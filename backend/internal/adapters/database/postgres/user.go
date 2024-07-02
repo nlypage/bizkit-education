@@ -49,6 +49,10 @@ func (s *usersStorage) Delete(ctx context.Context, uuid string) error {
 
 func (s *usersStorage) GetByUsernameAndPassword(ctx context.Context, username string, password string) (*entities.User, error) {
 	var user *entities.User
-	err := s.db.WithContext(ctx).Where("username = ? AND password = ?", username, entities.HashedPassword(password)).First(&user).Error
+	err := s.db.WithContext(ctx).Where("username = ?", username).First(&user).Error
+	if errInvalidPassword := user.ComparePassword(password); err != nil {
+		return nil, errInvalidPassword
+	}
+
 	return user, err
 }
