@@ -19,6 +19,7 @@ WORKDIR /opt
 
 COPY --from=builder /opt/bin/application ./
 
-COPY certs /opt/certs
+COPY fullchain.pem /opt/fullchain.pem
+COPY privkey.pem /opt/privkey.pem
 
 CMD ["./application"]
