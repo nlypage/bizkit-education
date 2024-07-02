@@ -6,3 +6,9 @@ type CreateUser struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required,password"`
 }
+
+// AuthUser is a struct that represents a DTO to authenticate a User.
+type AuthUser struct {
+	Username string `json:"username" validate:"required,username"`
+	Password string `json:"password" validate:"required,password"`
+}

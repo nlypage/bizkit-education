@@ -19,10 +19,15 @@ type User struct {
 	//TODO: questions
 }
 
+// HashedPassword is a function to hash the password.
+func HashedPassword(password string) []byte {
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return hashedPassword
+}
+
 // SetPassword is a method to hash the password before storing it.
 func (user *User) SetPassword(password string) {
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 14)
-	user.Password = hashedPassword
+	user.Password = HashedPassword(password)
 }
 
 // ComparePassword is a method to compare the password with the hashed password.

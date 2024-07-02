@@ -46,3 +46,9 @@ func (s *usersStorage) Update(ctx context.Context, user *entities.User) (*entiti
 func (s *usersStorage) Delete(ctx context.Context, uuid string) error {
 	return s.db.WithContext(ctx).Unscoped().Delete(&entities.User{}, "uuid = ?", uuid).Error
 }
+
+func (s *usersStorage) GetByUsernameAndPassword(ctx context.Context, username string, password string) (*entities.User, error) {
+	var user *entities.User
+	err := s.db.WithContext(ctx).Where("username = ? AND password = ?", username, entities.HashedPassword(password)).First(&user).Error
+	return user, err
+}
