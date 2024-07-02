@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 type Validator struct {
@@ -37,8 +37,13 @@ func New() *Validator {
 	})
 
 	_ = newValidator.RegisterValidation("password", func(fl validator.FieldLevel) bool {
-		re := regexp.MustCompile(`^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$`)
-		return re.MatchString(fl.Field().String())
+		password := fl.Field().String()
+		hasMinLength := len(password) >= 8
+		hasUppercase := strings.ToLower(password) != password
+		hasLowercase := strings.ToUpper(password) != password
+		hasDigit := strings.IndexFunc(password, func(c rune) bool { return unicode.IsDigit(c) }) != -1
+
+		return hasMinLength && hasUppercase && hasLowercase && hasDigit
 	})
 
 	return &Validator{
