@@ -41,7 +41,7 @@ func NewBizkitEduApp(config *config.Config) *BizkitEduApp {
 
 // Start is a function that starts the app
 func (a *BizkitEduApp) Start() {
-	if err := a.Fiber.ListenTLS(":"+a.listenPort, "certs/fullchain.pem", "privkey.pem"); err != nil {
+	if err := a.Fiber.ListenTLS(":"+a.listenPort, "fullchain.pem", "privkey.pem"); err != nil {
 		panic(err)
 	}
 }

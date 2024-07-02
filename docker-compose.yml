@@ -49,6 +49,7 @@ services:
       - ./certs:/etc/nginx/certs
     networks:
       - webnet
+    restart: always
 
 volumes:
   bizkit-database:
