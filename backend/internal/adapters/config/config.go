@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"github.com/nlypage/bizkit-education/internal/domain/entities"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -55,7 +56,9 @@ func GetConfig() *Config {
 		log.Println("Успешно подключились к базе данных")
 	}
 
-	err = database.AutoMigrate()
+	err = database.AutoMigrate(
+		&entities.User{},
+	)
 
 	if err != nil {
 		log.Panic(err)
