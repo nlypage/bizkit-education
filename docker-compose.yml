@@ -21,6 +21,7 @@ services:
     restart: always
 
   bizkit-backend:
+    container_name: bizkit-backend
     build: ./backend
     ports:
       - '8080:8080'

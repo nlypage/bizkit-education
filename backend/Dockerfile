@@ -19,6 +19,6 @@ WORKDIR /opt
 
 COPY --from=builder /opt/bin/application ./
 
-#COPY certs /opt/certs
+COPY certs /opt/certs
 
 CMD ["./application"]
