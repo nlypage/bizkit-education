@@ -11,8 +11,8 @@ type usersStorage struct {
 	db *gorm.DB
 }
 
-// NewUsersStorage is a function that returns a new instance of usersStorage.
-func NewUsersStorage(db *gorm.DB) *usersStorage {
+// NewUserStorage is a function that returns a new instance of usersStorage.
+func NewUserStorage(db *gorm.DB) *usersStorage {
 	return &usersStorage{db: db}
 }
 
