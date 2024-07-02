@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -30,10 +31,16 @@ func New() *Validator {
 	//_ = newValidator.RegisterValidation("accessToken", func(fl validator.FieldLevel) bool {
 	//	return len(fl.Field().String()) == 20
 	//})
-	//
-	//_ = newValidator.RegisterValidation("name", func(fl validator.FieldLevel) bool {
-	//	return len(fl.Field().String()) >= 2 && len(fl.Field().String()) <= 35
-	//})
+
+	_ = newValidator.RegisterValidation("username", func(fl validator.FieldLevel) bool {
+		return len(fl.Field().String()) >= 4 && len(fl.Field().String()) <= 20
+	})
+
+	_ = newValidator.RegisterValidation("password", func(fl validator.FieldLevel) bool {
+		var passwordRegex = `^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$`
+		re := regexp.MustCompile(passwordRegex)
+		return re.MatchString(fl.Field().String())
+	})
 
 	return &Validator{
 		newValidator,

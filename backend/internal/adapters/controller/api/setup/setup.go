@@ -5,6 +5,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	app "github.com/nlypage/bizkit-education/cmd/app"
+	v1 "github.com/nlypage/bizkit-education/internal/adapters/controller/api/v1"
 )
 
 func Setup(app *app.BizkitEduApp) {
@@ -23,7 +24,9 @@ func Setup(app *app.BizkitEduApp) {
 	})
 
 	// Setup api v1 routes
-	//apiV1 := app.Fiber.Group("/api/v1")
+	apiV1 := app.Fiber.Group("/api/v1")
 
-	// Setup alarm system routes
+	// Setup user routes
+	userHandler := v1.NewUserHandler(app)
+	userHandler.Setup(apiV1)
 }

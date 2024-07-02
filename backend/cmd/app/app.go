@@ -3,7 +3,7 @@ package app
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/nlypage/bizkit-education/internal/adapters/config"
-	bizkitEduValidator "github.com/nlypage/bizkit-education/internal/adapters/controller/api/validator"
+	"github.com/nlypage/bizkit-education/internal/adapters/controller/api/validator"
 
 	"gorm.io/gorm"
 )
@@ -13,7 +13,7 @@ type BizkitEduApp struct {
 	Fiber      *fiber.App
 	DB         *gorm.DB
 	listenPort string
-	Validator  *bizkitEduValidator.Validator
+	Validator  *validator.Validator
 	Logging    bool
 }
 
@@ -22,7 +22,7 @@ func NewBizkitEduApp(config *config.Config) *BizkitEduApp {
 	fiberApp := fiber.New(fiber.Config{
 		// Global custom error handler
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
-			return c.Status(fiber.StatusBadRequest).JSON(bizkitEduValidator.GlobalErrorHandlerResp{
+			return c.Status(fiber.StatusBadRequest).JSON(validator.GlobalErrorHandlerResp{
 				Success: false,
 				Message: err.Error(),
 			})
@@ -34,7 +34,7 @@ func NewBizkitEduApp(config *config.Config) *BizkitEduApp {
 		Fiber:      fiberApp,
 		DB:         config.Database,
 		listenPort: config.ListenPort,
-		Validator:  bizkitEduValidator.New(),
+		Validator:  validator.New(),
 		Logging:    config.Logging,
 	}
 }
