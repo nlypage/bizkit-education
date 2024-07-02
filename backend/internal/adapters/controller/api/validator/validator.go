@@ -37,8 +37,7 @@ func New() *Validator {
 	})
 
 	_ = newValidator.RegisterValidation("password", func(fl validator.FieldLevel) bool {
-		var passwordRegex = `^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$`
-		re := regexp.MustCompile(passwordRegex)
+		re := regexp.MustCompile(`^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$`)
 		return re.MatchString(fl.Field().String())
 	})
 
