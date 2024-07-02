@@ -49,6 +49,7 @@ services:
       - ./certs:/etc/nginx/certs
     networks:
       - webnet
+    depends_on: bizkit-backend
     restart: always
 
 volumes:
