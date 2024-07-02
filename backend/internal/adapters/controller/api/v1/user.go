@@ -79,7 +79,7 @@ func (h UserHandler) Auth(c *fiber.Ctx) error {
 	cookie := fiber.Cookie{
 		Name:     "jwt",
 		Value:    jwt,
-		Expires:  time.Now().Add(time.Hour * 10000000),
+		Expires:  time.Now().Add(time.Hour * 10000),
 		HTTPOnly: true,
 	}
 
