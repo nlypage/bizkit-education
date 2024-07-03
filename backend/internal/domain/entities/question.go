@@ -20,7 +20,7 @@ type Answer struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 
-	QuestionUUID string `json:"question_uuid" gorm:"foreignKey"`
+	QuestionUUID string `json:"question_uuid"`
 	Body         string `json:"body"`
 	IsCorrect    bool   `json:"is_correct"`
 }
