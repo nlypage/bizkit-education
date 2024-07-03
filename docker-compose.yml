@@ -39,9 +39,9 @@ services:
       - webnet
     restart: always
 
-  nginx:
+  bizkit-nginx:
     image: nginx:latest
-    container_name: nginx
+    container_name: bizkit-nginx
     ports:
       - "80:80"
       - "443:443"

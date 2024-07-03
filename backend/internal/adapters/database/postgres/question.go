@@ -31,10 +31,16 @@ func (s *questionStorage) GetByUUID(ctx context.Context, uuid string) (*entities
 }
 
 // GetAll is a method that returns a slice of pointers to Question instances.
-func (s *questionStorage) GetAll(ctx context.Context, limit, offset int) ([]*entities.Question, error) {
-	var question []*entities.Question
-	err := s.db.WithContext(ctx).Model(&entities.Question{}).Limit(limit).Offset(offset).Find(&question).Error
-	return question, err
+func (s *questionStorage) GetAll(ctx context.Context, limit, offset int, subject string) ([]*entities.Question, error) {
+	var questions []*entities.Question
+	query := s.db.WithContext(ctx).Model(&entities.Question{})
+
+	if subject != "" {
+		query = query.Where("subject = ?", subject)
+	}
+
+	err := query.Limit(limit).Offset(offset).Find(&questions).Error
+	return questions, err
 }
 
 // Update is a method to update an existing Question in database.

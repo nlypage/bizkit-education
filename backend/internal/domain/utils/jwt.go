@@ -50,8 +50,7 @@ func GetUUIDByToken(c *fiber.Ctx) (string, error) {
 			return "", errroz.InvalidAuthHeader
 		}
 
-		cookie := c.Cookies("jwt")
-		uuid, _, err := ParseJwt(cookie)
+		uuid, _, err := ParseJwt(parts[1])
 		return uuid, err
 	}
 	return "", errroz.EmptyAuthHeader

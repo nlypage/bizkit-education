@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/nlypage/bizkit-education/internal/domain/common/errroz"
 	"strconv"
 	"strings"
 	"unicode"
@@ -27,10 +28,6 @@ type ErrorResponse struct {
 
 func New() *Validator {
 	newValidator := validator.New()
-
-	//_ = newValidator.RegisterValidation("accessToken", func(fl validator.FieldLevel) bool {
-	//	return len(fl.Field().String()) == 20
-	//})
 
 	_ = newValidator.RegisterValidation("username", func(fl validator.FieldLevel) bool {
 		return len(fl.Field().String()) >= 4 && len(fl.Field().String()) <= 20
@@ -56,19 +53,11 @@ func New() *Validator {
 
 	_ = newValidator.RegisterValidation("subject", func(fl validator.FieldLevel) bool {
 		switch fl.Field().String() {
-		case "Русский язык":
+		case "Русский язык", "Математика", "Физика", "Литература", "Информатика":
 			return true
-		case "Математика":
-			return true
-		case "Физика":
-			return true
-		case "Литература":
-			return true
-		case "Информатика":
-			return true
-
+		default:
+			return false
 		}
-		return len(fl.Field().String()) >= 5 && len(fl.Field().String()) <= 150
 	})
 
 	return &Validator{
@@ -123,4 +112,17 @@ func (v Validator) GetLimitAndOffset(c *fiber.Ctx) (int, int) {
 		return 0, 10
 	}
 	return limit, offset
+}
+
+func (v Validator) GetSubject(c *fiber.Ctx) (string, error) {
+	subject := c.Query("subject", "")
+	if subject == "" {
+		return subject, nil
+	}
+	switch subject {
+	case "Русский язык", "Математика", "Физика", "Литература", "Информатика":
+		return subject, nil
+	default:
+		return "", errroz.InvalidSubject
+	}
 }
