@@ -58,6 +58,8 @@ func GetConfig() *Config {
 
 	err = database.AutoMigrate(
 		&entities.User{},
+		&entities.Answer{},
+		&entities.Question{},
 	)
 
 	if err != nil {
