@@ -92,7 +92,7 @@ func (h UserHandler) Auth(c *fiber.Ctx) error {
 
 // Setup is a function that registers all routes for the user.
 func (h UserHandler) Setup(router fiber.Router) {
-	alarmSystemGroup := router.Group("/user")
-	alarmSystemGroup.Post("/register", h.Create)
-	alarmSystemGroup.Post("/auth", h.Auth)
+	userGroup := router.Group("/user")
+	userGroup.Post("/register", h.Create)
+	userGroup.Post("/auth", h.Auth)
 }

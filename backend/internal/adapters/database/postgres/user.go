@@ -47,6 +47,7 @@ func (s *usersStorage) Delete(ctx context.Context, uuid string) error {
 	return s.db.WithContext(ctx).Unscoped().Delete(&entities.User{}, "uuid = ?", uuid).Error
 }
 
+// GetByUsernameAndPassword is a method that returns a pointer to a User instance and error.
 func (s *usersStorage) GetByUsernameAndPassword(ctx context.Context, username string, password string) (*entities.User, error) {
 	var user *entities.User
 	err := s.db.WithContext(ctx).Where("username = ?", username).First(&user).Error
