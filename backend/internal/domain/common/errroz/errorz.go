@@ -6,4 +6,5 @@ import "errors"
 
 var (
 	InvalidIssuer = errors.New("invalid issuer")
+	TokenExpired  = errors.New("authorization token expired")
 )
