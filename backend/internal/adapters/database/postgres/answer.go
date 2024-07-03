@@ -31,9 +31,9 @@ func (s *answerStorage) GetByUUID(ctx context.Context, uuid string) (*entities.A
 }
 
 // GetAll is a method that returns a slice of pointers to Answer instances.
-func (s *answerStorage) GetAll(ctx context.Context, limit, offset int, questionUUID string) ([]*entities.Answer, error) {
+func (s *answerStorage) GetAll(ctx context.Context, questionUUID string) ([]*entities.Answer, error) {
 	var answers []*entities.Answer
-	err := s.db.WithContext(ctx).Model(&entities.Answer{}).Where("question_uuid = ?", questionUUID).Limit(limit).Offset(offset).Find(&answers).Error
+	err := s.db.WithContext(ctx).Model(&entities.Answer{}).Where("question_uuid = ?", questionUUID).Find(&answers).Error
 	return answers, err
 }
 

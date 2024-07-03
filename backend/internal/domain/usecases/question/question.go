@@ -19,7 +19,7 @@ type UserService interface {
 }
 
 type AnswerService interface {
-	GetAll(ctx context.Context, limit, offset int, questionUUID string) ([]*entities.Answer, error)
+	GetAll(ctx context.Context, questionUUID string) ([]*entities.Answer, error)
 	Create(ctx context.Context, answer *dto.CreateAnswer) (*entities.Answer, error)
 }
 
@@ -70,7 +70,7 @@ func (u questionUseCase) GetQuestionWithAnswers(ctx context.Context, questionUUI
 		return nil, err
 	}
 
-	answers, err := u.answerService.GetAll(ctx, 0, 0, questionUUID)
+	answers, err := u.answerService.GetAll(ctx, questionUUID)
 	if err != nil {
 		return nil, err
 	}
