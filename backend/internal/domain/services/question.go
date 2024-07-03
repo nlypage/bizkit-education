@@ -32,5 +32,5 @@ func NewQuestionService(storage UserStorage) *userService {
 //	}
 //	user.SetPassword(createUser.Password)
 //
-//	return s.storage.Create(ctx, )
+//	return s.storage.Create(ctx)
 //}

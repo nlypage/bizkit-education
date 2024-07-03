@@ -46,6 +46,31 @@ func New() *Validator {
 		return hasMinLength && hasUppercase && hasLowercase && hasDigit
 	})
 
+	_ = newValidator.RegisterValidation("header", func(fl validator.FieldLevel) bool {
+		return len(fl.Field().String()) >= 5 && len(fl.Field().String()) <= 150
+	})
+
+	_ = newValidator.RegisterValidation("body", func(fl validator.FieldLevel) bool {
+		return len(fl.Field().String()) >= 5 && len(fl.Field().String()) <= 1500
+	})
+
+	_ = newValidator.RegisterValidation("subject", func(fl validator.FieldLevel) bool {
+		switch fl.Field().String() {
+		case "Русский язык":
+			return true
+		case "Математика":
+			return true
+		case "Физика":
+			return true
+		case "Литература":
+			return true
+		case "Информатика":
+			return true
+
+		}
+		return len(fl.Field().String()) >= 5 && len(fl.Field().String()) <= 150
+	})
+
 	return &Validator{
 		newValidator,
 	}

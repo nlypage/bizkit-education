@@ -9,7 +9,7 @@ import (
 )
 
 func Setup(app *app.BizkitEduApp) {
-	app.Fiber.Use(cors.New())
+	app.Fiber.Use(cors.New(cors.ConfigDefault))
 
 	if app.Logging {
 		app.Fiber.Use(logger.New())
