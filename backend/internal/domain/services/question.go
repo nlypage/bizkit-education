@@ -2,6 +2,8 @@ package services
 
 import (
 	"context"
+	"github.com/google/uuid"
+	"github.com/nlypage/bizkit-education/internal/domain/dto"
 	"github.com/nlypage/bizkit-education/internal/domain/entities"
 )
 
@@ -20,17 +22,19 @@ type questionService struct {
 }
 
 // NewQuestionService is a function that returns a new instance of questionService.
-func NewQuestionService(storage UserStorage) *userService {
-	return &userService{storage: storage}
+func NewQuestionService(storage QuestionStorage) *questionService {
+	return &questionService{storage: storage}
 }
 
-//func (s questionService) Create(ctx context.Context, createUser *dto.CreateUser) (*entities.User, error) {
-//	user := &entities.Question{
-//		UUID:     uuid.NewString(),
-//		Username: createUser.Username,
-//		Email:    createUser.Email,
-//	}
-//	user.SetPassword(createUser.Password)
-//
-//	return s.storage.Create(ctx)
-//}
+// Create is a method that creates a new question.
+func (s questionService) Create(ctx context.Context, createQuestion *dto.CreateQuestion) (*entities.Question, error) {
+	question := &entities.Question{
+		UUID:    uuid.NewString(),
+		Header:  createQuestion.Header,
+		Body:    createQuestion.Body,
+		Subject: createQuestion.Subject,
+		Reward:  createQuestion.Reward,
+	}
+
+	return s.storage.Create(ctx, question)
+}

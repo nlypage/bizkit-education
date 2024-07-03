@@ -27,18 +27,13 @@ func Setup(app *app.BizkitEduApp) {
 	// Setup api v1 routes
 	apiV1 := app.Fiber.Group("/api/v1")
 
+	middlewareHandler := middlewares.NewMiddlewareHandler(app)
+
 	// Setup user routes
 	userHandler := v1.NewUserHandler(app)
 	userHandler.Setup(apiV1)
 
-	middlewareHandler := middlewares.NewMiddlewareHandler(app)
-	pingGroup := app.Fiber.Group("/pingGroup")
-	pingGroup.Use(middlewareHandler.IsAuthenticated)
-	pingGroup.Get("/ping", func(c *fiber.Ctx) error {
-		c.Status(fiber.StatusOK)
-		return c.Status(fiber.StatusOK).JSON(fiber.Map{
-			"status": true,
-			"body":   "pong",
-		})
-	})
+	// Setup question routes
+	questionHandler := v1.NewQuestionHandler(app)
+	questionHandler.Setup(apiV1, middlewareHandler.IsAuthenticated)
 }
