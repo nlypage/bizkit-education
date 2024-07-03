@@ -32,6 +32,7 @@ func (s answerService) Create(ctx context.Context, createAnswer *dto.CreateAnswe
 		UUID:         uuid.NewString(),
 		Body:         createAnswer.Body,
 		QuestionUUID: createAnswer.QuestionUUID,
+		AuthorUUID:   createAnswer.AuthorUUID,
 	}
 
 	return s.storage.Create(ctx, answer)
