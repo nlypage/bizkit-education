@@ -28,6 +28,7 @@ func ParseJwt(cookie string) (string, string, error) {
 	if err != nil || !token.Valid {
 		return "", "", err
 	}
+
 	claims := token.Claims.(*jwt.StandardClaims)
 
 	issuerSlice := strings.Split(claims.Issuer, " ")
