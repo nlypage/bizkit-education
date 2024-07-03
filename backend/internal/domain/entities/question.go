@@ -11,7 +11,7 @@ type Question struct {
 	Body    string    `json:"body"`
 	Subject string    `json:"subject"`
 	Reward  uint      `json:"reward"`
-	Answer  []*Answer `json:"answer" gorm:"foreignKey:QuestionUUID"`
+	Answer  []*Answer `json:"answer" gorm:"foreignKey:QuestionUUID;constraint:OnDelete:CASCADE"`
 	Closed  bool      `json:"closed"`
 }
 
