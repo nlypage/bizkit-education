@@ -11,7 +11,7 @@ import (
 type AnswerStorage interface {
 	Create(ctx context.Context, answer *entities.Answer) (*entities.Answer, error)
 	GetByUUID(ctx context.Context, uuid string) (*entities.Answer, error)
-	GetAll(ctx context.Context, limit, offset int, questionUUID string) ([]*entities.Answer, error)
+	GetAll(ctx context.Context, questionUUID string) ([]*entities.Answer, error)
 	Update(ctx context.Context, answer *entities.Answer) (*entities.Answer, error)
 	Delete(ctx context.Context, uuid string) error
 }
@@ -38,6 +38,6 @@ func (s answerService) Create(ctx context.Context, createAnswer *dto.CreateAnswe
 }
 
 // GetAll is a method that returns all question answers.
-func (s answerService) GetAll(ctx context.Context, limit, offset int, questionUUID string) ([]*entities.Answer, error) {
-	return s.storage.GetAll(ctx, limit, offset, questionUUID)
+func (s answerService) GetAll(ctx context.Context, questionUUID string) ([]*entities.Answer, error) {
+	return s.storage.GetAll(ctx, questionUUID)
 }
