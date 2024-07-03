@@ -131,6 +131,12 @@ func (h QuestionHandler) CreateAnswer(c *fiber.Ctx) error {
 		return err
 	}
 
+	authorUuid, err := utils.GetUUIDByToken(c)
+	if err != nil {
+		return err
+	}
+	createAnswer.AuthorUUID = authorUuid
+
 	answer, err := h.questionUseCase.CreateAnswer(c.Context(), &createAnswer)
 	if err != nil {
 		return err
