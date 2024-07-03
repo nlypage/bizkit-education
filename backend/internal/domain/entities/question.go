@@ -1,6 +1,8 @@
 package entities
 
-import "time"
+import (
+	"time"
+)
 
 type Question struct {
 	UUID      string    `json:"uuid" gorm:"primaryKey,unique"`
