@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	app "github.com/nlypage/bizkit-education/cmd/app"
 	v1 "github.com/nlypage/bizkit-education/internal/adapters/controller/api/v1"
+	"github.com/nlypage/bizkit-education/internal/adapters/controller/api/v1/middlewares"
 )
 
 func Setup(app *app.BizkitEduApp) {
@@ -30,5 +31,14 @@ func Setup(app *app.BizkitEduApp) {
 	userHandler := v1.NewUserHandler(app)
 	userHandler.Setup(apiV1)
 
-	//middlewareHandler := middlewares.NewMiddlewareHandler(app)
+	middlewareHandler := middlewares.NewMiddlewareHandler(app)
+	pingGroup := app.Fiber.Group("/pingGroup")
+	pingGroup.Use(middlewareHandler.IsAuthenticated)
+	pingGroup.Get("/ping", func(c *fiber.Ctx) error {
+		c.Status(fiber.StatusOK)
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"status": true,
+			"body":   "pong",
+		})
+	})
 }
