@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"github.com/google/uuid"
+	"github.com/nlypage/bizkit-education/internal/domain/common/errroz"
 	"github.com/nlypage/bizkit-education/internal/domain/dto"
 	"github.com/nlypage/bizkit-education/internal/domain/entities"
 	"github.com/nlypage/bizkit-education/internal/domain/utils"
@@ -49,4 +50,18 @@ func (s userService) GenerateJwt(ctx context.Context, authUser *dto.AuthUser) (s
 
 func (s userService) GetByUUID(ctx context.Context, uuid string) (*entities.User, error) {
 	return s.storage.GetByUUID(ctx, uuid)
+}
+
+func (s userService) ChangeBalance(ctx context.Context, uuid string, change int) (*entities.User, error) {
+	user, err := s.storage.GetByUUID(ctx, uuid)
+	if err != nil {
+		return nil, err
+	}
+
+	if user.CoinsAmount+change < 0 {
+		return nil, errroz.NotEnoughCoins
+	}
+
+	user.CoinsAmount += change
+	return s.storage.Update(ctx, user)
 }

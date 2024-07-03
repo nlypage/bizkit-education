@@ -11,7 +11,7 @@ import (
 type QuestionStorage interface {
 	Create(ctx context.Context, question *entities.Question) (*entities.Question, error)
 	GetByUUID(ctx context.Context, uuid string) (*entities.Question, error)
-	GetAll(ctx context.Context, limit, offset int) ([]*entities.Question, error)
+	GetAll(ctx context.Context, limit, offset int, subject string) ([]*entities.Question, error)
 	Update(ctx context.Context, question *entities.Question) (*entities.Question, error)
 	Delete(ctx context.Context, uuid string) error
 }
@@ -37,4 +37,12 @@ func (s questionService) Create(ctx context.Context, createQuestion *dto.CreateQ
 	}
 
 	return s.storage.Create(ctx, question)
+}
+
+func (s questionService) GetAll(ctx context.Context, limit, offset int, subject string) ([]*entities.Question, error) {
+	return s.storage.GetAll(ctx, limit, offset, subject)
+}
+
+func (s questionService) GetByUUID(ctx context.Context, uuid string) (*entities.Question, error) {
+	return s.storage.GetByUUID(ctx, uuid)
 }

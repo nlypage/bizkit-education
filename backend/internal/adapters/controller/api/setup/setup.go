@@ -31,7 +31,7 @@ func Setup(app *app.BizkitEduApp) {
 
 	// Setup user routes
 	userHandler := v1.NewUserHandler(app)
-	userHandler.Setup(apiV1)
+	userHandler.Setup(apiV1, middlewareHandler.IsAuthenticated)
 
 	// Setup question routes
 	questionHandler := v1.NewQuestionHandler(app)
