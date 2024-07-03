@@ -13,7 +13,7 @@ type Question struct {
 	Body    string    `json:"body"`
 	Subject string    `json:"subject"`
 	Reward  uint      `json:"reward"`
-	Answer  []*Answer `json:"answer" gorm:"foreignKey:QuestionUUID;constraint:OnDelete:CASCADE"`
+	Answers []*Answer `json:"answer" gorm:"foreignKey:AnswerUUID;constraint:OnDelete:CASCADE"`
 	Closed  bool      `json:"closed"`
 }
 
@@ -22,7 +22,6 @@ type Answer struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 
-	QuestionUUID string `json:"question_uuid"`
-	Body         string `json:"body"`
-	IsCorrect    bool   `json:"is_correct"`
+	Body      string `json:"body"`
+	IsCorrect bool   `json:"is_correct"`
 }
