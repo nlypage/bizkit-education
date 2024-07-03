@@ -44,7 +44,7 @@ func (s userService) GenerateJwt(ctx context.Context, authUser *dto.AuthUser) (s
 	if err != nil {
 		return "", err
 	}
-	return utils.GenerateJwt(user.Username, string(user.Password))
+	return utils.GenerateJwt(user.UUID, string(user.Password))
 }
 
 func (s userService) GetByUUID(ctx context.Context, uuid string) (*entities.User, error) {
