@@ -61,8 +61,7 @@ func (h UserHandler) Register(c *fiber.Ctx) error {
 
 func (h UserHandler) Auth(c *fiber.Ctx) error {
 	var authUser dto.AuthUser
-	c.Response().Header.Set("Content-Type", "application/json; charset=utf-8")
-	c.Response().Header.Set("Access-Control-Allow-Origin", "*")
+
 	if err := c.BodyParser(&authUser); err != nil {
 		return err
 	}
