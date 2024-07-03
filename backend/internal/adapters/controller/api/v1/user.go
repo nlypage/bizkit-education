@@ -9,7 +9,6 @@ import (
 	"github.com/nlypage/bizkit-education/internal/domain/dto"
 	"github.com/nlypage/bizkit-education/internal/domain/entities"
 	"github.com/nlypage/bizkit-education/internal/domain/services"
-	"time"
 )
 
 // UserService is an interface that contains methods to interact with the user service
@@ -76,14 +75,6 @@ func (h UserHandler) Auth(c *fiber.Ctx) error {
 		return err
 	}
 
-	cookie := fiber.Cookie{
-		Name:     "jwt",
-		Value:    jwt,
-		Expires:  time.Now().Add(time.Hour * 10000),
-		HTTPOnly: true,
-	}
-
-	c.Cookie(&cookie)
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"status": true,
 		"body":   jwt,

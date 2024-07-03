@@ -7,27 +7,10 @@ import (
 	app "github.com/nlypage/bizkit-education/cmd/app"
 	v1 "github.com/nlypage/bizkit-education/internal/adapters/controller/api/v1"
 	"github.com/nlypage/bizkit-education/internal/adapters/controller/api/v1/middlewares"
-	"strings"
 )
 
 func Setup(app *app.BizkitEduApp) {
-	app.Fiber.Use(cors.New(cors.Config{
-		Next:             nil,
-		AllowOriginsFunc: nil,
-		AllowOrigins:     "*",
-		AllowMethods: strings.Join([]string{
-			fiber.MethodGet,
-			fiber.MethodPost,
-			fiber.MethodHead,
-			fiber.MethodPut,
-			fiber.MethodDelete,
-			fiber.MethodPatch,
-		}, ","),
-		AllowHeaders:     "",
-		AllowCredentials: true,
-		ExposeHeaders:    "",
-		MaxAge:           0,
-	}))
+	app.Fiber.Use(cors.New(cors.ConfigDefault))
 
 	if app.Logging {
 		app.Fiber.Use(logger.New())
