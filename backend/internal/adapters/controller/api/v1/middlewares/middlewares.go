@@ -9,6 +9,7 @@ import (
 	"github.com/nlypage/bizkit-education/internal/domain/entities"
 	"github.com/nlypage/bizkit-education/internal/domain/services"
 	"github.com/nlypage/bizkit-education/internal/domain/utils"
+	"strings"
 )
 
 type UserService interface {
@@ -30,30 +31,52 @@ func NewMiddlewareHandler(bizkitEduApp *app.BizkitEduApp) *MiddlewareHandler {
 }
 
 func (h MiddlewareHandler) IsAuthenticated(c *fiber.Ctx) error {
-	cookie := c.Cookies("jwt")
+	if len(c.GetReqHeaders()["Authorization"]) > 0 {
+		authHeader := c.GetReqHeaders()["Authorization"][0]
+		if authHeader == "" {
+			c.Status(fiber.StatusUnauthorized)
+			return c.JSON(fiber.Map{
+				"status":  false,
+				"message": "auth header is empty",
+			})
+		}
 
-	uuid, password, errParse := utils.ParseJwt(cookie)
-	if errParse != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"status": false,
-			"body":   errParse.Error(),
-		})
+		parts := strings.Split(authHeader, " ")
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			c.Status(fiber.StatusUnauthorized)
+			return c.JSON(fiber.Map{
+				"status":  false,
+				"message": "invalid auth header",
+			})
+		}
+
+		uuid, password, errParse := utils.ParseJwt(parts[1])
+		if errParse != nil {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"status": false,
+				"body":   errParse.Error(),
+			})
+		}
+
+		user, errGetUser := h.userService.GetByUUID(c.Context(), uuid)
+		if errGetUser != nil {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"status": false,
+				"body":   errGetUser.Error(),
+			})
+		}
+
+		if string(user.Password) != password {
+			return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+				"status": false,
+				"body":   errroz.TokenExpired.Error(),
+			})
+		}
+		return c.Next()
+
 	}
-
-	user, errGetUser := h.userService.GetByUUID(c.Context(), uuid)
-	if errGetUser != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"status": false,
-			"body":   errGetUser.Error(),
-		})
-	}
-
-	if string(user.Password) != password {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"status": false,
-			"body":   errroz.TokenExpired.Error(),
-		})
-	}
-
-	return c.Next()
+	return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+		"status": false,
+		"body":   errroz.EmptyAuthHeader.Error(),
+	})
 }

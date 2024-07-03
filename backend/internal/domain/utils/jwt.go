@@ -37,8 +37,21 @@ func ParseJwt(cookie string) (string, string, error) {
 	return issuerSlice[0], issuerSlice[1], nil
 }
 
-func GetUUIDByCookie(c *fiber.Ctx) (string, error) {
-	cookie := c.Cookies("jwt")
-	uuid, _, err := ParseJwt(cookie)
-	return uuid, err
+func GetUUIDByToken(c *fiber.Ctx) (string, error) {
+	if len(c.GetReqHeaders()["Authorization"]) > 0 {
+		authHeader := c.GetReqHeaders()["Authorization"][0]
+		if authHeader == "" {
+			return "", errroz.EmptyAuthHeader
+		}
+
+		parts := strings.Split(authHeader, " ")
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			return "", errroz.InvalidAuthHeader
+		}
+
+		cookie := c.Cookies("jwt")
+		uuid, _, err := ParseJwt(cookie)
+		return uuid, err
+	}
+	return "", errroz.EmptyAuthHeader
 }
