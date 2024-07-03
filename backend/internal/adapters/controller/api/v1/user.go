@@ -35,8 +35,8 @@ func NewUserHandler(bizkitEduApp *app.BizkitEduApp) *UserHandler {
 	}
 }
 
-// Create is handler for creating alarm system.
-func (h UserHandler) Create(c *fiber.Ctx) error {
+// Register is handler for user registration.
+func (h UserHandler) Register(c *fiber.Ctx) error {
 	var createUser dto.CreateUser
 
 	if err := c.BodyParser(&createUser); err != nil {
@@ -93,6 +93,6 @@ func (h UserHandler) Auth(c *fiber.Ctx) error {
 // Setup is a function that registers all routes for the user.
 func (h UserHandler) Setup(router fiber.Router) {
 	userGroup := router.Group("/user")
-	userGroup.Post("/register", h.Create)
+	userGroup.Post("/register", h.Register)
 	userGroup.Post("/auth", h.Auth)
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/nlypage/bizkit-education/internal/adapters/controller/api/setup"
 )
 
-// main is entry point of the program.
+// main is the entry point of the application.
 func main() {
 	appConfig := config.GetConfig()
 	bizkitEduApp := app.NewBizkitEduApp(appConfig)
