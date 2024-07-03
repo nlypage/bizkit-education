@@ -25,3 +25,8 @@ type Answer struct {
 	Body         string `json:"body"`
 	IsCorrect    bool   `json:"is_correct"`
 }
+
+type QuestionWithAnswers struct {
+	Question
+	Answers []*Answer `json:"answers"`
+}

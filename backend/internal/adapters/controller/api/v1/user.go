@@ -9,12 +9,14 @@ import (
 	"github.com/nlypage/bizkit-education/internal/domain/dto"
 	"github.com/nlypage/bizkit-education/internal/domain/entities"
 	"github.com/nlypage/bizkit-education/internal/domain/services"
+	"github.com/nlypage/bizkit-education/internal/domain/utils"
 )
 
 // UserService is an interface that contains methods to interact with the user service
 type UserService interface {
 	Create(ctx context.Context, createUser *dto.CreateUser) (*entities.User, error)
 	GenerateJwt(ctx context.Context, authUser *dto.AuthUser) (string, error)
+	GetByUUID(ctx context.Context, uuid string) (*entities.User, error)
 }
 
 // UserHandler is a struct that contains the userService and validator.
@@ -81,9 +83,28 @@ func (h UserHandler) Auth(c *fiber.Ctx) error {
 	})
 }
 
+func (h UserHandler) Me(c *fiber.Ctx) error {
+	uuid, err := utils.GetUUIDByToken(c)
+	if err != nil {
+		return err
+	}
+
+	user, err := h.userService.GetByUUID(c.Context(), uuid)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(fiber.Map{
+		"status": true,
+		"body":   user,
+	})
+
+}
+
 // Setup is a function that registers all routes for the user.
-func (h UserHandler) Setup(router fiber.Router) {
+func (h UserHandler) Setup(router fiber.Router, middleware fiber.Handler) {
 	userGroup := router.Group("/user")
 	userGroup.Post("/register", h.Register)
 	userGroup.Post("/auth", h.Auth)
+	userGroup.Get("/me", h.Me, middleware)
 }
