@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gofiber/fiber/v2"
 	"github.com/nlypage/bizkit-education/internal/domain/common/errroz"
 	"os"
 	"strings"
@@ -34,4 +35,10 @@ func ParseJwt(cookie string) (string, string, error) {
 		return "", "", errroz.InvalidIssuer
 	}
 	return issuerSlice[0], issuerSlice[1], nil
+}
+
+func GetUUIDByCookie(c *fiber.Ctx) (string, error) {
+	cookie := c.Cookies("jwt")
+	uuid, _, err := ParseJwt(cookie)
+	return uuid, err
 }
