@@ -17,6 +17,7 @@ import (
 // QuestionService is an interface that contains methods to interact with the question service
 type QuestionService interface {
 	GetAll(ctx context.Context, limit, offset int, subject string) ([]*entities.Question, error)
+	GetMy(ctx context.Context, limit, offset int, userUuid string) ([]*entities.Question, error)
 }
 
 type QuestionUseCase interface {
@@ -149,6 +150,7 @@ func (h QuestionHandler) CreateAnswer(c *fiber.Ctx) error {
 	})
 }
 
+// CorrectAnswer is a handler for confirming the correctness of the response.
 func (h QuestionHandler) CorrectAnswer(c *fiber.Ctx) error {
 	var uuid4 apiDto.UUID
 	uuid := c.Params("uuid")
@@ -176,6 +178,26 @@ func (h QuestionHandler) CorrectAnswer(c *fiber.Ctx) error {
 	})
 }
 
+// GetMy is a handler for getting all questions of the user.
+func (h QuestionHandler) GetMy(c *fiber.Ctx) error {
+	limit, offset := h.validator.GetLimitAndOffset(c)
+
+	uuid, err := utils.GetUUIDByToken(c)
+	if err != nil {
+		return err
+	}
+
+	questions, err := h.questionService.GetMy(c.Context(), limit, offset, uuid)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status": true,
+		"body":   questions,
+	})
+}
+
 // Setup is a function that registers all routes for the question.
 func (h QuestionHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	questionGroup := router.Group("/question")
@@ -184,5 +206,6 @@ func (h QuestionHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	questionGroup.Get("/:uuid", h.GetByUUID)
 	questionGroup.Post("/answer/create", h.CreateAnswer, handler)
 	questionGroup.Put("/answer/correct/:uuid", h.CorrectAnswer, handler)
+	questionGroup.Get("/my", h.GetMy, handler)
 
 }
