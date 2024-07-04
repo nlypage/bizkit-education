@@ -9,11 +9,12 @@ type Question struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 
-	Header  string `json:"header"`
-	Body    string `json:"body"`
-	Subject string `json:"subject"`
-	Reward  uint   `json:"reward"`
-	Closed  bool   `json:"closed"`
+	AuthorUUID string `json:"author_uuid"`
+	Header     string `json:"header"`
+	Body       string `json:"body"`
+	Subject    string `json:"subject"`
+	Reward     uint   `json:"reward"`
+	Closed     bool   `json:"closed"`
 }
 
 type Answer struct {

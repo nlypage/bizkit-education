@@ -23,6 +23,7 @@ type QuestionUseCase interface {
 	CreateQuestion(ctx context.Context, question *dto.CreateQuestion) (*entities.Question, error)
 	CreateAnswer(ctx context.Context, createAnswer *dto.CreateAnswer) (*entities.Answer, error)
 	GetQuestionWithAnswers(ctx context.Context, questionUUID string) (*entities.QuestionWithAnswers, error)
+	CorrectAnswer(ctx context.Context, answerUUID string, userUUID string) (*entities.QuestionWithAnswers, error)
 }
 
 // QuestionHandler is a struct that contains the questionService and validator.
@@ -148,11 +149,40 @@ func (h QuestionHandler) CreateAnswer(c *fiber.Ctx) error {
 	})
 }
 
+func (h QuestionHandler) CorrectAnswer(c *fiber.Ctx) error {
+	var uuid4 apiDto.UUID
+	uuid := c.Params("uuid")
+
+	uuid4.UUID = uuid
+
+	errValidate := h.validator.ValidateData(uuid4)
+	if errValidate != nil {
+		return errValidate
+	}
+
+	userUUID, err := utils.GetUUIDByToken(c)
+	if err != nil {
+		return err
+	}
+
+	questionWithAnswers, err := h.questionUseCase.CorrectAnswer(c.Context(), uuid4.UUID, userUUID)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status": true,
+		"body":   questionWithAnswers,
+	})
+}
+
 // Setup is a function that registers all routes for the question.
 func (h QuestionHandler) Setup(router fiber.Router, handler fiber.Handler) {
-	userGroup := router.Group("/question")
-	userGroup.Post("/create", h.Create, handler)
-	userGroup.Get("/all", h.GetAll)
-	userGroup.Get("/:uuid", h.GetByUUID)
-	userGroup.Post("/answer/create", h.CreateAnswer, handler)
+	questionGroup := router.Group("/question")
+	questionGroup.Post("/create", h.Create, handler)
+	questionGroup.Get("/all", h.GetAll)
+	questionGroup.Get("/:uuid", h.GetByUUID)
+	questionGroup.Post("/answer/create", h.CreateAnswer, handler)
+	questionGroup.Put("/answer/correct/:uuid", h.CorrectAnswer, handler)
+
 }

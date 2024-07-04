@@ -38,7 +38,27 @@ func (s answerService) Create(ctx context.Context, createAnswer *dto.CreateAnswe
 	return s.storage.Create(ctx, answer)
 }
 
+func (s answerService) GetByUUID(ctx context.Context, uuid string) (*entities.Answer, error) {
+	return s.storage.GetByUUID(ctx, uuid)
+}
+
 // GetAll is a method that returns all question answers.
 func (s answerService) GetAll(ctx context.Context, questionUUID string) ([]*entities.Answer, error) {
 	return s.storage.GetAll(ctx, questionUUID)
+}
+
+// Correct is a method for confirming the correctness of the response.
+func (s answerService) Correct(ctx context.Context, answerUUID string) (*entities.Answer, error) {
+	answer, err := s.storage.GetByUUID(ctx, answerUUID)
+	if err != nil {
+		return nil, err
+	}
+
+	answer.IsCorrect = true
+	answer, err = s.storage.Update(ctx, answer)
+	if err != nil {
+		return nil, err
+	}
+
+	return answer, err
 }
