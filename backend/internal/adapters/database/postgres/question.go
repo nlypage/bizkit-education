@@ -53,3 +53,10 @@ func (s *questionStorage) Update(ctx context.Context, question *entities.Questio
 func (s *questionStorage) Delete(ctx context.Context, uuid string) error {
 	return s.db.WithContext(ctx).Unscoped().Delete(&entities.Question{}, "uuid = ?", uuid).Error
 }
+
+// GetMy is a method that returns a slice of pointers to Question instances.
+func (s *questionStorage) GetMy(ctx context.Context, limit, offset int, uuid string) ([]*entities.Question, error) {
+	var questions []*entities.Question
+	err := s.db.WithContext(ctx).Model(&entities.Question{}).Where("author_uuid = ?", uuid).Limit(limit).Offset(offset).Find(&questions).Error
+	return questions, err
+}
