@@ -203,9 +203,8 @@ func (h QuestionHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	questionGroup := router.Group("/question")
 	questionGroup.Post("/create", h.Create, handler)
 	questionGroup.Get("/all", h.GetAll)
+	questionGroup.Get("/my", h.GetMy, handler)
 	questionGroup.Get("/:uuid", h.GetByUUID)
 	questionGroup.Post("/answer/create", h.CreateAnswer, handler)
 	questionGroup.Put("/answer/correct/:uuid", h.CorrectAnswer, handler)
-	questionGroup.Get("/my", h.GetMy, handler)
-
 }
