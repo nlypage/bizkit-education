@@ -5,11 +5,12 @@ import "errors"
 // Declaring constants for error messages
 
 var (
-	InvalidIssuer     = errors.New("invalid issuer")
-	TokenExpired      = errors.New("authorization token expired")
-	EmptyAuthHeader   = errors.New("auth header is empty")
-	InvalidAuthHeader = errors.New("invalid auth header")
-	InvalidSubject    = errors.New("invalid subject")
-	NotEnoughCoins    = errors.New("not enough coins")
-	QuestionClosed    = errors.New("question is closed")
+	InvalidIssuer        = errors.New("invalid issuer")
+	TokenExpired         = errors.New("authorization token expired")
+	EmptyAuthHeader      = errors.New("auth header is empty")
+	InvalidAuthHeader    = errors.New("invalid auth header")
+	InvalidSubject       = errors.New("invalid subject")
+	NotEnoughCoins       = errors.New("not enough coins")
+	QuestionClosed       = errors.New("question is closed")
+	NotEnoughPermissions = errors.New("not enough permissions")
 )

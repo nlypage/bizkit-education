@@ -29,20 +29,34 @@ func NewQuestionService(storage QuestionStorage) *questionService {
 // Create is a method that creates a new question.
 func (s questionService) Create(ctx context.Context, createQuestion *dto.CreateQuestion) (*entities.Question, error) {
 	question := &entities.Question{
-		UUID:    uuid.NewString(),
-		Header:  createQuestion.Header,
-		Body:    createQuestion.Body,
-		Subject: createQuestion.Subject,
-		Reward:  createQuestion.Reward,
+		UUID:       uuid.NewString(),
+		Header:     createQuestion.Header,
+		Body:       createQuestion.Body,
+		Subject:    createQuestion.Subject,
+		Reward:     createQuestion.Reward,
+		AuthorUUID: createQuestion.UserUUID,
 	}
 
 	return s.storage.Create(ctx, question)
 }
 
+// GetAll is a method that returns all questions.
 func (s questionService) GetAll(ctx context.Context, limit, offset int, subject string) ([]*entities.Question, error) {
 	return s.storage.GetAll(ctx, limit, offset, subject)
 }
 
+// GetByUUID is a method that returns a question by its UUID.
 func (s questionService) GetByUUID(ctx context.Context, uuid string) (*entities.Question, error) {
 	return s.storage.GetByUUID(ctx, uuid)
+}
+
+// Close is a method for close the question.
+func (s questionService) Close(ctx context.Context, uuid string) (*entities.Question, error) {
+	question, err := s.storage.GetByUUID(ctx, uuid)
+	if err != nil {
+		return nil, err
+	}
+
+	question.Closed = true
+	return s.storage.Update(ctx, question)
 }
