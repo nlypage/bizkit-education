@@ -114,9 +114,11 @@ func (u questionUseCase) CorrectAnswer(ctx context.Context, answerUUID string, u
 		return nil, err
 	}
 
-	_, err = u.userService.ChangeBalance(ctx, answer.AuthorUUID, int(question.Reward))
-	if err != nil {
-		return nil, err
+	if question.AuthorUUID != answer.AuthorUUID {
+		_, err = u.userService.ChangeBalance(ctx, answer.AuthorUUID, int(question.Reward))
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return u.GetQuestionWithAnswers(ctx, question.UUID)
