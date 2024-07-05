@@ -39,6 +39,18 @@ services:
       - webnet
     restart: always
 
+  bizkit-summarize:
+    container_name: bizkit-summarize
+    build: ./summarizer
+    ports:
+      - '5000:5000'
+    environment:
+      - YANDEX_OAUTH=${YANDEX_OAUTH}
+      - YANDEX_COOKIE=${YANDEX_COOKIE}
+    networks:
+        - webnet
+    restart: always
+
   bizkit-nginx:
     image: nginx:latest
     container_name: bizkit-nginx
