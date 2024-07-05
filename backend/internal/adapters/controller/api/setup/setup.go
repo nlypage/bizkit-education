@@ -36,4 +36,8 @@ func Setup(app *app.BizkitEduApp) {
 	// Setup question routes
 	questionHandler := v1.NewQuestionHandler(app)
 	questionHandler.Setup(apiV1, middlewareHandler.IsAuthenticated)
+
+	// Setup conference routes
+	conferenceHandler := v1.NewConferenceHandler(app)
+	conferenceHandler.Setup(apiV1, middlewareHandler.IsAuthenticated)
 }

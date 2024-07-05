@@ -54,7 +54,8 @@ func NewQuestionHandler(bizkitEduApp *app.BizkitEduApp) *QuestionHandler {
 	}
 }
 
-func (h QuestionHandler) Create(c *fiber.Ctx) error {
+// create is a handler for creating new question in database.
+func (h QuestionHandler) create(c *fiber.Ctx) error {
 	var createQuestion dto.CreateQuestion
 
 	if err := c.BodyParser(&createQuestion); err != nil {
@@ -83,8 +84,8 @@ func (h QuestionHandler) Create(c *fiber.Ctx) error {
 	})
 }
 
-// GetAll is a handler for getting all questions.
-func (h QuestionHandler) GetAll(c *fiber.Ctx) error {
+// getAll is a handler for getting all questions.
+func (h QuestionHandler) getAll(c *fiber.Ctx) error {
 	limit, offset := h.validator.GetLimitAndOffset(c)
 	subject, err := h.validator.GetSubject(c)
 	if err != nil {
@@ -102,8 +103,8 @@ func (h QuestionHandler) GetAll(c *fiber.Ctx) error {
 	})
 }
 
-// GetByUUID is a handler for getting a question by UUID.
-func (h QuestionHandler) GetByUUID(c *fiber.Ctx) error {
+// getByUUID is a handler for getting a question by UUID.
+func (h QuestionHandler) getByUUID(c *fiber.Ctx) error {
 	var uuid4 apiDto.UUID
 	uuid := c.Params("uuid")
 
@@ -125,8 +126,8 @@ func (h QuestionHandler) GetByUUID(c *fiber.Ctx) error {
 	})
 }
 
-// CreateAnswer is a handler for creating an answer.
-func (h QuestionHandler) CreateAnswer(c *fiber.Ctx) error {
+// createAnswer is a handler for creating an answer.
+func (h QuestionHandler) createAnswer(c *fiber.Ctx) error {
 	var createAnswer dto.CreateAnswer
 
 	if err := c.BodyParser(&createAnswer); err != nil {
@@ -150,8 +151,8 @@ func (h QuestionHandler) CreateAnswer(c *fiber.Ctx) error {
 	})
 }
 
-// CorrectAnswer is a handler for confirming the correctness of the response.
-func (h QuestionHandler) CorrectAnswer(c *fiber.Ctx) error {
+// correctAnswer is a handler for confirming the correctness of the response.
+func (h QuestionHandler) correctAnswer(c *fiber.Ctx) error {
 	var uuid4 apiDto.UUID
 	uuid := c.Params("uuid")
 
@@ -178,8 +179,8 @@ func (h QuestionHandler) CorrectAnswer(c *fiber.Ctx) error {
 	})
 }
 
-// GetMy is a handler for getting all questions of the user.
-func (h QuestionHandler) GetMy(c *fiber.Ctx) error {
+// getMy is a handler for getting all questions of the user.
+func (h QuestionHandler) getMy(c *fiber.Ctx) error {
 	limit, offset := h.validator.GetLimitAndOffset(c)
 
 	uuid, err := utils.GetUUIDByToken(c)
@@ -201,10 +202,10 @@ func (h QuestionHandler) GetMy(c *fiber.Ctx) error {
 // Setup is a function that registers all routes for the question.
 func (h QuestionHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	questionGroup := router.Group("/question")
-	questionGroup.Post("/create", h.Create, handler)
-	questionGroup.Get("/all", h.GetAll)
-	questionGroup.Get("/my", h.GetMy, handler)
-	questionGroup.Get("/:uuid", h.GetByUUID)
-	questionGroup.Post("/answer/create", h.CreateAnswer, handler)
-	questionGroup.Put("/answer/correct/:uuid", h.CorrectAnswer, handler)
+	questionGroup.Post("/create", h.create, handler)
+	questionGroup.Get("/all", h.getAll)
+	questionGroup.Get("/my", h.getMy, handler)
+	questionGroup.Get("/:uuid", h.getByUUID)
+	questionGroup.Post("/answer/create", h.createAnswer, handler)
+	questionGroup.Put("/answer/correct/:uuid", h.correctAnswer, handler)
 }
