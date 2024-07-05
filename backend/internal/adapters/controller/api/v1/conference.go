@@ -6,10 +6,12 @@ import (
 	"github.com/nlypage/bizkit-education/cmd/app"
 	"github.com/nlypage/bizkit-education/internal/adapters/controller/api/validator"
 	"github.com/nlypage/bizkit-education/internal/adapters/database/postgres"
+	"github.com/nlypage/bizkit-education/internal/domain/common/errroz"
 	"github.com/nlypage/bizkit-education/internal/domain/dto"
 	"github.com/nlypage/bizkit-education/internal/domain/entities"
 	"github.com/nlypage/bizkit-education/internal/domain/services"
 	"github.com/nlypage/bizkit-education/internal/domain/utils"
+	"time"
 )
 
 type ConferenceService interface {
@@ -32,11 +34,26 @@ func NewConferenceHandler(bizkitEduApp *app.BizkitEduApp) *ConferenceHandler {
 }
 
 func (h ConferenceHandler) create(c *fiber.Ctx) error {
-	var createConference dto.CreateConference
+	var (
+		createConference dto.CreateConference
+		data             map[string]interface{}
+	)
 
 	if err := c.BodyParser(&createConference); err != nil {
 		return err
 	}
+
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+
+	startTime, ok := data["start_time"]
+	if !ok {
+		return errroz.ParsingError
+	}
+
+	parsedTime, err := time.Parse(time.RFC3339, startTime.(string))
+	createConference.StartTime = parsedTime
 
 	uuid, err := utils.GetUUIDByToken(c)
 	if err != nil {
