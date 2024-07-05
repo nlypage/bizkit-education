@@ -11,6 +11,7 @@ import (
 	"github.com/nlypage/bizkit-education/internal/domain/entities"
 	"github.com/nlypage/bizkit-education/internal/domain/services"
 	"github.com/nlypage/bizkit-education/internal/domain/utils"
+	"log"
 	"time"
 )
 
@@ -39,10 +40,12 @@ func (h ConferenceHandler) create(c *fiber.Ctx) error {
 		data             map[string]interface{}
 	)
 
+	log.Println(0)
 	if err := c.BodyParser(&createConference); err != nil {
 		return err
 	}
 
+	log.Println(1)
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
@@ -52,6 +55,7 @@ func (h ConferenceHandler) create(c *fiber.Ctx) error {
 		return errroz.ParsingError
 	}
 
+	log.Println(2)
 	parsedTime, err := time.Parse(time.RFC3339, startTime.(string))
 	if err != nil {
 		return err
