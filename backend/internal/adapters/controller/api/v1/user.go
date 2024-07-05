@@ -37,7 +37,7 @@ func NewUserHandler(bizkitEduApp *app.BizkitEduApp) *UserHandler {
 }
 
 // Register is handler for user registration.
-func (h UserHandler) Register(c *fiber.Ctx) error {
+func (h UserHandler) register(c *fiber.Ctx) error {
 	var createUser dto.CreateUser
 
 	if err := c.BodyParser(&createUser); err != nil {
@@ -60,7 +60,7 @@ func (h UserHandler) Register(c *fiber.Ctx) error {
 	})
 }
 
-func (h UserHandler) Auth(c *fiber.Ctx) error {
+func (h UserHandler) auth(c *fiber.Ctx) error {
 	var authUser dto.AuthUser
 
 	if err := c.BodyParser(&authUser); err != nil {
@@ -83,7 +83,7 @@ func (h UserHandler) Auth(c *fiber.Ctx) error {
 	})
 }
 
-func (h UserHandler) Me(c *fiber.Ctx) error {
+func (h UserHandler) me(c *fiber.Ctx) error {
 	uuid, err := utils.GetUUIDByToken(c)
 	if err != nil {
 		return err
@@ -104,7 +104,7 @@ func (h UserHandler) Me(c *fiber.Ctx) error {
 // Setup is a function that registers all routes for the user.
 func (h UserHandler) Setup(router fiber.Router, middleware fiber.Handler) {
 	userGroup := router.Group("/user")
-	userGroup.Post("/register", h.Register)
-	userGroup.Post("/auth", h.Auth)
-	userGroup.Get("/me", h.Me, middleware)
+	userGroup.Post("/register", h.register)
+	userGroup.Post("/auth", h.auth)
+	userGroup.Get("/me", h.me, middleware)
 }
