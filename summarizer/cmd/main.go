@@ -5,12 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strings"
-	"time"
 )
 
 var (
@@ -138,71 +136,46 @@ func (client *Summarize300Client) parseTextSummarizationJson(url string, data ma
 }
 
 func (client *Summarize300Client) SummarizeUrl(url string) (*MessageBuffer, error) {
-	jsonPayload := make(map[string]interface{})
-	var parseSelector func(string, map[string]interface{}) error
-
-	if strings.Contains(url, "youtu") {
-		jsonPayload["video_url"] = url
-		parseSelector = client.parseVideoSummarizationJson
-	} else {
-		jsonPayload["article_url"] = url
-		parseSelector = client.parseArticleSummarizationJson
+	// Example JSON payload. Adjust according to the API's requirements.
+	jsonPayload := map[string]interface{}{
+		"url": url,
 	}
 
-	if len(url) > 300 {
-		jsonPayload["text"] = url
-		parseSelector = client.parseTextSummarizationJson
-	}
-
-	counter := 0
-	var statusCode int
-	var responseJson map[string]interface{} // Declare responseJson here
-
-	for (statusCode != 0 && statusCode != 2) && counter < MaxRetries {
-		counter++
-		response, err := client.sendRequest(jsonPayload)
-		if err != nil {
-			return nil, err
-		}
-		defer response.Body.Close()
-		body, err := ioutil.ReadAll(response.Body)
-		if err != nil {
-			return nil, err
-		}
-
-		err = json.Unmarshal(body, &responseJson) // Assign responseJson here
-		if err != nil {
-			return nil, err
-		}
-
-		log.Println(responseJson)
-
-		if sc, ok := responseJson["status_code"]; ok {
-			statusCode = int(sc.(float64))
-		} else {
-			log.Printf("%s backend error: %v", url, responseJson)
-			client.Buffer.Add("Yandex API is not available, try again later")
-			return client.Buffer, nil
-		}
-
-		if statusCode >= 3 {
-			log.Printf("%s returned status_code > 2", url)
-			client.Buffer.Add(fmt.Sprintf("Yandex API returned status_code %d when processing %s, the link is not supported by Yandex backend", statusCode, url))
-			return client.Buffer, nil
-		}
-
-		if pollIntervalMs, ok := responseJson["poll_interval_ms"]; ok {
-			time.Sleep(time.Duration(pollIntervalMs.(float64)) * time.Millisecond)
-		}
-
-		if sessionId, ok := responseJson["session_id"]; ok {
-			jsonPayload["session_id"] = sessionId
-		}
-	}
-
-	err := parseSelector(url, responseJson)
+	// Sending request to the API endpoint.
+	response, err := client.sendRequest(jsonPayload)
 	if err != nil {
 		return nil, err
+	}
+	defer response.Body.Close()
+
+	// Parsing the response body.
+	var responseData map[string]interface{}
+	if err := json.NewDecoder(response.Body).Decode(&responseData); err != nil {
+		return nil, err
+	}
+
+	// Example of handling different types of summarization based on the response.
+	// This needs to be customized based on your actual API response structure.
+	if _, ok := responseData["type"]; ok {
+		switch responseData["type"] {
+		case "article":
+			err := client.parseArticleSummarizationJson(url, responseData)
+			if err != nil {
+				return nil, err
+			}
+		case "video":
+			err := client.parseVideoSummarizationJson(url, responseData)
+			if err != nil {
+				return nil, err
+			}
+		default:
+			err := client.parseTextSummarizationJson(url, responseData)
+			if err != nil {
+				return nil, err
+			}
+		}
+	} else {
+		return nil, fmt.Errorf("unknown summarization type")
 	}
 
 	return client.Buffer, nil
@@ -211,7 +184,7 @@ func (client *Summarize300Client) SummarizeUrl(url string) (*MessageBuffer, erro
 func main() {
 	fiberApp := fiber.New()
 
-	fiberApp.Post("/generate", func(c *fiber.Ctx) error {
+	fiberApp.Post("/summarize/generate", func(c *fiber.Ctx) error {
 		var data map[string]interface{}
 
 		if err := c.BodyParser(&data); err != nil {
