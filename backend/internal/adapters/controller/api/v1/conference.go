@@ -53,6 +53,9 @@ func (h ConferenceHandler) create(c *fiber.Ctx) error {
 	}
 
 	parsedTime, err := time.Parse(time.RFC3339, startTime.(string))
+	if err != nil {
+		return err
+	}
 	createConference.StartTime = parsedTime
 
 	uuid, err := utils.GetUUIDByToken(c)
