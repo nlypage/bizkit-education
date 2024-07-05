@@ -13,4 +13,5 @@ var (
 	NotEnoughCoins       = errors.New("not enough coins")
 	QuestionClosed       = errors.New("question is closed")
 	NotEnoughPermissions = errors.New("not enough permissions")
+	ParsingError         = errors.New("parsing error")
 )
