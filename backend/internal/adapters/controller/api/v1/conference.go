@@ -15,20 +15,25 @@ import (
 	"time"
 )
 
+// ConferenceService is an interface that contains a method to create a conference.
 type ConferenceService interface {
 	Create(ctx context.Context, createConference *dto.CreateConference) (*entities.Conference, error)
+	SetUrl(ctx context.Context, updateConference *dto.SetConferenceURL) (*entities.Conference, error)
 }
 
+// ConferenceUseCase is an interface that contains a method to create a conference.
 type ConferenceUseCase interface {
 	NewConference(ctx context.Context, createConference *dto.CreateConference) (*entities.Conference, error)
 }
 
+// ConferenceHandler is a struct that contains instances of services.
 type ConferenceHandler struct {
 	conferenceService ConferenceService
 	conferenceUseCase ConferenceUseCase
 	validator         *validator.Validator
 }
 
+// NewConferenceHandler is a function that returns a new instance of ConferenceHandler.
 func NewConferenceHandler(bizkitEduApp *app.BizkitEduApp) *ConferenceHandler {
 	conferenceStorage := postgres.NewConferenceStorage(bizkitEduApp.DB)
 	conferenceService := services.NewConferenceService(conferenceStorage)
@@ -45,6 +50,7 @@ func NewConferenceHandler(bizkitEduApp *app.BizkitEduApp) *ConferenceHandler {
 	}
 }
 
+// create is a method that creates a new conference.
 func (h ConferenceHandler) create(c *fiber.Ctx) error {
 	var (
 		createConference dto.CreateConference
@@ -92,7 +98,35 @@ func (h ConferenceHandler) create(c *fiber.Ctx) error {
 	})
 }
 
+// Update is a method that updates a conference.
+func (h ConferenceHandler) setUrl(c *fiber.Ctx) error {
+	var (
+		setConferenceURL dto.SetConferenceURL
+	)
+
+	if err := c.BodyParser(&setConferenceURL); err != nil {
+		return err
+	}
+
+	errValidate := h.validator.ValidateData(setConferenceURL)
+	if errValidate != nil {
+		return errValidate
+	}
+
+	conf, err := h.conferenceService.SetUrl(c.Context(), &setConferenceURL)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status": true,
+		"body":   conf,
+	})
+}
+
+// Setup is a method that sets up conference routes.
 func (h ConferenceHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	conferenceGroup := router.Group("/conference")
 	conferenceGroup.Post("/create", h.create, handler)
+	conferenceGroup.Patch("/url", h.setUrl, handler)
 }
