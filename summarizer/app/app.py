@@ -41,4 +41,4 @@ if __name__ == '__main__':
         print("YANDEX_OAUTH or YANDEX_COOKIE environment variables not set.")
         # Handle this case as needed
     
-    app.run()
+    app.run(ssl_context=('./certs/fullchain.pem', './certs/privkey.pem'))
