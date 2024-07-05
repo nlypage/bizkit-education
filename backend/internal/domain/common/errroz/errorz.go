@@ -14,4 +14,5 @@ var (
 	QuestionClosed       = errors.New("question is closed")
 	NotEnoughPermissions = errors.New("not enough permissions")
 	ParsingError         = errors.New("parsing error")
+	URLAlreadySet        = errors.New("url already set")
 )

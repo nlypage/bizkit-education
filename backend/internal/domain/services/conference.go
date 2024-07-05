@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"github.com/google/uuid"
+	"github.com/nlypage/bizkit-education/internal/domain/common/errroz"
 	"github.com/nlypage/bizkit-education/internal/domain/dto"
 	"github.com/nlypage/bizkit-education/internal/domain/entities"
 )
@@ -37,4 +38,19 @@ func (s conferenceService) Create(ctx context.Context, createConference *dto.Cre
 	}
 
 	return s.storage.Create(ctx, conference)
+}
+
+// SetUrl is a method to set the conference url.
+func (s conferenceService) SetUrl(ctx context.Context, updateConference *dto.SetConferenceURL) (*entities.Conference, error) {
+	conference, err := s.storage.GetByUUID(ctx, updateConference.UUID)
+	if err != nil {
+		return nil, err
+	}
+
+	if conference.URL != "" {
+		return nil, errroz.URLAlreadySet
+	}
+
+	conference.URL = updateConference.URL
+	return s.storage.Update(ctx, conference)
 }
