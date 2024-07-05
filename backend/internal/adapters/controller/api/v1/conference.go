@@ -10,6 +10,7 @@ import (
 	"github.com/nlypage/bizkit-education/internal/domain/dto"
 	"github.com/nlypage/bizkit-education/internal/domain/entities"
 	"github.com/nlypage/bizkit-education/internal/domain/services"
+	"github.com/nlypage/bizkit-education/internal/domain/usecases/conference"
 	"github.com/nlypage/bizkit-education/internal/domain/utils"
 	"time"
 )
@@ -18,8 +19,13 @@ type ConferenceService interface {
 	Create(ctx context.Context, createConference *dto.CreateConference) (*entities.Conference, error)
 }
 
+type ConferenceUseCase interface {
+	NewConference(ctx context.Context, createConference *dto.CreateConference) (*entities.Conference, error)
+}
+
 type ConferenceHandler struct {
 	conferenceService ConferenceService
+	conferenceUseCase ConferenceUseCase
 	validator         *validator.Validator
 }
 
@@ -27,8 +33,14 @@ func NewConferenceHandler(bizkitEduApp *app.BizkitEduApp) *ConferenceHandler {
 	conferenceStorage := postgres.NewConferenceStorage(bizkitEduApp.DB)
 	conferenceService := services.NewConferenceService(conferenceStorage)
 
+	userStorage := postgres.NewUserStorage(bizkitEduApp.DB)
+	userService := services.NewUserService(userStorage)
+
+	conferenceUseCase := conference.NewConferenceUseCase(conferenceService, userService)
+
 	return &ConferenceHandler{
 		conferenceService: conferenceService,
+		conferenceUseCase: conferenceUseCase,
 		validator:         bizkitEduApp.Validator,
 	}
 }
@@ -69,14 +81,14 @@ func (h ConferenceHandler) create(c *fiber.Ctx) error {
 		return errValidate
 	}
 
-	conference, err := h.conferenceService.Create(c.Context(), &createConference)
+	conf, err := h.conferenceUseCase.NewConference(c.Context(), &createConference)
 	if err != nil {
 		return err
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"status": true,
-		"body":   conference,
+		"body":   conf,
 	})
 }
 
