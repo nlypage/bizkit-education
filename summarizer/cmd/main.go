@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
-	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -155,10 +155,9 @@ func (client *Summarize300Client) SummarizeUrl(url string) (*MessageBuffer, erro
 	}
 
 	counter := 0
-	var (
-		statusCode   int
-		responseJson map[string]interface{}
-	)
+	var statusCode int
+	var responseJson map[string]interface{} // Declare responseJson here
+
 	for (statusCode != 0 && statusCode != 2) && counter < MaxRetries {
 		counter++
 		response, err := client.sendRequest(jsonPayload)
@@ -166,12 +165,12 @@ func (client *Summarize300Client) SummarizeUrl(url string) (*MessageBuffer, erro
 			return nil, err
 		}
 		defer response.Body.Close()
-		body, err := io.ReadAll(response.Body)
+		body, err := ioutil.ReadAll(response.Body)
 		if err != nil {
 			return nil, err
 		}
 
-		err = json.Unmarshal(body, &responseJson)
+		err = json.Unmarshal(body, &responseJson) // Assign responseJson here
 		if err != nil {
 			return nil, err
 		}
