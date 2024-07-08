@@ -128,7 +128,7 @@ func (v Validator) GetSubject(c *fiber.Ctx) (string, error) {
 }
 
 func (v Validator) GetConferenceSearchType(c *fiber.Ctx) (string, error) {
-	searchType := c.Params("search_type", "upcoming")
+	searchType := c.Query("search_type", "upcoming")
 	if searchType != "upcoming" && searchType != "archived" {
 		return "", errroz.InvalidSearchMethod
 	}
