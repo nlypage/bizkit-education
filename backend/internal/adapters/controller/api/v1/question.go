@@ -203,9 +203,9 @@ func (h QuestionHandler) getMy(c *fiber.Ctx) error {
 func (h QuestionHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	questionGroup := router.Group("/question")
 	questionGroup.Post("/create", h.create, handler)
-	questionGroup.Get("/all", h.getAll)
+	questionGroup.Get("/all", h.getAll, handler)
 	questionGroup.Get("/my", h.getMy, handler)
-	questionGroup.Get("/:uuid", h.getByUUID)
+	questionGroup.Get("/:uuid", h.getByUUID, handler)
 	questionGroup.Post("/answer/create", h.createAnswer, handler)
 	questionGroup.Put("/answer/correct/:uuid", h.correctAnswer, handler)
 }

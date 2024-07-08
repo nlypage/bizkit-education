@@ -15,4 +15,5 @@ var (
 	NotEnoughPermissions = errors.New("not enough permissions")
 	ParsingError         = errors.New("parsing error")
 	URLAlreadySet        = errors.New("url already set")
+	InvalidSearchMethod  = errors.New("invalid search method")
 )

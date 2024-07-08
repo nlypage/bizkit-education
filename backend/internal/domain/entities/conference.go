@@ -12,4 +12,5 @@ type Conference struct {
 	StartTime   time.Time `json:"start_time"`
 	AuthorUUID  string    `json:"author_uuid"`
 	URL         string    `json:"url"`
+	Archived    bool      `json:"archived"`
 }

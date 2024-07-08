@@ -12,7 +12,8 @@ import (
 type ConferenceStorage interface {
 	Create(ctx context.Context, conference *entities.Conference) (*entities.Conference, error)
 	GetByUUID(ctx context.Context, uuid string) (*entities.Conference, error)
-	GetAll(ctx context.Context, limit, offset int) ([]*entities.Conference, error)
+	GetAll(ctx context.Context, limit, offset int, searchType string) ([]*entities.Conference, error)
+	GetUserConferences(ctx context.Context, userUUID string) ([]*entities.Conference, error)
 	Update(ctx context.Context, conference *entities.Conference) (*entities.Conference, error)
 	Delete(ctx context.Context, uuid string) error
 }
@@ -53,4 +54,14 @@ func (s conferenceService) SetUrl(ctx context.Context, updateConference *dto.Set
 
 	conference.URL = updateConference.URL
 	return s.storage.Update(ctx, conference)
+}
+
+// GetAll is a method that returns all conferences.
+func (s conferenceService) GetAll(ctx context.Context, limit, offset int, searchType string) ([]*entities.Conference, error) {
+	return s.storage.GetAll(ctx, limit, offset, searchType)
+}
+
+// GetUserConferences is a method that returns all conferences of the user.
+func (s conferenceService) GetUserConferences(ctx context.Context, userUUID string) ([]*entities.Conference, error) {
+	return s.storage.GetUserConferences(ctx, userUUID)
 }

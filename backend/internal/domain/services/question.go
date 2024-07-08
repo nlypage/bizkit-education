@@ -14,7 +14,7 @@ type QuestionStorage interface {
 	GetAll(ctx context.Context, limit, offset int, subject string) ([]*entities.Question, error)
 	Update(ctx context.Context, question *entities.Question) (*entities.Question, error)
 	Delete(ctx context.Context, uuid string) error
-	GetMy(ctx context.Context, limit, offset int, uuid string) ([]*entities.Question, error)
+	GetUserQuestions(ctx context.Context, limit, offset int, uuid string) ([]*entities.Question, error)
 }
 
 // questionService is a struct that contains a pointer to a QuestionStorage instance.
@@ -48,7 +48,7 @@ func (s questionService) GetAll(ctx context.Context, limit, offset int, subject 
 
 // GetMy is a method that returns all questions of the user.
 func (s questionService) GetMy(ctx context.Context, limit, offset int, userUuid string) ([]*entities.Question, error) {
-	return s.storage.GetMy(ctx, limit, offset, userUuid)
+	return s.storage.GetUserQuestions(ctx, limit, offset, userUuid)
 }
 
 // GetByUUID is a method that returns a question by its UUID.

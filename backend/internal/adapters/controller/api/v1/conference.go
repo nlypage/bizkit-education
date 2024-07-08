@@ -17,8 +17,9 @@ import (
 
 // ConferenceService is an interface that contains a method to create a conference.
 type ConferenceService interface {
-	Create(ctx context.Context, createConference *dto.CreateConference) (*entities.Conference, error)
 	SetUrl(ctx context.Context, updateConference *dto.SetConferenceURL) (*entities.Conference, error)
+	GetAll(ctx context.Context, limit, offset int, searchType string) ([]*entities.Conference, error)
+	GetUserConferences(ctx context.Context, userUUID string) ([]*entities.Conference, error)
 }
 
 // ConferenceUseCase is an interface that contains a method to create a conference.
@@ -124,9 +125,49 @@ func (h ConferenceHandler) setUrl(c *fiber.Ctx) error {
 	})
 }
 
+// GetAll is a method that returns all conferences.
+func (h ConferenceHandler) GetAll(c *fiber.Ctx) error {
+	searchType, err := h.validator.GetConferenceSearchType(c)
+	if err != nil {
+		return err
+	}
+
+	limit, offset := h.validator.GetLimitAndOffset(c)
+
+	conferences, err := h.conferenceService.GetAll(c.Context(), limit, offset, searchType)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status": true,
+		"body":   conferences,
+	})
+}
+
+// GetMy is a method that returns all conferences of the user.
+func (h ConferenceHandler) GetMy(c *fiber.Ctx) error {
+	uuid, err := utils.GetUUIDByToken(c)
+	if err != nil {
+		return err
+	}
+
+	conferences, err := h.conferenceService.GetUserConferences(c.Context(), uuid)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status": true,
+		"body":   conferences,
+	})
+}
+
 // Setup is a method that sets up conference routes.
 func (h ConferenceHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	conferenceGroup := router.Group("/conference")
 	conferenceGroup.Post("/create", h.create, handler)
 	conferenceGroup.Patch("/url", h.setUrl, handler)
+	conferenceGroup.Patch("/my", h.GetMy, handler)
+	conferenceGroup.Get("/all", h.GetAll, handler)
 }
