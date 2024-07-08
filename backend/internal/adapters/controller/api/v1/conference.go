@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/gofiber/fiber/v2"
 	"github.com/nlypage/bizkit-education/cmd/app"
+	apiDto "github.com/nlypage/bizkit-education/internal/adapters/controller/api/dto"
 	"github.com/nlypage/bizkit-education/internal/adapters/controller/api/validator"
 	"github.com/nlypage/bizkit-education/internal/adapters/database/postgres"
 	"github.com/nlypage/bizkit-education/internal/domain/common/errroz"
@@ -20,6 +21,7 @@ type ConferenceService interface {
 	SetUrl(ctx context.Context, updateConference *dto.SetConferenceURL) (*entities.Conference, error)
 	GetAll(ctx context.Context, limit, offset int, searchType string) ([]*entities.Conference, error)
 	GetUserConferences(ctx context.Context, userUUID string) ([]*entities.Conference, error)
+	Archive(ctx context.Context, uuid string, userUUID string) (*entities.Conference, error)
 }
 
 // ConferenceUseCase is an interface that contains a method to create a conference.
@@ -167,6 +169,34 @@ func (h ConferenceHandler) GetMy(c *fiber.Ctx) error {
 	})
 }
 
+// Archive is a method that archives a conference.
+func (h ConferenceHandler) Archive(c *fiber.Ctx) error {
+	var uuidDto apiDto.UUID
+
+	uuid, err := utils.GetUUIDByToken(c)
+	if err != nil {
+		return err
+	}
+
+	conferenceUUID := c.Params("uuid")
+	uuidDto.UUID = conferenceUUID
+
+	errValidate := h.validator.ValidateData(uuidDto)
+	if errValidate != nil {
+		return errValidate
+	}
+
+	conf, err := h.conferenceService.Archive(c.Context(), conferenceUUID, uuid)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status": true,
+		"body":   conf,
+	})
+}
+
 // Setup is a method that sets up conference routes.
 func (h ConferenceHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	conferenceGroup := router.Group("/conference")
@@ -174,4 +204,5 @@ func (h ConferenceHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	conferenceGroup.Patch("/url", h.setUrl, handler)
 	conferenceGroup.Get("/my", h.GetMy, handler)
 	conferenceGroup.Get("/all", h.GetAll, handler)
+	conferenceGroup.Patch("/:uuid/archive", h.Archive, handler)
 }
