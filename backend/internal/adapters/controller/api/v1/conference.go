@@ -83,6 +83,10 @@ func (h ConferenceHandler) create(c *fiber.Ctx) error {
 	}
 	createConference.AuthorUUID = uuid
 
+	if createConference.StartTime.Before(time.Now()) {
+		return errroz.InvalidStartTime
+	}
+
 	errValidate := h.validator.ValidateData(createConference)
 	if errValidate != nil {
 		return errValidate
@@ -168,6 +172,6 @@ func (h ConferenceHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	conferenceGroup := router.Group("/conference")
 	conferenceGroup.Post("/create", h.create, handler)
 	conferenceGroup.Patch("/url", h.setUrl, handler)
-	conferenceGroup.Patch("/my", h.GetMy, handler)
+	conferenceGroup.Get("/my", h.GetMy, handler)
 	conferenceGroup.Get("/all", h.GetAll, handler)
 }

@@ -16,4 +16,5 @@ var (
 	ParsingError         = errors.New("parsing error")
 	URLAlreadySet        = errors.New("url already set")
 	InvalidSearchMethod  = errors.New("invalid search method")
+	InvalidStartTime     = errors.New("invalid start time")
 )
