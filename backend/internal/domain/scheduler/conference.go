@@ -20,7 +20,7 @@ func NewConferenceScheduler(app *app.BizkitEduApp) *ConferenceScheduler {
 
 // periodicallyArchiveConferences is a method that archives conferences every hour.
 func (s ConferenceScheduler) periodicallyArchiveConferences() {
-	ticker := time.NewTicker(10 * time.Second)
+	ticker := time.NewTicker(15 * time.Minute)
 	for {
 		select {
 		case <-ticker.C:
