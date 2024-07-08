@@ -65,3 +65,17 @@ func (s conferenceService) GetAll(ctx context.Context, limit, offset int, search
 func (s conferenceService) GetUserConferences(ctx context.Context, userUUID string) ([]*entities.Conference, error) {
 	return s.storage.GetUserConferences(ctx, userUUID)
 }
+
+// Archive is a method to archive a conference.
+func (s conferenceService) Archive(ctx context.Context, uuid string, userUUID string) (*entities.Conference, error) {
+	conference, err := s.storage.GetByUUID(ctx, uuid)
+	if err != nil {
+		return nil, err
+	}
+
+	if conference.AuthorUUID != userUUID {
+		return nil, errroz.NotEnoughPermissions
+	}
+	conference.Archived = true
+	return s.storage.Update(ctx, conference)
+}
