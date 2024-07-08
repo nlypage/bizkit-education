@@ -33,7 +33,7 @@ func (s *questionStorage) GetByUUID(ctx context.Context, uuid string) (*entities
 // GetAll is a method that returns a slice of pointers to Question instances.
 func (s *questionStorage) GetAll(ctx context.Context, limit, offset int, subject string) ([]*entities.Question, error) {
 	var questions []*entities.Question
-	query := s.db.WithContext(ctx).Model(&entities.Question{})
+	query := s.db.WithContext(ctx).Model(&entities.Question{}).Order("created_at desc")
 
 	if subject != "" {
 		query = query.Where("subject = ?", subject)
@@ -57,6 +57,6 @@ func (s *questionStorage) Delete(ctx context.Context, uuid string) error {
 // GetMy is a method that returns a slice of pointers to Question instances.
 func (s *questionStorage) GetMy(ctx context.Context, limit, offset int, uuid string) ([]*entities.Question, error) {
 	var questions []*entities.Question
-	err := s.db.WithContext(ctx).Model(&entities.Question{}).Where("author_uuid = ?", uuid).Limit(limit).Offset(offset).Find(&questions).Error
+	err := s.db.WithContext(ctx).Model(&entities.Question{}).Order("created_at desc").Where("author_uuid = ?", uuid).Limit(limit).Offset(offset).Find(&questions).Error
 	return questions, err
 }
