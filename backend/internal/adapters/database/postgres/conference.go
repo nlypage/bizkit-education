@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"context"
+	"github.com/nlypage/bizkit-education/internal/domain/common/errroz"
 	"github.com/nlypage/bizkit-education/internal/domain/entities"
 	"gorm.io/gorm"
 )
@@ -30,10 +31,28 @@ func (s *conferenceStorage) GetByUUID(ctx context.Context, uuid string) (*entiti
 }
 
 // GetAll is a method that returns a slice of pointers to Conference instances.
-func (s *conferenceStorage) GetAll(ctx context.Context, limit, offset int) ([]*entities.Conference, error) {
-	var conference []*entities.Conference
-	err := s.db.WithContext(ctx).Model(&entities.Conference{}).Order("start_time desc").Limit(limit).Offset(offset).Find(&conference).Error
-	return conference, err
+func (s *conferenceStorage) GetAll(ctx context.Context, limit, offset int, searchType string) ([]*entities.Conference, error) {
+	var query *gorm.DB
+
+	switch searchType {
+	case "upcoming":
+		query = s.db.WithContext(ctx).Model(&entities.Conference{}).Limit(limit).Offset(offset).Where("archived = ?", false).Order("start_time asc")
+	case "archived":
+		query = s.db.WithContext(ctx).Model(&entities.Conference{}).Limit(limit).Offset(offset).Where("archived = ?", true).Order("start_time desc")
+	default:
+		return nil, errroz.InvalidSearchMethod
+	}
+
+	var conferences []*entities.Conference
+	err := query.Find(&conferences).Error
+	return conferences, err
+}
+
+// GetUserConferences is a method that returns a slice of pointers to user Conference instances.
+func (s *conferenceStorage) GetUserConferences(ctx context.Context, userUUID string) ([]*entities.Conference, error) {
+	var conferences []*entities.Conference
+	err := s.db.WithContext(ctx).Model(&entities.Conference{}).Where("author_uuid = ?", userUUID).Find(&conferences).Error
+	return conferences, err
 }
 
 // Update is a method to update an existing Conference in database.

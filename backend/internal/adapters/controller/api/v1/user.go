@@ -102,9 +102,9 @@ func (h UserHandler) me(c *fiber.Ctx) error {
 }
 
 // Setup is a function that registers all routes for the user.
-func (h UserHandler) Setup(router fiber.Router, middleware fiber.Handler) {
+func (h UserHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	userGroup := router.Group("/user")
 	userGroup.Post("/register", h.register)
 	userGroup.Post("/auth", h.auth)
-	userGroup.Get("/me", h.me, middleware)
+	userGroup.Get("/me", h.me, handler)
 }

@@ -54,8 +54,8 @@ func (s *questionStorage) Delete(ctx context.Context, uuid string) error {
 	return s.db.WithContext(ctx).Unscoped().Delete(&entities.Question{}, "uuid = ?", uuid).Error
 }
 
-// GetMy is a method that returns a slice of pointers to Question instances.
-func (s *questionStorage) GetMy(ctx context.Context, limit, offset int, uuid string) ([]*entities.Question, error) {
+// GetUserQuestions is a method to  get questions created by user.
+func (s *questionStorage) GetUserQuestions(ctx context.Context, limit, offset int, uuid string) ([]*entities.Question, error) {
 	var questions []*entities.Question
 	err := s.db.WithContext(ctx).Model(&entities.Question{}).Order("created_at desc").Where("author_uuid = ?", uuid).Limit(limit).Offset(offset).Find(&questions).Error
 	return questions, err
