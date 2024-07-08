@@ -4,14 +4,17 @@ import os
 
 application = Flask(__name__)
 
+YANDEX_OAUTH = os.environ["YANDEX_OAUTH"]
+YANDEX_COOKIE = os.environ["YANDEX_COOKIE"]
+
 @application.route('/summarize/generate', methods=['POST'])
 def generate():
     data = request.json
     url = data.get('content')
-    
+
     if len(url) <= 300:
         url = url.split()
-    
+
     else:
         url = [url]
 
@@ -34,11 +37,8 @@ def generate():
     }
 
 if __name__ == '__main__':
-    YANDEX_OAUTH = os.environ["YANDEX_OAUTH"]
-    YANDEX_COOKIE = os.environ["YANDEX_COOKIE"]
-
     if not YANDEX_OAUTH or not YANDEX_COOKIE:
         print("YANDEX_OAUTH or YANDEX_COOKIE environment variables not set.")
         # Handle this case as needed
-    
+
     application.run(ssl_context=('./certs/fullchain.pem', './certs/privkey.pem'))
