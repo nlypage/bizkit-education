@@ -145,6 +145,7 @@ func (u questionUseCase) GetAll(ctx context.Context, limit, offset int, subject 
 		}
 
 		questionsDto = append(questionsDto, &dto.ReturnQuestion{
+			UUID:    question.UUID,
 			Header:  question.Header,
 			Body:    question.Body,
 			Subject: question.Subject,
