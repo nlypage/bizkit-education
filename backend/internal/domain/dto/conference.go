@@ -30,6 +30,6 @@ type ReturnConference struct {
 
 type ConferenceDonate struct {
 	ConferenceUUID string `json:"-" validate:"required,uuid4"`
-	UserUUID       string `json:"user_uuid" validate:"required,uuid4"`
+	UserUUID       string `json:"-" validate:"required,uuid4"`
 	Amount         uint   `json:"amount" validate:"required,numeric"`
 }
