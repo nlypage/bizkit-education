@@ -9,6 +9,7 @@ type CreateQuestion struct {
 }
 
 type ReturnQuestion struct {
+	UUID    string `json:"uuid"`
 	Header  string `json:"header"`
 	Body    string `json:"body"`
 	Subject string `json:"subject"`
