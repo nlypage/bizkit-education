@@ -87,12 +87,12 @@ func (s *usersStorage) Transfer(ctx context.Context, fromUUID, toUUID string, am
 	fromUser.CoinsAmount -= int(amount)
 	toUser.CoinsAmount += int(float32(amount) * 0.8)
 
-	if err := tx.Save(fromUser).Error; err != nil {
+	if err := tx.Model(&entities.User{}).Where("uuid = ?", fromUser.UUID).Save(fromUser).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	if err := tx.Save(toUser).Error; err != nil {
+	if err := tx.Model(&entities.User{}).Where("uuid = ?", toUser.UUID).Save(toUser).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
