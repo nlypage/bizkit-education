@@ -116,8 +116,9 @@ func (u questionUseCase) CorrectAnswer(ctx context.Context, answerUUID string, u
 		return nil, err
 	}
 
+	finalReward := float32(question.Reward) * 0.8
 	if question.AuthorUUID != answer.AuthorUUID {
-		_, err = u.userService.ChangeBalance(ctx, answer.AuthorUUID, int(question.Reward))
+		_, err = u.userService.ChangeBalance(ctx, answer.AuthorUUID, int(finalReward))
 		if err != nil {
 			return nil, err
 		}

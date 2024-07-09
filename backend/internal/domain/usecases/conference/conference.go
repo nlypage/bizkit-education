@@ -10,12 +10,14 @@ import (
 type Service interface {
 	Create(ctx context.Context, createConference *dto.CreateConference) (*entities.Conference, error)
 	GetAll(ctx context.Context, limit, offset int, searchType string) ([]*entities.Conference, error)
+	GetByUUID(ctx context.Context, uuid string) (*entities.Conference, error)
 }
 
 // UserService is an interface that contains a method to change the balance of a user.
 type UserService interface {
 	ChangeBalance(ctx context.Context, uuid string, change int) (*entities.User, error)
 	GetByUUID(ctx context.Context, uuid string) (*entities.User, error)
+	Transfer(ctx context.Context, fromUUID, toUUID string, amount uint) error
 }
 
 // conferenceUseCase is an interface that contains a method to create a conference.
@@ -42,6 +44,18 @@ func (u conferenceUseCase) NewConference(ctx context.Context, createConference *
 	return u.conferenceService.Create(ctx, createConference)
 }
 
+// Donate is a method that donates to a conference.
+func (u conferenceUseCase) Donate(ctx context.Context, conferenceUUID string, userUUID string, amount uint) error {
+	conference, err := u.conferenceService.GetByUUID(ctx, conferenceUUID)
+	if err != nil {
+		return err
+	}
+
+	errTransfer := u.userService.Transfer(ctx, userUUID, conference.AuthorUUID, amount)
+	return errTransfer
+}
+
+// GetAll is a method that returns all conference in dto with author.
 func (u conferenceUseCase) GetAll(ctx context.Context, limit, offset int, searchType string) ([]*dto.ReturnConference, error) {
 	var (
 		conferenceDto []*dto.ReturnConference

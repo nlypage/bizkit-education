@@ -79,3 +79,8 @@ func (s conferenceService) Archive(ctx context.Context, uuid string, userUUID st
 	conference.Archived = true
 	return s.storage.Update(ctx, conference)
 }
+
+// GetByUUID is a method that returns a conference by uuid.
+func (s conferenceService) GetByUUID(ctx context.Context, uuid string) (*entities.Conference, error) {
+	return s.storage.GetByUUID(ctx, uuid)
+}

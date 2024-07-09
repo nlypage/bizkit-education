@@ -57,3 +57,45 @@ func (s *usersStorage) GetByUsernameAndPassword(ctx context.Context, username st
 
 	return user, err
 }
+
+// Transfer is a method to transfer coins between users.
+func (s *usersStorage) Transfer(ctx context.Context, fromUUID, toUUID string, amount uint) error {
+	tx := s.db.WithContext(ctx).Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	fromUser, err := s.GetByUUID(ctx, fromUUID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	toUser, err := s.GetByUUID(ctx, toUUID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if fromUser.CoinsAmount < int(amount) {
+		tx.Rollback()
+		return err
+	}
+
+	fromUser.CoinsAmount -= int(amount)
+	toUser.CoinsAmount += int(float32(amount) * 0.8)
+
+	if err := tx.Save(fromUser).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	if err := tx.Save(toUser).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
+}
