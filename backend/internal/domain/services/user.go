@@ -17,6 +17,7 @@ type UserStorage interface {
 	Update(ctx context.Context, user *entities.User) (*entities.User, error)
 	Delete(ctx context.Context, uuid string) error
 	GetByUsernameAndPassword(ctx context.Context, username string, password string) (*entities.User, error)
+	Transfer(ctx context.Context, fromUUID, toUUID string, amount uint) error
 }
 
 // userService is a struct that contains a pointer to an UserStorage instance.
@@ -64,4 +65,13 @@ func (s userService) ChangeBalance(ctx context.Context, uuid string, change int)
 
 	user.CoinsAmount += change
 	return s.storage.Update(ctx, user)
+}
+
+// Transfer is a method to transfer coins between users.
+func (s userService) Transfer(ctx context.Context, fromUUID, toUUID string, amount uint) error {
+	if fromUUID == toUUID {
+		return errroz.TransferToYourself
+	}
+
+	return s.storage.Transfer(ctx, fromUUID, toUUID, amount)
 }

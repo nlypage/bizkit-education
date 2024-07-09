@@ -27,3 +27,9 @@ type ReturnConference struct {
 	URL         string    `json:"url"`
 	Archived    bool      `json:"archived"`
 }
+
+type ConferenceDonate struct {
+	ConferenceUUID string `json:"-" validate:"required,uuid4"`
+	UserUUID       string `json:"user_uuid" validate:"required,uuid4"`
+	Amount         uint   `json:"amount" validate:"required,numeric"`
+}

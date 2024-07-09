@@ -28,6 +28,7 @@ type ConferenceService interface {
 type ConferenceUseCase interface {
 	NewConference(ctx context.Context, createConference *dto.CreateConference) (*entities.Conference, error)
 	GetAll(ctx context.Context, limit, offset int, searchType string) ([]*dto.ReturnConference, error)
+	Donate(ctx context.Context, conferenceUUID string, userUUID string, amount uint) error
 }
 
 // ConferenceHandler is a struct that contains instances of services.
@@ -133,7 +134,7 @@ func (h ConferenceHandler) setUrl(c *fiber.Ctx) error {
 }
 
 // GetAll is a method that returns all conferences.
-func (h ConferenceHandler) GetAll(c *fiber.Ctx) error {
+func (h ConferenceHandler) getAll(c *fiber.Ctx) error {
 	searchType, err := h.validator.GetConferenceSearchType(c)
 	if err != nil {
 		return err
@@ -153,7 +154,7 @@ func (h ConferenceHandler) GetAll(c *fiber.Ctx) error {
 }
 
 // GetMy is a method that returns all conferences of the user.
-func (h ConferenceHandler) GetMy(c *fiber.Ctx) error {
+func (h ConferenceHandler) getMy(c *fiber.Ctx) error {
 	uuid, err := utils.GetUUIDByToken(c)
 	if err != nil {
 		return err
@@ -171,7 +172,7 @@ func (h ConferenceHandler) GetMy(c *fiber.Ctx) error {
 }
 
 // Archive is a method that archives a conference.
-func (h ConferenceHandler) Archive(c *fiber.Ctx) error {
+func (h ConferenceHandler) archive(c *fiber.Ctx) error {
 	var uuidDto apiDto.UUID
 
 	uuid, err := utils.GetUUIDByToken(c)
@@ -198,12 +199,41 @@ func (h ConferenceHandler) Archive(c *fiber.Ctx) error {
 	})
 }
 
+func (h ConferenceHandler) donate(c *fiber.Ctx) error {
+	var (
+		donate  dto.ConferenceDonate
+		uuidDto apiDto.UUID
+	)
+
+	conferenceUUID := c.Params("uuid")
+	uuidDto.UUID = conferenceUUID
+
+	if err := c.BodyParser(&donate); err != nil {
+		return err
+	}
+
+	errValidate := h.validator.ValidateData(donate)
+	if errValidate != nil {
+		return errValidate
+	}
+
+	err := h.conferenceUseCase.Donate(c.Context(), donate.ConferenceUUID, donate.UserUUID, donate.Amount)
+	if err != nil {
+		return err
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"status": true,
+	})
+}
+
 // Setup is a method that sets up conference routes.
 func (h ConferenceHandler) Setup(router fiber.Router, handler fiber.Handler) {
 	conferenceGroup := router.Group("/conference")
 	conferenceGroup.Post("/create", h.create, handler)
 	conferenceGroup.Patch("/url", h.setUrl, handler)
-	conferenceGroup.Get("/my", h.GetMy, handler)
-	conferenceGroup.Get("/all", h.GetAll, handler)
-	conferenceGroup.Patch("/:uuid/archive", h.Archive, handler)
+	conferenceGroup.Get("/my", h.getMy, handler)
+	conferenceGroup.Get("/all", h.getAll, handler)
+	conferenceGroup.Patch("/:uuid/archive", h.archive, handler)
+	conferenceGroup.Post("/:uuid/donate", h.donate, handler)
 }
