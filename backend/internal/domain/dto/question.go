@@ -7,3 +7,11 @@ type CreateQuestion struct {
 	Reward   uint   `json:"reward" validate:"required"`
 	UserUUID string `json:"-"`
 }
+
+type ReturnQuestion struct {
+	Header  string `json:"header"`
+	Body    string `json:"body"`
+	Subject string `json:"subject"`
+	Reward  uint   `json:"reward"`
+	Author  Author `json:"author"`
+}

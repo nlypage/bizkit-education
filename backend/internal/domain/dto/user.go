@@ -12,3 +12,9 @@ type AuthUser struct {
 	Username string `json:"username" validate:"required,username"`
 	Password string `json:"password" validate:"required,password"`
 }
+
+type Author struct {
+	UUID     string `json:"uuid"`
+	Username string `json:"username"`
+	Rate     string `json:"rate"`
+}
