@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"github.com/nlypage/bizkit-education/internal/domain/dto"
 	"time"
 )
 
@@ -30,5 +31,5 @@ type Answer struct {
 
 type QuestionWithAnswers struct {
 	Question
-	Answers []*Answer `json:"answers"`
+	Answers []*dto.ReturnAnswer `json:"answers"`
 }

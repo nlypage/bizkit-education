@@ -27,6 +27,7 @@ type ConferenceService interface {
 // ConferenceUseCase is an interface that contains a method to create a conference.
 type ConferenceUseCase interface {
 	NewConference(ctx context.Context, createConference *dto.CreateConference) (*entities.Conference, error)
+	GetAll(ctx context.Context, limit, offset int, searchType string) ([]*dto.ReturnConference, error)
 }
 
 // ConferenceHandler is a struct that contains instances of services.
@@ -140,7 +141,7 @@ func (h ConferenceHandler) GetAll(c *fiber.Ctx) error {
 
 	limit, offset := h.validator.GetLimitAndOffset(c)
 
-	conferences, err := h.conferenceService.GetAll(c.Context(), limit, offset, searchType)
+	conferences, err := h.conferenceUseCase.GetAll(c.Context(), limit, offset, searchType)
 	if err != nil {
 		return err
 	}
