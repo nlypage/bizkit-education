@@ -1,0 +1,19 @@
+.logobox_title {
+    letter-spacing: 12px;
+    color: #7950F2;
+    font-size: 30px;
+    margin-left: 50px;
+    margin-top: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+}
+.logobox {
+    text-align: center;
+}
+.logobox_logo {
+    position: absolute;
+    width: 37px;
+    height: 37px;
+    margin-top: -2px;
+    margin-left: -110px;
+}
