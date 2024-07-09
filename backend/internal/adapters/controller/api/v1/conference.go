@@ -199,17 +199,23 @@ func (h ConferenceHandler) archive(c *fiber.Ctx) error {
 	})
 }
 
+// Donate is a method that donates to a conference.
 func (h ConferenceHandler) donate(c *fiber.Ctx) error {
 	var (
-		donate  dto.ConferenceDonate
-		uuidDto apiDto.UUID
+		donate dto.ConferenceDonate
 	)
 
 	conferenceUUID := c.Params("uuid")
-	uuidDto.UUID = conferenceUUID
+	donate.ConferenceUUID = conferenceUUID
 
-	if err := c.BodyParser(&donate); err != nil {
-		return err
+	userUUID, errGetUserUUID := utils.GetUUIDByToken(c)
+	if errGetUserUUID != nil {
+		return errGetUserUUID
+	}
+	donate.UserUUID = userUUID
+
+	if errParse := c.BodyParser(&donate); errParse != nil {
+		return errParse
 	}
 
 	errValidate := h.validator.ValidateData(donate)
@@ -217,9 +223,9 @@ func (h ConferenceHandler) donate(c *fiber.Ctx) error {
 		return errValidate
 	}
 
-	err := h.conferenceUseCase.Donate(c.Context(), donate.ConferenceUUID, donate.UserUUID, donate.Amount)
-	if err != nil {
-		return err
+	errDonate := h.conferenceUseCase.Donate(c.Context(), donate.ConferenceUUID, donate.UserUUID, donate.Amount)
+	if errDonate != nil {
+		return errDonate
 	}
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
