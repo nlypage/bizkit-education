@@ -75,7 +75,7 @@ func (u questionUseCase) GetQuestionWithAnswers(ctx context.Context, questionUUI
 		return nil, err
 	}
 
-	answers, err := u.answerService.GetAll(ctx, questionUUID)
+	answers, err := u.GetAllAnswersByUUID(ctx, questionUUID)
 	if err != nil {
 		return nil, err
 	}
