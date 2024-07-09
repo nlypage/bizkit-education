@@ -14,3 +14,16 @@ type SetConferenceURL struct {
 	UUID string `json:"uuid" validate:"required,uuid4"`
 	URL  string `json:"url" validate:"required,url"`
 }
+
+type ReturnConference struct {
+	UUID      string    `json:"uuid"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	StartTime   time.Time `json:"start_time"`
+	Author      Author    `json:"author"`
+	URL         string    `json:"url"`
+	Archived    bool      `json:"archived"`
+}

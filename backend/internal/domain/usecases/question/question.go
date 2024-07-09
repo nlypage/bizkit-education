@@ -12,11 +12,13 @@ type Service interface {
 	GetByUUID(ctx context.Context, uuid string) (*entities.Question, error)
 	Create(ctx context.Context, question *dto.CreateQuestion) (*entities.Question, error)
 	Close(ctx context.Context, uuid string) (*entities.Question, error)
+	GetAll(ctx context.Context, limit, offset int, subject string) ([]*entities.Question, error)
 }
 
 // UserService is an interface that contains a method to change the balance of a user.
 type UserService interface {
 	ChangeBalance(ctx context.Context, uuid string, change int) (*entities.User, error)
+	GetByUUID(ctx context.Context, uuid string) (*entities.User, error)
 }
 
 type AnswerService interface {
@@ -122,4 +124,73 @@ func (u questionUseCase) CorrectAnswer(ctx context.Context, answerUUID string, u
 	}
 
 	return u.GetQuestionWithAnswers(ctx, question.UUID)
+}
+
+func (u questionUseCase) GetAll(ctx context.Context, limit, offset int, subject string) ([]*dto.ReturnQuestion, error) {
+	var (
+		questionsDto []*dto.ReturnQuestion
+	)
+
+	questions, err := u.questionService.GetAll(ctx, limit, offset, subject)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, question := range questions {
+		user, errGetUser := u.userService.GetByUUID(ctx, question.AuthorUUID)
+
+		if errGetUser != nil {
+			return nil, err
+		}
+
+		questionsDto = append(questionsDto, &dto.ReturnQuestion{
+			Header:  question.Header,
+			Body:    question.Body,
+			Subject: question.Subject,
+			Reward:  question.Reward,
+			Author: dto.Author{
+				UUID:     user.UUID,
+				Username: user.Username,
+				Rate:     user.Rate,
+			},
+		})
+	}
+
+	return questionsDto, nil
+}
+
+func (u questionUseCase) GetAllAnswersByUUID(ctx context.Context, questionUUID string) ([]*dto.ReturnAnswer, error) {
+	var (
+		answerDto []*dto.ReturnAnswer
+	)
+
+	answers, err := u.answerService.GetAll(ctx, questionUUID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, answer := range answers {
+		user, errGetUser := u.userService.GetByUUID(ctx, answer.AuthorUUID)
+
+		if errGetUser != nil {
+			return nil, err
+		}
+
+		answerDto = append(answerDto, &dto.ReturnAnswer{
+			UUID:      answer.UUID,
+			CreatedAt: answer.CreatedAt,
+			UpdatedAt: answer.UpdatedAt,
+			Author: dto.Author{
+				UUID:     user.UUID,
+				Username: user.Username,
+				Rate:     user.Rate,
+			},
+			QuestionUUID: answer.QuestionUUID,
+			Body:         answer.Body,
+			IsCorrect:    answer.IsCorrect,
+		})
+	}
+
+	return answerDto, nil
 }
