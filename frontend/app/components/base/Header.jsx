@@ -1,8 +1,8 @@
 import styles from "../styles/Header.module.css"
-import LogoWithTitle from "../ui/LogoWithTitle"
+import Title from "./Title"
 
 export default function Header() {
     return <div className={styles.header}>
-        <LogoWithTitle></LogoWithTitle>
+        <Title/>
     </div>
 }

@@ -1,12 +1,12 @@
 "use client";
 import styles from "../components/styles/LoginForm.module.css"
-import LogoWithTitle from "../components/ui/LogoWithTitle"
-import OpacitedButton from "../components/ui/OpacitedButton"
-import PurpleButton from "../components/ui/PurpleButton"
+import OpacitedButton from "../components/ui/opacitedButton"
+import PurpleButton from "../components/ui/purpleButton"
 import stylesForInput from "../components/styles/DefaultInput.module.css"
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "../components/base/Header";
+import Title from "../components/base/Title";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -40,7 +40,7 @@ export default function Login() {
       <form onSubmit={handleSubmit}>
         <div className={styles.login_form}>
           <div className={styles.welcome_message_box}>
-              <LogoWithTitle></LogoWithTitle>
+              <Title/>
               <p className={styles.welcome_message}>Вход в <span className={styles.welcome_message_title}>BIZKIT</span></p>
           </div>
 
