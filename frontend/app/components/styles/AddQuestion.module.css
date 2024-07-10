@@ -1,0 +1,92 @@
+.add_question_box {
+    width: 60%;
+    min-width: 400px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 16px;
+    height: 700px;
+    display: inline-block;
+    position: relative;
+    padding-bottom: .8rem;
+    padding-left: .3rem;
+    padding-right: .3rem;
+    top: 50%;
+    margin-top: 80px;
+    left: 50%;
+    
+    transform: translate(-50%, 0%);
+}
+.ask_question_button_box {
+   display: flex;
+   width: 100%;
+   margin-top: 20px;
+}
+.add_question_reward_cookie {
+    width: 20px;
+    
+    height: 20px;
+    margin-top: 10px;
+    margin-left: 5px;
+    /* position: absolute; */
+}
+.ask_question_reward_box {
+    color: #7950F2;
+    display: flex;
+    background-color: #E9E9E9;
+    /* width: 230px; */
+    height: 40px;
+    border-radius: 16px;
+    font-weight: bolder;
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    padding-left: .5rem;
+    padding-right: .5rem;
+}
+.add_question_reward_dropdown {
+    /* float: right !important;  */
+    margin-left: -5px;
+    margin-top: 0px;
+    color: #7950F2;
+    border-style: none;
+    background-color: #ffffff00;   
+    font-size: 18px;
+    font-weight: bolder;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    /* width: 50px; */
+    /* padding: .3rem; */
+    padding-left: .1rem;
+    padding-right: .1rem;
+}
+.add_question_reward_dropdown:hover {
+    cursor: pointer;
+}
+.add_question_description {
+    font-family: 'Inter', sans-serif;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 8px;
+    border-color: rgb(163, 163, 163);
+    background-color: rgb(234, 234, 234);
+    outline: none;
+    font-size: 20px;
+    width: 100%;
+    resize: none;
+    height: 520px;
+    /* margin-left: 20px; */
+    margin-top: 20px;
+    transition-duration: .3s;
+    padding-left: 5px;
+    padding-top: 5px;
+    /* margin: auto; */
+}
+.add_question_description:focus {
+    border-width: 3px;
+    border-color: blueviolet;
+    background-color: #A992EC;
+    color: white;
+    border-radius: 12px;
+}
+.add_question_description_wrapper {
+    margin: auto;
+    width: 96%;
+}

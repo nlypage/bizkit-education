@@ -1,0 +1,24 @@
+.opacited_button {
+    font-size: 22px;
+    padding: .3rem;
+    padding-left: .9rem;
+    padding-right: .9rem;
+    border-radius: 16px;
+    border-style: solid;
+    border-color: #7950F2;
+    /* background-color: #A992EC; */
+    color: white;
+    font-family: 'Inter', sans-serif;
+    border-width: 4px;
+    font-weight: normal;
+    transition-duration: .3s;
+    background-color: #a8a8a825;
+    color: #7950F2;
+}
+
+.opacited_button:hover {
+    cursor: pointer;
+    border-color: #7950F2;
+    background-color: #A992EC;
+    color: white;
+}
