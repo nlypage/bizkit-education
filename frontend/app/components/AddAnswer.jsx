@@ -127,11 +127,24 @@ const AddAnswer = ({ question }) => {
           </div>
           
           <div className={styles.question_preview_answer_button_wrapper} style={{marginTop: "-30px",margin: "auto", marginRight: "10px", float: "right"}}>
-            <OpacitedButton onClick={() => answerClick(question.uuid)} title={"Ответить"}></OpacitedButton>
-          </div>  
+            <OpacitedButton onClick={() => setShowAnswerInput(!showAnswerInput)} title={"Ответить"}></OpacitedButton>
+          </div>
 
         </div>
       </div>
+
+      {showAnswerInput && (
+        <div className={styles.question_answer_box}>
+          <textarea
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+          />
+          <div className={styles.question_preview_answer_button_wrapper} style={{marginTop: "20px",margin: "auto", marginRight: "10px", float: "right"}}>
+            <OpacitedButton onClick={addAnswer} title={"Отправить"}></OpacitedButton>
+          </div>
+          
+        </div>
+      )}
       
       <div className={styles.question_answer_p}>
         Ответы:
@@ -181,15 +194,7 @@ const AddAnswer = ({ question }) => {
             : "Еще нет ответов"}
       </div>
       
-      {showAnswerInput && (
-        <div>
-          <textarea
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-          />
-          <button onClick={addAnswer}>Отправить</button>
-        </div>
-      )}
+      
 
       
         
