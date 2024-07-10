@@ -5,6 +5,8 @@ import { fetchWithAuth } from "../utils/api";
 import styles from './styles/AddAnswer.module.css'
 import answerQuestionStyles from './styles/QuestionPreview.module.css'
 import OpacitedButton from "./ui/opacitedButton";
+import addQuestionStyles from "./styles/AddQuestion.module.css"
+import PurpleButton from "./ui/purpleButton";
 // {
 //   "uuid": "f413611a-198c-428a-b2c5-08f22595d5f3",
 //   "created_at": "2024-07-04T20:20:06.478291Z",
@@ -90,6 +92,7 @@ const AddAnswer = ({ question }) => {
 
       if (response.ok) {
         console.log(answer);
+        setShowAnswerInput(!showAnswerInput)
         fetchQuestions();
       } else {
         console.error("Error submitting question");
@@ -135,11 +138,11 @@ const AddAnswer = ({ question }) => {
 
       {showAnswerInput && (
         <div className={styles.question_answer_box}>
-          <textarea
+          <textarea className={addQuestionStyles.add_question_description} style={{ height: "300px", width: "97%", marginLeft: "1.5%"}}
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
           />
-          <div className={styles.question_preview_answer_button_wrapper} style={{marginTop: "20px",margin: "auto", marginRight: "10px", float: "right"}}>
+          <div className={styles.question_preview_answer_button_wrapper} style={{margin: "auto",marginTop: "10px", marginRight: "10px", float: "right"}}>
             <OpacitedButton onClick={addAnswer} title={"Отправить"}></OpacitedButton>
           </div>
           
@@ -157,6 +160,9 @@ const AddAnswer = ({ question }) => {
                     <p className={answerQuestionStyles.question_preview_nickname}>{"Aboba"}</p>
                     <hr className={answerQuestionStyles.question_preview_hr} />
                     <p className={answerQuestionStyles.question_preview_rank}>{"Megabrain"}</p>    
+                    <div style={{margin: "auto", marginTop: "10px", marginRight: "10px", float: "right"}}>
+                      <PurpleButton title={"Правильный ответ"} onClick={() => markAsCorrect(answer.uuid)}></PurpleButton>
+                    </div>
                   </div>
                   <div className={styles.question_description} style={{marginTop: "20px"}}>
                     fnsjafhjahfjalkjk ?fmkl kml
@@ -178,6 +184,10 @@ const AddAnswer = ({ question }) => {
                   <p className={answerQuestionStyles.question_preview_nickname}>{"Aboba"}</p>
                   <hr className={answerQuestionStyles.question_preview_hr} />
                   <p className={answerQuestionStyles.question_preview_rank}>{"Megabrain"}</p>    
+                  <div style={{margin: "auto", marginTop: "10px", marginRight: "10px", float: "right"}}>
+                    <PurpleButton title={"Правильный ответ"} onClick={() => markAsCorrect(answer.uuid)}></PurpleButton>
+                  </div>
+
                 </div>
                 <div className={styles.question_description} style={{marginTop: "20px"}}>
                   fnsjafhjahfjalkjk ?fmkl kml
