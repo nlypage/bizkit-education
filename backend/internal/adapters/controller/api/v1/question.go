@@ -26,6 +26,7 @@ type QuestionUseCase interface {
 	GetQuestionWithAnswers(ctx context.Context, questionUUID string) (*entities.QuestionWithAnswers, error)
 	CorrectAnswer(ctx context.Context, answerUUID string, userUUID string) (*entities.QuestionWithAnswers, error)
 	GetAll(ctx context.Context, limit, offset int, subject string) ([]*dto.ReturnQuestion, error)
+	GetMyQuestions(ctx context.Context, limit int, offset int, uuid string) ([]*dto.ReturnQuestion, error)
 }
 
 // QuestionHandler is a struct that contains the questionService and validator.
@@ -189,7 +190,7 @@ func (h QuestionHandler) getMy(c *fiber.Ctx) error {
 		return err
 	}
 
-	questions, err := h.questionService.GetMy(c.Context(), limit, offset, uuid)
+	questions, err := h.questionUseCase.GetMyQuestions(c.Context(), limit, offset, uuid)
 	if err != nil {
 		return err
 	}
