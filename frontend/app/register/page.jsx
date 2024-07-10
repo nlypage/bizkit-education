@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from "../components/base/Header";
 import styles from "../components/styles/SignupForm.module.css"
-import LogoWithTitle from "../components/ui/LogoWithTitle"
-import OpacitedButton from "../components/ui/OpacitedButton"
-import PurpleButton from "../components/ui/PurpleButton"
+import OpacitedButton from "../components/ui/opacitedButton"
+import PurpleButton from "../components/ui/purpleButton"
 import stylesForInput from "../components/styles/DefaultInput.module.css"
+import Title from '../components/base/Title';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -40,7 +40,7 @@ export default function Register() {
       <form onSubmit={handleSubmit}>
         <div className={styles.login_form}>
           <div className={styles.welcome_message_box}>
-            <LogoWithTitle></LogoWithTitle>
+            <Title/>
             <p className={styles.welcome_message}>Вход в <span className={styles.welcome_message_title}>BIZKIT</span></p>
           </div>
 

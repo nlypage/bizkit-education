@@ -13,51 +13,6 @@ import "leaflet/dist/leaflet.css";
 import axios from "axios";
 
 
-// const L = dynamic(
-//   () => import("leaflet").then((module) => module.L),
-//   {
-//     ssr: false,
-//   }
-// );
-// const useMap = dynamic(
-//   () => import("react-leaflet").then((module) => module.useMap),
-//   {
-//     ssr: false,
-//   }
-// );
-
-// const MapContainer = dynamic(
-//   () => import("react-leaflet").then((module) => module.MapContainer),
-//   {
-//     ssr: false, // Disable server-side rendering for this component
-//   }
-// );
-// const TileLayer = dynamic(
-//   () => import("react-leaflet").then((module) => module.TileLayer),
-//   {
-//     ssr: false,
-//   }
-// );
-// const Marker = dynamic(
-//   () => import("react-leaflet").then((module) => module.Marker),
-//   {
-//     ssr: false,
-//   }
-// );
-// const Popup = dynamic(
-//   () => import("react-leaflet").then((module) => module.Popup),
-//   {
-//     ssr: false,
-//   }
-// );
-
-// const useMapEvents = dynamic(
-//   () => import("react-leaflet").then((module) => module.useMapEvents),
-//   {
-//     ssr: false,
-//   }
-// );
-
 const MapApp = () => {
   const [markerPosition, setMarkerPosition] = useState([]);
   const [markerData, setMarkerData] = useState([
