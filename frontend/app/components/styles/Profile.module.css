@@ -1,0 +1,101 @@
+.profile_box {
+    
+    /* height: 500px; */
+    
+    width: 60%;
+    
+    min-width: 400px;
+    padding-bottom: 3.5rem;
+    background-color: rgb(255, 255, 255);
+    border-radius: 16px;
+    display: inline-block;
+    padding-left: .3rem;
+    padding-right: .3rem;
+    position: relative;
+    margin-top: 80px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+.profile_user_data_box {
+    margin-top: 35px;
+    margin-left: 1%;
+    display: flex;
+}
+.profile_nickname {
+    font-weight: bolder;
+    color: rgb(22, 22, 22);
+    font-family: 'Inter', sans-serif;
+    font-size: 34px;
+    margin-left: 10px;
+}
+.profile_rank {
+    font-weight: normal;
+    color: #6B6B6B;
+    font-family: 'Inter', sans-serif;
+    font-size: 26px;
+    margin-left: 20px;
+    margin-top: -27px;
+}
+.profile_avatar {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin-top: -20px;
+}
+.profile_hr {
+    background-color: #7950F2; 
+    border: none;
+    height: 2px;
+    width: 97%;
+    margin: auto;
+    margin-top: 20px;
+}
+.profile_kitten {
+    width: 300px;
+    height: 300px;
+    /* margin: auto; */
+}
+.profile_cookies_count_box {
+    display: flex;
+    width: 60%;
+    min-width: 650px;
+    
+    margin: auto;
+    margin-top: 20px;
+}
+.profile_cookies_count {
+    display: flex;
+    
+    font-family: 'Inter', sans-serif;
+    font-size: 56px;
+    font-weight: bold;
+    color: #7950F2; 
+    margin-top: 100px;
+    margin-left: 50px;
+    /* margin-top: -170px; */
+}
+@media (max-width: 1000px) {
+    .profile_cookies_count_box {
+        display: inline-block;
+        width: 70%;
+        /* margin: 0; */
+        margin-left: 10%;
+        
+    }
+    
+    .profile_kitten {
+    }
+
+}
+
+.planned_lections {
+    width: 400px;
+    display: inline-block;
+}
+.planned_lections_onclick_box {
+    font-weight: bold;
+    color: #7950F2; 
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+}

@@ -1,0 +1,36 @@
+.input_box {
+
+    
+    margin: 0 auto;
+    margin-top: 30px;
+    width: 80%;
+    height: 60px;
+}
+.input_title {
+    color: rgb(163, 163, 163);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    margin-left: 5px;
+}
+
+.input {
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 8px;
+    border-color: rgb(163, 163, 163);
+    background-color: rgb(234, 234, 234);
+    outline: none;
+    color: rgb(0, 0, 0);
+    width: 100%;
+    height: 40px;
+    transition-duration: .3s;
+    font-size: 20px;
+    padding-left: 5px;
+}
+.input:focus {
+    border-width: 3px;
+    border-color: blueviolet;
+    background-color: #A992EC;
+    color: white;
+    border-radius: 12px;
+}
