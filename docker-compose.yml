@@ -66,6 +66,19 @@ services:
       - bizkit-backend
     restart: always
 
+  bizkit-frontend:
+    container_name: bizkit-frontend
+    build: ./frontend
+    ports:
+      - '3000:3000'
+    environment:
+      - NEXT_PUBLIC_APP_ID=${NEXT_PUBLIC_APP_ID}
+      - NEXT_PUBLIC_APP_SECRET=${NEXT_PUBLIC_APP_SECRET}
+    networks:
+      - webnet
+    depends_on:
+      - bizkit-backend
+
 volumes:
   bizkit-database:
 
