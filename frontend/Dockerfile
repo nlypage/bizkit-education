@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["yarn", "dev", "--host", "0.0.0.0"]
+CMD ["yarn", "dev", "--port", "3000"]
