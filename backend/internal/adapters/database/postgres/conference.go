@@ -38,7 +38,7 @@ func (s *conferenceStorage) GetAll(ctx context.Context, limit, offset int, searc
 	case "upcoming":
 		query = s.db.WithContext(ctx).Model(&entities.Conference{}).Limit(limit).Offset(offset).Where("archived = ?", false).Order("start_time asc")
 	case "archived":
-		query = s.db.WithContext(ctx).Model(&entities.Conference{}).Limit(limit).Offset(offset).Where("archived = ? AND URL != ?", true).Order("start_time desc")
+		query = s.db.WithContext(ctx).Model(&entities.Conference{}).Limit(limit).Offset(offset).Where("archived = ? AND URL != ?", true, "").Order("start_time desc")
 	case "all":
 		query = s.db.WithContext(ctx).Model(&entities.Conference{}).Limit(limit).Offset(offset).Order("start_time desc")
 	default:
