@@ -1,8 +1,13 @@
-FROM node:20
+FROM node:21-alpine3.19
 
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+
+COPY yarn.lock package.json ./
+
+RUN yarn install
+
 COPY . .
+
 EXPOSE 3000
-CMD npm run dev
+
+CMD ["yarn", "dev", "--host", "0.0.0.0"]
