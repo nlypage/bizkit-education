@@ -30,6 +30,6 @@ type Answer struct {
 }
 
 type QuestionWithAnswers struct {
-	Question
-	Answers []*dto.ReturnAnswer `json:"answers"`
+	Question *dto.ReturnQuestion `json:"question"`
+	Answers  []*dto.ReturnAnswer `json:"answers"`
 }
