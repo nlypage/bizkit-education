@@ -15,4 +15,5 @@ type ReturnQuestion struct {
 	Subject string `json:"subject"`
 	Reward  uint   `json:"reward"`
 	Author  Author `json:"author"`
+	Closed  bool   `json:"closed"`
 }
