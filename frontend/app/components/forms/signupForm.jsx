@@ -1,8 +1,8 @@
 import Title from "../base/Title"
 import styles from "../styles/SignupForm.module.css"
 import DefaultInput from "../ui/DefaultInput"
-import OpacitedButton from "../ui/OpacitedButton"
-import PurpleButton from "../ui/PurpleButton"
+import OpacitedButton from "../ui/opacitedButton"
+import PurpleButton from "../ui/purpleButton"
 
 export default function SignupForm() {
     return <div className={styles.login_form}>

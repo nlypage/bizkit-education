@@ -1,7 +1,7 @@
 "use client";
 import styles from "../components/styles/LoginForm.module.css"
-import OpacitedButton from "../components/ui/OpacitedButton"
-import PurpleButton from "../components/ui/PurpleButton"
+import OpacitedButton from "../components/ui/opacitedButton"
+import PurpleButton from "../components/ui/purpleButton"
 import stylesForInput from "../components/styles/DefaultInput.module.css"
 import { useState } from "react";
 import { useRouter } from "next/navigation";

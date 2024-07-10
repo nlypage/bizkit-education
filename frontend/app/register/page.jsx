@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from "../components/base/Header";
 import styles from "../components/styles/SignupForm.module.css"
-import OpacitedButton from "../components/ui/OpacitedButton"
-import PurpleButton from "../components/ui/PurpleButton"
+import OpacitedButton from "../components/ui/opacitedButton"
+import PurpleButton from "../components/ui/purpleButton"
 import stylesForInput from "../components/styles/DefaultInput.module.css"
 import Title from '../components/base/Title';
 
