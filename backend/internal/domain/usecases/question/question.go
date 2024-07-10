@@ -13,6 +13,7 @@ type Service interface {
 	Create(ctx context.Context, question *dto.CreateQuestion) (*entities.Question, error)
 	Close(ctx context.Context, uuid string) (*entities.Question, error)
 	GetAll(ctx context.Context, limit, offset int, subject string) ([]*entities.Question, error)
+	GetMy(ctx context.Context, limit, offset int, userUuid string) ([]*entities.Question, error)
 }
 
 // UserService is an interface that contains a method to change the balance of a user.
@@ -155,6 +156,7 @@ func (u questionUseCase) GetAll(ctx context.Context, limit, offset int, subject 
 				Username: user.Username,
 				Rate:     user.Rate,
 			},
+			Closed: question.Closed,
 		})
 	}
 
@@ -221,5 +223,42 @@ func (u questionUseCase) GetQuestionByUUID(ctx context.Context, uuid string) (*d
 			Username: user.Username,
 			Rate:     user.Rate,
 		},
+		Closed: question.Closed,
 	}, nil
+}
+
+func (u questionUseCase) GetMyQuestions(ctx context.Context, limit int, offset int, uuid string) ([]*dto.ReturnQuestion, error) {
+	var (
+		questionsDto []*dto.ReturnQuestion
+	)
+
+	questions, err := u.questionService.GetMy(ctx, limit, offset, uuid)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, question := range questions {
+		user, errGetUser := u.userService.GetByUUID(ctx, question.AuthorUUID)
+
+		if errGetUser != nil {
+			return nil, errGetUser
+		}
+
+		questionsDto = append(questionsDto, &dto.ReturnQuestion{
+			UUID:    question.UUID,
+			Header:  question.Header,
+			Body:    question.Body,
+			Subject: question.Subject,
+			Reward:  question.Reward,
+			Author: dto.Author{
+				UUID:     user.UUID,
+				Username: user.Username,
+				Rate:     user.Rate,
+			},
+			Closed: question.Closed,
+		})
+	}
+
+	return questionsDto, nil
 }
