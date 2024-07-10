@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import AddAnswer from "./AddAnswer";
-import styles from "./styles/QuestionPreview.module.css"
-import OpacitedButton from "./ui/opacitedButton"
+import styles from "./styles/QuestionPreview.module.css";
+import OpacitedButton from "./ui/opacitedButton";
 import PurpleButton from "./ui/purpleButton";
-
-
 
 const AnswerQuestions = () => {
   const [questions, setQuestions] = useState([]);
@@ -45,7 +43,7 @@ const AnswerQuestions = () => {
 
   const answerClick = (question) => {
     setSelectedQuestion(question);
-    console.log(question)
+    console.log(question);
   };
 
   const loadMore = () => {
@@ -61,13 +59,22 @@ const AnswerQuestions = () => {
         <AddAnswer question={selectedQuestion} />
       ) : (
         <div>
-          {questions.map((question) => (
-            <div className={styles.question_preview_box} key={question.uuid}>
+          {questions.length > 0 ? (
+            questions.map((question) => (
+              <div className={styles.question_preview_box} key={question.uuid}>
                 <div className={styles.question_preview_user_box}>
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-YIGV8GTRHiW_KACLMhhi9fEq2T5BDQcEyA&s" alt="" className={styles.question_preview_avatar}/>
-                  <p className={styles.question_preview_nickname}>{question.author.username}</p>
+                  <img
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-YIGV8GTRHiW_KACLMhhi9fEq2T5BDQcEyA&s"
+                    alt=""
+                    className={styles.question_preview_avatar}
+                  />
+                  <p className={styles.question_preview_nickname}>
+                    {question.author.username}
+                  </p>
                   <hr className={styles.question_preview_hr} />
-                  <p className={styles.question_preview_rank}>{question.author.rate}</p>    
+                  <p className={styles.question_preview_rank}>
+                    {question.author.rate}
+                  </p>
                 </div>
                 <div className={styles.question_preview_question_type}>
                   #{question.subject}
@@ -78,24 +85,44 @@ const AnswerQuestions = () => {
                 <div className={styles.question_preview_bottombar}>
                   <div className={styles.question_preview_cost}>
                     {question.reward}
-                    <img src="biscuit.png" className={styles.question_preview_cookie} alt="" />
+                    <img
+                      src="biscuit.png"
+                      className={styles.question_preview_cookie}
+                      alt=""
+                    />
                   </div>
-                  <div className={styles.question_preview_answer_button_wrapper}>
-                    <OpacitedButton onClick={() => answerClick(question.uuid)} title={"Ответить"}></OpacitedButton>
-                  </div>  
+                  <div
+                    className={styles.question_preview_answer_button_wrapper}
+                  >
+                    <OpacitedButton
+                      onClick={() => answerClick(question.uuid)}
+                      title={"Ответить"}
+                    ></OpacitedButton>
+                  </div>
                 </div>
-            </div>
-            
-          ))}
+              </div>
+            ))
+          ) : (
+            <div  style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              textAlign: 'center',
+              fontSize: '3vh'
+            }}><p>Добавьте первый вопрос</p></div>
+          )}
           {isLoading ? (
             <div>Loading...</div>
           ) : (
             <div className={styles.question_preview_pagination_buttons}>
-              <OpacitedButton onClick={loadPrevios} title={"Назад"}></OpacitedButton>
+              <OpacitedButton
+                onClick={loadPrevios}
+                title={"Назад"}
+              ></OpacitedButton>
               <div className={styles.question_preview_padding_div}></div>
               <PurpleButton onClick={loadMore} title={"Далее"}></PurpleButton>
             </div>
-           
           )}
         </div>
       )}
