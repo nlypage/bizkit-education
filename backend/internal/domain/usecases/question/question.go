@@ -70,7 +70,7 @@ func (u questionUseCase) CreateAnswer(ctx context.Context, createAnswer *dto.Cre
 
 // GetQuestionWithAnswers is a method that returns a question with its answers.
 func (u questionUseCase) GetQuestionWithAnswers(ctx context.Context, questionUUID string) (*entities.QuestionWithAnswers, error) {
-	question, err := u.questionService.GetByUUID(ctx, questionUUID)
+	question, err := u.GetQuestionByUUID(ctx, questionUUID)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (u questionUseCase) GetQuestionWithAnswers(ctx context.Context, questionUUI
 	}
 
 	return &entities.QuestionWithAnswers{
-		Question: *question,
+		Question: question,
 		Answers:  answers,
 	}, nil
 }
@@ -195,4 +195,31 @@ func (u questionUseCase) GetAllAnswersByUUID(ctx context.Context, questionUUID s
 	}
 
 	return answerDto, nil
+}
+
+func (u questionUseCase) GetQuestionByUUID(ctx context.Context, uuid string) (*dto.ReturnQuestion, error) {
+	question, err := u.questionService.GetByUUID(ctx, uuid)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user, errGetUser := u.userService.GetByUUID(ctx, question.AuthorUUID)
+
+	if errGetUser != nil {
+		return nil, err
+	}
+
+	return &dto.ReturnQuestion{
+		UUID:    question.UUID,
+		Header:  question.Header,
+		Body:    question.Body,
+		Subject: question.Subject,
+		Reward:  question.Reward,
+		Author: dto.Author{
+			UUID:     user.UUID,
+			Username: user.Username,
+			Rate:     user.Rate,
+		},
+	}, nil
 }
