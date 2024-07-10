@@ -24,10 +24,12 @@ const Home = () => {
   }, []);
   return (
     <>
+      <Header></Header>
+      <Sidebar view={view} setView={setView} />
       {isClient && (
         <div>
-          <Header></Header>
-          <Sidebar view={view} setView={setView} />
+          
+          
           <div>
             {view === "answer" && <AnswerQuestions setView={setView} />}
             {view === "question" && <AddQuestion setView={setView} />}
