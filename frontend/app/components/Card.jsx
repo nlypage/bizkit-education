@@ -12,19 +12,30 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 
-
 const MapApp = () => {
   const [markerPosition, setMarkerPosition] = useState([]);
   const [markerData, setMarkerData] = useState([
     {
-      title: "",
-      description: "",
-      time: "",
-      address: "",
+      position: [51.5074, -0.1278],
+      data: {
+        title: "Big Ben",
+        description: "Famous clock tower in London",
+        time: "Always",
+        address: "Westminster, London SW1A 0AA, UK",
+      },
     },
   ]);
-  const [searchAddress, setSearchAddress] = useState("");
   const mapRef = useRef(null);
+  const [newMarkerData, setNewMarkerData] = useState({
+    title: "",
+    description: "",
+    time: "",
+    address: "",
+    lat: "",
+    lng: "",
+  });
+  const [isAddingMarker, setIsAddingMarker] = useState(false);
+  const [searchAddress, setSearchAddress] = useState("");
 
   const AddMarkerButton = () => {
     const map = useMapEvents({
@@ -34,8 +45,25 @@ const MapApp = () => {
         setMarkerPosition((prevMarkers) => [...prevMarkers, [lat, lng]]);
         setMarkerData((prevData) => [
           ...prevData,
-          { title: "", description: "", time: "", address: addressData },
+          {
+            position: [lat, lng],
+            data: {
+              title: "",
+              description: "",
+              time: "",
+              address: addressData,
+            },
+          },
         ]);
+        setNewMarkerData({
+          title: "",
+          description: "",
+          time: "",
+          address: addressData,
+          lat: lat,
+          lng: lng,
+        });
+        setIsAddingMarker(true);
         console.log(
           "New Marker Position:",
           [lat, lng],
@@ -46,97 +74,86 @@ const MapApp = () => {
     });
 
     return (
-      <button onClick={() => map.locate({ setView: true })}>Add Marker</button>
+      <div>
+        <button onClick={() => map.locate({ setView: true })}>
+          Add Marker
+        </button>
+      </div>
     );
   };
 
-  const handleSubmit = (index) => {
-    const combinedMarker = {
-      position: markerPosition[index],
-      data: markerData[index],
-    };
-    console.log("Combined Marker:", combinedMarker);
-  };
-
-  const handleInputChange = (e, index) => {
-    setMarkerData((prevData) =>
-      prevData.map((data, i) =>
-        i === index ? { ...data, [e.target.name]: e.target.value } : data
-      )
-    );
-  };
-
-  const handleSearchAddress = async () => {
+  const getAddressFromCoordinates = async (lat, lng) => {
     try {
       const response = await axios.get(
-        `https://nominatim.openstreetmap.org/search?q=${searchAddress}&format=json&limit=1`
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
       );
-      if (response.data.length > 0) {
-        const { lat, lon } = response.data[0];
-        const addressData = await getAddressFromCoordinates(lat, lon);
-        setMarkerPosition((prevMarkers) => [...prevMarkers, [lat, lon]]);
-        setMarkerData((prevData) => [
-          ...prevData,
-          { title: "", description: "", time: "", address: addressData },
-        ]);
-        console.log(
-          "New Marker Position:",
-          [lat, lon],
-          "Address:",
-          addressData
-        );
-        const map = mapRef.current;
-        if (map) {
-          map.flyTo([lat, lon], 13, {
-            duration: 2,
-            easeLinearity: 0.5,
-          });
-        }
-      } else {
-        console.log("No address found");
-      }
-    } catch (error) {
-      console.error("Error getting address:", error);
-    }
-  };
-
-  const getAddressFromCoordinates = async (latitude, longitude) => {
-    try {
-      const response = await axios.get(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`
-      );
-      console.log(response)
-      let address = ''
-      address += response.data.display_name;
-      return address;
+      return response.data.display_name;
     } catch (error) {
       console.error("Error getting address:", error);
       return "Unknown address";
     }
   };
 
+  const getCoordinatesFromAddress = async () => {
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?q=${searchAddress}&format=json&limit=1`
+      );
+      if (response.data.length > 0) {
+        const { lat, lon } = response.data[0];
+        setNewMarkerData({
+          ...newMarkerData,
+          lat: parseFloat(lat),
+          lng: parseFloat(lon),
+          address: response.data[0].display_name,
+        });
+        setIsAddingMarker(true);
+        mapRef.current.flyTo([parseFloat(lat), parseFloat(lon)], 13);
+      } else {
+        console.error("No results found for the address");
+      }
+    } catch (error) {
+      console.error("Error getting coordinates:", error);
+    }
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    const newMarkerInfo = {
+      data: newMarkerData,
+    };
+    setMarkerData((prevData) => [...prevData, newMarkerInfo]);
+    console.log("New Marker Data:", newMarkerInfo);
+    setNewMarkerData({
+      title: "",
+      description: "",
+      time: "",
+      address: "",
+     
+    });
+    setIsAddingMarker(false);
+    setSearchAddress("");
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewMarkerData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSearchAddressChange = (e) => {
+    setSearchAddress(e.target.value);
+  };
+
   return (
     <div>
-      <div style={{ margin: "20vh" }}>
-        <input
-          type="text"
-          placeholder="Search Address"
-          value={searchAddress}
-          onChange={(e) => setSearchAddress(e.target.value)}
-          style={{ marginRight: "10px" }}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleSearchAddress();
-            }
-          }}
-        />
-        <button onClick={handleSearchAddress}>Find Address</button>
-      </div>
       <MapContainer
         ref={mapRef}
         center={[51.505, -0.09]}
         zoom={13}
-        style={{ width: "60%", height: "50vh", margin: "10vh" }}
+        style={{ width: "60%", height: "50vh", margin: "10vh", filter: 'grayscale(50%)' }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -144,10 +161,10 @@ const MapApp = () => {
         />
         <AddMarkerButton />
 
-        {markerPosition.map((position, index) => (
+        {markerData.map((marker, index) => (
           <Marker
             key={index}
-            position={position}
+            position={marker.position}
             draggable={false}
             icon={L.icon({
               iconUrl:
@@ -156,34 +173,80 @@ const MapApp = () => {
           >
             <Popup>
               <div>
-                <p>Address: {markerData[index+1].address}</p>
-                <input
-                  type="text"
-                  name="title"
-                  placeholder="Title"
-                  value={markerData[index].title}
-                  onChange={(e) => handleInputChange(e, index)}
-                />
-                <input
-                  type="text"
-                  name="description"
-                  placeholder="Description"
-                  value={markerData[index].description}
-                  onChange={(e) => handleInputChange(e, index)}
-                />
-                <input
-                  type="text"
-                  name="time"
-                  placeholder="Time"
-                  value={markerData[index].time}
-                  onChange={(e) => handleInputChange(e, index)}
-                />
-                <button onClick={() => handleSubmit(index)}>Submit</button>
+                <p>Time: {marker.data.time}</p>
+                <p>Address: {marker.data.address}</p>
               </div>
             </Popup>
           </Marker>
         ))}
+
+        {isAddingMarker && (
+          <Marker
+            position={[newMarkerData.lat, newMarkerData.lng]}
+            draggable={false}
+            icon={L.icon({
+              iconUrl:
+                "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+            })}
+          >
+            <Popup>
+              <div>
+                <p>Address: {newMarkerData.address}</p>
+              </div>
+            </Popup>
+          </Marker>
+        )}
       </MapContainer>
+
+      <div style={{ marginTop: "20px" }}>
+        <input
+          type="text"
+          placeholder="Search for an address"
+          value={searchAddress}
+          onChange={handleSearchAddressChange}
+        />
+        <button onClick={getCoordinatesFromAddress}>Add Marker</button>
+      </div>
+
+      {isAddingMarker && (
+        <div style={{ marginTop: "20px" }}>
+          <h2>Add New Marker</h2>
+          <form onSubmit={handleFormSubmit}>
+        <input
+          type="text"
+          name="title"
+          placeholder="Title"
+          value={newMarkerData.title}
+          onChange={handleInputChange}
+          required
+        />
+        <textarea
+          name="description"
+          placeholder="Description"
+          value={newMarkerData.description}
+          onChange={handleInputChange}
+          required
+        ></textarea>
+        <input
+          type="text"
+          name="time"
+          placeholder="Time"
+          value={newMarkerData.time}
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          type="text"
+          name="address"
+          placeholder="Address"
+          value={newMarkerData.address}
+          onChange={handleInputChange}
+          required
+        />
+        <button type="submit">Add Marker</button>
+      </form>
+        </div>
+      )}
     </div>
   );
 };

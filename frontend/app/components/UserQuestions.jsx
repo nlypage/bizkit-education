@@ -46,13 +46,14 @@ const UserQuestions = () => {
         <AddAnswer question={selectedQuestion} />
       ) : (
         <div>
-          {questions.map((question) => (
+          {questions.length > 0 ? (
+          <div>{questions.map((question) => (
             <div className={styles.question_preview_box} key={question.uuid}>
                 <div className={styles.question_preview_user_box}>
                   <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-YIGV8GTRHiW_KACLMhhi9fEq2T5BDQcEyA&s" alt="" className={styles.question_preview_avatar}/>
-                  <p className={styles.question_preview_nickname}>{"Aboba"}</p>
+                  <p className={styles.question_preview_nickname}>{question?.author?.username}</p>
                   <hr className={styles.question_preview_hr} />
-                  <p className={styles.question_preview_rank}>{"Megabrain"}</p>    
+                  <p className={styles.question_preview_rank}>{question?.author?.rate}</p>    
                 </div>
                 <div className={styles.question_preview_question_type}>
                   #{question.subject}
@@ -71,7 +72,14 @@ const UserQuestions = () => {
                 </div>
             </div>
             
-          ))}
+          ))}</div>):(<div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            textAlign: 'center',
+            fontSize: '3vh'
+          }}><p>Вы пока не задали вопросов</p></div>)}
         </div>
       )}
     </>

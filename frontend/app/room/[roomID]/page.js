@@ -94,7 +94,7 @@ export default function Stream({ params }) {
       <div
         className="myCallContainer"
         ref={conference}
-        style={{ width: "100vw", height: "50vh" }}
+        style={{ width: "100vw", height: "100vh" }}
       ></div>
     </div>
   );

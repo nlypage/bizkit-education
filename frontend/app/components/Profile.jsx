@@ -4,17 +4,6 @@ import React, { useEffect, useState } from "react";
 import { fetchWithAuth } from "../utils/api";
 import styles from "./styles/Profile.module.css"
 
-// {
-//   "uuid": "dc5edb8d-d889-4d96-8598-75e361066b6e",
-//   "created_at": "2024-07-04T18:30:19.881505Z",
-//   "updated_at": "2024-07-04T19:38:53.059948Z",
-//   "username": "hhhhhhhhhh",
-//   "email": "nujo23kmpl1@adda.roa",
-//   "role": "student",
-//   "coins_amount": 36,
-//   "rate": "Ученик" 
-// }
-
 const Profile = () => {
   const [user, setUser] = useState(null);
 
