@@ -4,7 +4,9 @@ import styles from "../styles/QuestionPreview.module.css";
 import OpacitedButton from "../ui/opacitedButton";
 import { fetchWithAuth } from "../../utils/api";
 import { useRouter } from "next/navigation";
-
+import scheduleStyles from "../styles/Schedule.module.css"
+import DefaultInput from "../ui/defaultInput";
+import PurpleButton from "../ui/purpleButton";
 
 const MyConference = () => {
   const [myConference, setMyConference] = useState([]);
@@ -92,9 +94,9 @@ const MyConference = () => {
 
   return (
     <>
-      <div>
+      
         {myConference.map((conference) => (
-          <div className={styles.question_preview_box} key={conference.uuid}>
+          <div className={styles.question_preview_box} key={conference.uuid} style={{minWidth: "370px", maxWidth: "1000px", marginTop: "30px"}}>
             <div className={styles.question_preview_user_box}>
               <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-YIGV8GTRHiW_KACLMhhi9fEq2T5BDQcEyA&s"
@@ -109,49 +111,47 @@ const MyConference = () => {
               {conference.title}
             </div>
             <div className={styles.question_preview_bottombar}>
-              <div className={styles.question_preview_cost}>
-                {conference.description}
-                <img
-                  src="biscuit.png"
-                  className={styles.question_preview_cookie}
-                  alt=""
-                />
-              </div>
-              <div className={styles.question_preview_answer_button_wrapper}>
+              
+              <div className={styles.question_preview_answer_button_wrapper} style={{marginLeft: "10px", marginRight: "0px"}}>
                 <OpacitedButton
                      onClick={() => addLink(conference)}
-                  title={"Добавить ссылку"}
+                  title={"Ссылка"}
                 ></OpacitedButton>
               </div>
-              <div className={styles.question_preview_answer_button_wrapper}>
+              <div className={styles.question_preview_answer_button_wrapper} style={{marginLeft: "100px", marginRight: "0px"}}>
                 <OpacitedButton
                   onClick={() => joinConference(conference)}
-                  title={"Начать лекцию"}
+                  title={"Начать"}
                 ></OpacitedButton>
               </div>
-              <div className={styles.question_preview_answer_button_wrapper}>
+              <div className={styles.question_preview_answer_button_wrapper} style={{float: "left", marginLeft: "100px",marginRight: "0px"}}>
                 <OpacitedButton
                   onClick={() => handlePatchRequest(conference)}
-                  title={"Отметить завершенной"}
+                  title={"Отменить"}
                 ></OpacitedButton>
               </div>
             </div>
           </div>
         ))}
-      </div>
+      
       {showModal && (
         <div onClose={() => setShowModal(false)}>
-          <div>
-            <h3>Добавить ссылку</h3>
-            <input
+          <div className={scheduleStyles.classes_create_class_box} style={{textAlign: "center"}}>
+            <DefaultInput title={"Ссылка"}type={"text"} value={linkToAdd} onChange={(e) => setLinkToAdd(e.target.value)}></DefaultInput>
+            {/* <input
               type="text"
               value={linkToAdd}
               onChange={(e) => setLinkToAdd(e.target.value)}
-            />
-            <button onClick={handleLinkSubmit}>Сохранить</button>
+            /> */}
+            <div style={{marginTop: "20px"}}>
+              <PurpleButton onClick={handleLinkSubmit} title={"Сохранить"}></PurpleButton>
+            </div>
+            
+            
           </div>
         </div>
       )}
+      <br />
     </>
   );
 };

@@ -79,6 +79,11 @@ const Profile = () => {
       <div>{user?.rate}</div>
       <div>{user?.username}</div>
       <div>{user?.coins_amount}</div> */}
+      <br />
+    <br />
+    <br />
+    <br />
+    <br />
     </>
   );
 };
