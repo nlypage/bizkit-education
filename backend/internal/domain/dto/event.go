@@ -16,13 +16,13 @@ type Event struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	StartTime   time.Time `json:"start_time"`
-	Longitude   float64   `json:"longitude"`
-	Latitude    float64   `json:"latitude"`
+	Longitude   string    `json:"longitude"`
+	Latitude    string    `json:"latitude"`
 	Address     string    `json:"address"`
 	Author      Author    `json:"author"`
 }
 
 type ReturnEvent struct {
-	Position [2]float64 `json:"position"`
-	Data     Event      `json:"data"`
+	Position [2]string `json:"position"`
+	Data     Event     `json:"data"`
 }
