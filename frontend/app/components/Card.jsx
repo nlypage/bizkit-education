@@ -16,6 +16,7 @@ import styles from "./styles/Card.module.css"
 import OpacitedButton from "./ui/opacitedButton";
 import PurpleButton from "./ui/purpleButton";
 import DefaultInput from "./ui/defaultInput";
+import { fetchWithAuth } from "../utils/api";
 import classesStyles from "./styles/Schedule.module.css"
 
 const MapApp = () => {
@@ -31,14 +32,12 @@ const MapApp = () => {
       },
     },
   ]);
-  const setTime = () => {
-
-  }
+  
   const mapRef = useRef(null);
   const [newMarkerData, setNewMarkerData] = useState({
     title: "",
     description: "",
-    time: "",
+    time: null,
     address: "",
     lat: "",
     lng: "",
@@ -123,7 +122,7 @@ const MapApp = () => {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const newMarkerInfo = {
       position: [newMarkerData.lat, newMarkerData.lng],
@@ -140,6 +139,24 @@ const MapApp = () => {
       lng: "",
 
     });
+    try {
+      const response = await fetchWithAuth(
+        "https://bizkit.fun/api/v1/event/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newMarkerData),
+        }
+      );
+      console.log( JSON.stringify(newMarkerData))
+
+      const responseData = await response.json();
+      console.log("Response:", responseData);
+    } catch (error) {
+      console.error("Error:", error);
+    }
     setIsAddingMarker(false);
     setSearchAddress("");
   };
@@ -183,8 +200,8 @@ const MapApp = () => {
           >
             <Popup>
               <div>
-                <p>Time: {marker.data.time}</p>
-                <p>Address: {marker.data.address}</p>
+                <p>Time: {marker?.data?.time}</p>
+                <p>Address: {marker?.data?.address}</p>
               </div>
             </Popup>
           </Marker>
@@ -262,6 +279,7 @@ const MapApp = () => {
             <DefaultInput type={"text"} value={newMarkerData.address} title={"Адресс"} name={"address"}  onChange={handleInputChange}></DefaultInput>
             
             <input className={classesStyles.classes_create_date} style={{marginLeft: "40px"}}
+            name="time"
               type="datetime-local"
               value={newMarkerData.time}
               onChange={handleInputChange}
