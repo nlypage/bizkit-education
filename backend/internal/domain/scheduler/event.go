@@ -41,4 +41,5 @@ func (s EventScheduler) archiveEvent() {
 
 func (s EventScheduler) Start() {
 	log.Println("conference scheduler started")
+	go s.periodicallyArchiveConferences()
 }
