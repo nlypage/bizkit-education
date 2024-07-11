@@ -12,7 +12,11 @@ import {
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
-import { fetchWithAuth } from "../utils/api";
+import styles from "./styles/Card.module.css"
+import OpacitedButton from "./ui/opacitedButton";
+import PurpleButton from "./ui/purpleButton";
+import DefaultInput from "./ui/defaultInput";
+import classesStyles from "./styles/Schedule.module.css"
 
 const MapApp = () => {
   const [markerPosition, setMarkerPosition] = useState([]);
@@ -27,6 +31,9 @@ const MapApp = () => {
       },
     },
   ]);
+  const setTime = () => {
+
+  }
   const mapRef = useRef(null);
   const [newMarkerData, setNewMarkerData] = useState({
     title: "",
@@ -116,14 +123,14 @@ const MapApp = () => {
     }
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     const newMarkerInfo = {
       position: [newMarkerData.lat, newMarkerData.lng],
       data: newMarkerData,
     };
     setMarkerData((prevData) => [...prevData, newMarkerInfo]);
-    console.log("New Marker Data:", newMarkerData);
+    console.log("New Marker Data:", newMarkerInfo);
     setNewMarkerData({
       title: "",
       description: "",
@@ -133,24 +140,6 @@ const MapApp = () => {
       lng: "",
 
     });
-    try {
-      const response = await fetchWithAuth(
-        "https://bizkit.fun/api/v1/event/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newMarkerData),
-        }
-      );
-      console.log( JSON.stringify(newMarkerData))
-
-      const responseData = await response.json();
-      console.log("Response:", responseData);
-    } catch (error) {
-      console.error("Error:", error);
-    }
     setIsAddingMarker(false);
     setSearchAddress("");
   };
@@ -168,12 +157,13 @@ const MapApp = () => {
   };
 
   return (
-    <div>
+    <div className={styles.map}>
       <MapContainer
         ref={mapRef}
         center={[51.505, -0.09]}
         zoom={13}
-        style={{ width: "60%", height: "50vh", margin: "10vh" }}
+        style={{ width: "100%", height: "500px", borderRadius: "16px" }}
+        className={styles.map_container}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -219,52 +209,77 @@ const MapApp = () => {
         )}
       </MapContainer>
 
-      <div style={{ marginTop: "20px" }}>
-        <input
+      <div className={styles.map_find_box} style={{ margin: "auto", marginTop: "20px", width: "100%", display: "flex", height: "50px" }}>
+        
+          <DefaultInput type={"text"} title={"Адресс"} value={searchAddress} onChange={handleSearchAddressChange}></DefaultInput>
+
+        
+        {/* <input
           type="text"
           placeholder="Search for an address"
           value={searchAddress}
           onChange={handleSearchAddressChange}
-        />
-        <button onClick={getCoordinatesFromAddress}>Add Marker</button>
+        /> */}
+        
+        <div style={{marginTop: "45px", marginLeft: "15px"}}>
+          <OpacitedButton title={"Поиск"} onClick={getCoordinatesFromAddress}></OpacitedButton>
+        </div>
+        
+        
       </div>
 
       {isAddingMarker && (
-        <div style={{ marginTop: "20px" }}>
-          <h2>Add New Marker</h2>
+        <div className={classesStyles.classes_create_class_box} style={{marginTop: "100px"}}>
+          
           <form onSubmit={handleFormSubmit}>
-            <input
+            <DefaultInput type={"text"} title={"Название"} name={"title"} value={newMarkerData.title} onChange={handleInputChange}></DefaultInput>
+            {/* <input
               type="text"
               name="title"
               placeholder="Title"
               value={newMarkerData.title}
               onChange={handleInputChange}
               required
-            />
-            <textarea
+            /> */}
+            <DefaultInput type={"text"} value={newMarkerData.description} title={"Описание"} name={"description"}  onChange={handleInputChange}></DefaultInput>
+            {/* <textarea
               name="description"
               placeholder="Description"
               value={newMarkerData.description}
               onChange={handleInputChange}
               required
-            ></textarea>
-            <input
-              type="datetime-local"
+            ></textarea> */}
+            {/* <DefaultInput type={"text"} value={newMarkerData.time} title={"Время"} name={"time"}  onChange={handleInputChange}></DefaultInput> */}
+            
+            {/* <input
+              type="text"
               name="time"
               placeholder="Time"
               value={newMarkerData.time}
               onChange={handleInputChange}
               required
+            /> */}
+            <DefaultInput type={"text"} value={newMarkerData.address} title={"Адресс"} name={"address"}  onChange={handleInputChange}></DefaultInput>
+            
+            <input className={classesStyles.classes_create_date} style={{marginLeft: "40px"}}
+              type="datetime-local"
+              value={newMarkerData.time}
+              onChange={handleInputChange}
+              required
             />
-            <input
+            {/* <input
               type="text"
               name="address"
               placeholder="Address"
               value={newMarkerData.address}
               onChange={handleInputChange}
               required
-            />
-            <button type="submit">Add Marker</button>
+            /> */}
+            <div style={{float: "left", marginLeft: "40px", marginTop: "20px"}}>
+
+              <PurpleButton type={"submit"} title={"Создать"}></PurpleButton>
+            </div>
+            {/* <button type="submit">Add Marker</button> */}
           </form>
         </div>
       )}

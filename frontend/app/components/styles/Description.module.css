@@ -1,0 +1,17 @@
+.description_box {
+    width: 60%;
+    min-width: 400px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 16px;
+    height: 700px;
+    display: inline-block;
+    position: relative;
+    padding-bottom: .8rem;
+    padding-left: .3rem;
+    padding-right: .3rem;
+    top: 50%;
+    margin-top: 80px;
+    left: 50%;
+    
+    transform: translate(-50%, 0%);
+}
