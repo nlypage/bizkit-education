@@ -124,6 +124,12 @@ const AnswerQuestions = () => {
               <PurpleButton onClick={loadMore} title={"Далее"}></PurpleButton>
             </div>
           )}
+
+          {/* :) бр бр бр))*/}
+          <br />
+          <br />
+          <br />
+          
         </div>
       )}
     </>

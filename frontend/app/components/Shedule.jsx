@@ -18,10 +18,9 @@ const useClickOutside = (ref, callback) => {
   }
   useEffect(() => {
     document.addEventListener("mousedown", handleClick)
-    document.getElementById("cb")
     return () => {
-      document.removeEventListener("mousedown", handleClick)
       
+      document.removeEventListener("mousedown", handleClick) 
     }
   })
 }
@@ -80,7 +79,7 @@ const Schedule = () => {
 
 
   return (
-    <div style={{ margin: "300px" }} className={styles.classes}>
+    <div style={{ margin: "300px" }} className={styles.classes} id="cb">
       <button onClick={handleCreateConference}>Создать конференцию</button>
       <h1>Мои конференции</h1>
       <MyConference />
@@ -88,7 +87,7 @@ const Schedule = () => {
       <AllConferences />
 
       {showModal && (
-        <div className={styles.classes_create_class_box} id="cb" ref={menuRef}>
+        <div className={styles.classes_create_class_box} ref={menuRef}>
           
             
             <DefaultInput title={"Предмет"} type={"text"} onChange={(e) => setTitle(e.target.value)} value={title}></DefaultInput>
@@ -109,7 +108,7 @@ const Schedule = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             /> */}
-          <div style={{display: "flex", width: "70%", margin: "auto"}}>
+          <div style={{display: "flex", width: "10%", margin: "auto"}}>
             <input className={styles.classes_create_date}
               type="datetime-local"
               value={time}

@@ -115,5 +115,15 @@
     /* margin-left: 1000px; */
 }
 .question_preview_padding_div {
-    width: 10px;
+    width: 15px;
+    margin-left: 15px;
+}
+@media only screen and (max-width: 768px) {
+    .question_preview_pagination_buttons {
+        width: 40%;
+        
+    }
+    .question_preview_answer_button_wrapper {
+        margin-right: 100px;
+    }
 }
