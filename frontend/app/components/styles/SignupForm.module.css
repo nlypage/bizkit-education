@@ -32,3 +32,8 @@
     align-items: center;
     width: 100%;
 }
+
+.error_message {
+    font-size: 60%;
+    color: #7950F2; 
+}

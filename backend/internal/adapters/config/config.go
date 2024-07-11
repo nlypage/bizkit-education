@@ -61,6 +61,7 @@ func GetConfig() *Config {
 		&entities.Question{},
 		&entities.Answer{},
 		&entities.Conference{},
+		&entities.Event{},
 	)
 
 	if err != nil {
