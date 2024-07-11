@@ -9,7 +9,7 @@ type CreateEvent struct {
 	AuthorUUID  string    `json:"-" validate:"required,uuid4"`
 	Longitude   string    `json:"lng" validate:"required"`
 	Latitude    string    `json:"lat" validate:"required"`
-	Address     string    `json:"address"`
+	Address     string    `json:"address" validate:"required"`
 }
 
 type Event struct {
