@@ -1,11 +1,11 @@
 from flask import Flask, request
-from flask_cors import CORS, cross_origin()
+from flask_cors import CORS, cross_origin
 from main import Summarize300Client
 import os
 
 application = Flask(__name__)
 cors = CORS(application)
-app.config['CORS_HEADERS'] = 'Content-Type'
+application.config['CORS_HEADERS'] = 'Content-Type'
 
 YANDEX_OAUTH = os.environ["YANDEX_OAUTH"]
 YANDEX_COOKIE = os.environ["YANDEX_COOKIE"]
