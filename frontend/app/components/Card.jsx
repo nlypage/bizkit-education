@@ -12,6 +12,7 @@ import {
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
+import { fetchWithAuth } from "../utils/api";
 
 const MapApp = () => {
   const [markerPosition, setMarkerPosition] = useState([]);
@@ -115,14 +116,14 @@ const MapApp = () => {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const newMarkerInfo = {
       position: [newMarkerData.lat, newMarkerData.lng],
       data: newMarkerData,
     };
     setMarkerData((prevData) => [...prevData, newMarkerInfo]);
-    console.log("New Marker Data:", newMarkerInfo);
+    console.log("New Marker Data:", newMarkerData);
     setNewMarkerData({
       title: "",
       description: "",
@@ -132,6 +133,24 @@ const MapApp = () => {
       lng: "",
 
     });
+    try {
+      const response = await fetchWithAuth(
+        "https://bizkit.fun/api/v1/event/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newMarkerData),
+        }
+      );
+      console.log( JSON.stringify(newMarkerData))
+
+      const responseData = await response.json();
+      console.log("Response:", responseData);
+    } catch (error) {
+      console.error("Error:", error);
+    }
     setIsAddingMarker(false);
     setSearchAddress("");
   };
@@ -230,7 +249,7 @@ const MapApp = () => {
               required
             ></textarea>
             <input
-              type="text"
+              type="datetime-local"
               name="time"
               placeholder="Time"
               value={newMarkerData.time}
