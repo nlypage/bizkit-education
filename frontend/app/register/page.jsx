@@ -18,24 +18,40 @@ export default function Register() {
   const [emailError, setEmailError] = useState('');
   const router = useRouter();
 
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmailError('');
+    setEmail(e.target.value);
+  };
+  
+  const handlePasswordChange = (e) => {
+    setPasswordError('');
+    setPassword(e.target.value);
+  };
+  
+  const handleConfirmPasswordChange = (e) => {
+    setPasswordError('');
+    setConfirmPassword(e.target.value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate email
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
     if (!emailRegex.test(email)) {
       setEmailError('Введите действительный адрес электронной почты');
       return;
     }
 
-    // Validate password
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     if (!passwordRegex.test(password)) {
       setPasswordError('Пароль должен содержать минимум 8 символов, одну заглавную букву и одну цифру');
       return;
     }
 
-    // Validate password confirmation
     if (password !== confirmPassword) {
       setPasswordError('Пароли не совпадают');
       return;
@@ -70,24 +86,24 @@ export default function Register() {
 
           <div className={stylesForInput.input_box}>
             <p className={stylesForInput.input_title}>Электронная почта</p>
-            <input value={email} onChange={(e) => setEmail(e.target.value)} className={stylesForInput.input} type="text" />
+            <input value={email} onChange={handleEmailChange} className={stylesForInput.input} type="text" />
             {emailError && <div className={styles.error_message}>{emailError}</div>}
           </div>
 
           <div className={stylesForInput.input_box}>
             <p className={stylesForInput.input_title}>Юзернейм</p>
-            <input value={username} onChange={(e) => setUsername(e.target.value)} className={stylesForInput.input} type="text" />
+            <input value={username} onChange={handleUsernameChange} className={stylesForInput.input} type="text" />
           </div>
 
           <div className={stylesForInput.input_box}>
             <p className={stylesForInput.input_title}>Пароль</p>
-            <input value={password} onChange={(e) => setPassword(e.target.value)} className={stylesForInput.input} type="password" />
+            <input value={password} onChange={handlePasswordChange} className={stylesForInput.input} type="password" />
             {passwordError && <div className={styles.error_message}>{passwordError}</div>}
           </div>
 
           <div className={stylesForInput.input_box}>
             <p className={stylesForInput.input_title}>Повторите пароль</p>
-            <input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className={stylesForInput.input} type="password" />
+            <input value={confirmPassword} onChange={handleConfirmPasswordChange} className={stylesForInput.input} type="password" />
             {passwordError && <div className={styles.error_message}>{passwordError}</div>}
           </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   MapContainer,
   TileLayer,
@@ -33,6 +33,31 @@ const MapApp = () => {
     },
   ]);
   
+  useEffect(() => {
+    const addEvents = async () => {
+      try {
+        const url = `https://bizkit.fun/api/v1/event/all`;
+        const response = await fetchWithAuth(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        if (Array.isArray(data.body)) {
+          setMarkerData(data.body)
+          console.log(data.body);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    addEvents();
+  }, []);
+
+
+
+
   const mapRef = useRef(null);
   const [newMarkerData, setNewMarkerData] = useState({
     title: "",

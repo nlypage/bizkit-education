@@ -15,3 +15,27 @@
     
     transform: translate(-50%, 0%);
 }
+
+.triangle {
+    transform: rotate(0deg);
+    transition: transform 0.3s ease-in-out;
+    color: #7950F2;
+  }
+  
+  .rotate {
+    transform: rotate(180deg);
+  }
+  
+  .vertical_bar {
+    width: 2px;
+    height: 100%;
+    background-color: #7950F2;
+    margin-right: 10px;
+    transition: height 0.3s ease-in-out;
+  }
+  
+  .active {
+    height: 30px;
+  }
+
+  
