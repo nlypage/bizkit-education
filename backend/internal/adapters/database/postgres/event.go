@@ -31,9 +31,9 @@ func (s *eventStorage) GetAll(ctx context.Context, limit, offset int, searchType
 
 	switch searchType {
 	case "upcoming":
-		query = s.db.WithContext(ctx).Model(&entities.Event{}).Limit(limit).Offset(offset).Where("archived_at = ?", false).Order("start_time asc")
+		query = s.db.WithContext(ctx).Model(&entities.Event{}).Limit(limit).Offset(offset).Where("archived = ?", false).Order("start_time asc")
 	case "archived":
-		query = s.db.WithContext(ctx).Model(&entities.Event{}).Limit(limit).Offset(offset).Where("archived_at = ?", true).Order("start_time desc")
+		query = s.db.WithContext(ctx).Model(&entities.Event{}).Limit(limit).Offset(offset).Where("archived = ?", true).Order("start_time desc")
 	case "all":
 		query = s.db.WithContext(ctx).Model(&entities.Event{}).Limit(limit).Offset(offset).Order("start_time desc")
 	default:
