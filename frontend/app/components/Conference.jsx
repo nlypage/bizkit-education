@@ -15,11 +15,13 @@ const Conference = ({ conference }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            url: conferenceData.url,
+            content: conferenceData.url,
           }),
         }
       );
-
+      console.log(JSON.stringify({
+        content: conferenceData.url,
+      }),)
       const responseData = await response.json();
       console.log("Response:", responseData);
     } catch (error) {
