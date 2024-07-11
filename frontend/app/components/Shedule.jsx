@@ -1,10 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { fetchWithAuth } from "../utils/api";
 import MyConference from "./elements/MyConference";
 import AllConferences from "./elements/AllConferences";
+import styles from "./styles/Schedule.module.css"
+import DefaultInput from "./ui/defaultInput";
+import OpacitedButton from "./ui/opacitedButton";
+import PurpleButton from "./ui/purpleButton";
+
+const useClickOutside = (ref, callback) => {
+  const handleClick = (e) => {
+    if (ref.current && !ref.current.contains(e.target)) {
+      callback()
+    }
+  }
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClick)
+    return () => {
+      
+      document.removeEventListener("mousedown", handleClick) 
+    }
+  })
+}
 
 const Schedule = () => {
   const router = useRouter();
@@ -16,6 +35,13 @@ const Schedule = () => {
   const handleCreateConference = () => {
     setShowModal(true);
   };
+  const menuRef = useRef(null)
+  useClickOutside(menuRef, () => {
+    setShowModal(false);
+    setTitle("");
+    setDescription("");
+    setTime("");
+  })
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -53,7 +79,7 @@ const Schedule = () => {
 
 
   return (
-    <div style={{ margin: "300px" }}>
+    <div style={{ margin: "300px" }} className={styles.classes} id="cb">
       <button onClick={handleCreateConference}>Создать конференцию</button>
       <h1>Мои конференции</h1>
       <MyConference />
@@ -61,41 +87,43 @@ const Schedule = () => {
       <AllConferences />
 
       {showModal && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div>
-            <h2>Создать конференцию</h2>
-            <input
+        <div className={styles.classes_create_class_box} ref={menuRef}>
+          
+            
+            <DefaultInput title={"Предмет"} type={"text"} onChange={(e) => setTitle(e.target.value)} value={title}></DefaultInput>
+            {/* <input
               type="text"
               placeholder="Предмет"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-            />
-            <input
+            /> */}
+            {/* <OpacitedButton onClick={handleCloseModal} title={"Закрыть"}></OpacitedButton> */}
+
+          
+
+          <DefaultInput title={"Описание"} type={"text"} onChange={(e) => setDescription(e.target.value)} value={title}></DefaultInput>
+            {/* <input
               type="text"
               placeholder="Описание"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-            />
-            <input
+            /> */}
+          <div style={{display: "flex", width: "10%", margin: "auto"}}>
+            <input className={styles.classes_create_date}
               type="datetime-local"
               value={time}
               onChange={(e) => setTime(e.target.value)}
             />
-            <button onClick={handleSubmit}>Отправить</button>
-            <button onClick={handleCloseModal}>Закрыть</button>
+            <div style={{marginLeft: "15px", marginTop: "20px"}}>
+
+              <PurpleButton onClick={handleSubmit} title={"Отправить"}></PurpleButton>
+            </div>
+
+            
           </div>
+            
+            
+          
         </div>
       )}
     </div>
