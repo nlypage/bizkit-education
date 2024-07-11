@@ -7,8 +7,8 @@ type CreateEvent struct {
 	Description string    `json:"description" validate:"required,body"`
 	StartTime   time.Time `json:"-" validate:"required"`
 	AuthorUUID  string    `json:"-" validate:"required,uuid4"`
-	Longitude   float64   `json:"lng" validate:"required"`
-	Latitude    float64   `json:"lat" validate:"required"`
+	Longitude   string    `json:"lng" validate:"required"`
+	Latitude    string    `json:"lat" validate:"required"`
 	Address     string    `json:"address"`
 }
 
