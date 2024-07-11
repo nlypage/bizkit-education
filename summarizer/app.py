@@ -1,13 +1,17 @@
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
 from main import Summarize300Client
 import os
 
 application = Flask(__name__)
+cors = CORS(application)
+application.config['CORS_HEADERS'] = 'Content-Type'
 
 YANDEX_OAUTH = os.environ["YANDEX_OAUTH"]
 YANDEX_COOKIE = os.environ["YANDEX_COOKIE"]
 
 @application.route('/summarize/generate', methods=['POST'])
+@cross_origin()
 def generate():
     data = request.json
     url = data.get('content')
