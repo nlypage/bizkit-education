@@ -12,7 +12,7 @@ type Event struct {
 	StartTime   time.Time `json:"start_date"`
 	AuthorUUID  string    `json:"author_uuid"`
 	Archived    bool      `json:"archived"`
-	Longitude   float64   `json:"longitude"`
-	Latitude    float64   `json:"latitude"`
+	Longitude   string    `json:"longitude"`
+	Latitude    string    `json:"latitude"`
 	Address     string    `json:"address"`
 }
