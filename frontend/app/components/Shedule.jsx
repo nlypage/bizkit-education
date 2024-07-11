@@ -108,7 +108,7 @@ const Schedule = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             /> */}
-          <div style={{display: "flex", width: "10%", margin: "auto"}}>
+          <div style={{display: "flex", width: "70%", margin: "auto"}}>
             <input className={styles.classes_create_date}
               type="datetime-local"
               value={time}
