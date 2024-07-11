@@ -79,13 +79,20 @@ const Schedule = () => {
 
 
   return (
-    <div style={{ margin: "300px" }} className={styles.classes} id="cb">
-      <button onClick={handleCreateConference}>Создать конференцию</button>
-      <h1>Мои конференции</h1>
-      <MyConference />
-      <h1>Смотреть конференции</h1>
-      <AllConferences />
-
+    <>
+    <div style={{width: "60%", margin: "auto", marginTop: "100px", textAlign: "center" }} className={styles.classes} id="cb" >
+      <PurpleButton onClick={handleCreateConference} title={"Создать конференцию"}></PurpleButton>
+    </div>
+    <div style={{width: "60%", margin: "auto", marginTop: "20px", textAlign: "center" }} className={styles.classes} id="cb" >
+      <h1 style={{color: "gray", marginTop: "20px"}}>Мои конференции</h1>
+      
+    </div>
+    <MyConference />
+    <div style={{width: "60%", margin: "auto", marginTop: "40px", textAlign: "center" }} className={styles.classes} id="cb" >
+      <h1 style={{color: "gray"}}>Смотреть конференции</h1>
+      
+    </div>
+    <AllConferences />
       {showModal && (
         <div className={styles.classes_create_class_box} ref={menuRef}>
           
@@ -101,7 +108,7 @@ const Schedule = () => {
 
           
 
-          <DefaultInput title={"Описание"} type={"text"} onChange={(e) => setDescription(e.target.value)} value={title}></DefaultInput>
+          <DefaultInput title={"Описание"} type={"text"} onChange={(e) => setDescription(e.target.value)} value={description}></DefaultInput>
             {/* <input
               type="text"
               placeholder="Описание"
@@ -126,7 +133,9 @@ const Schedule = () => {
           
         </div>
       )}
-    </div>
+    </>
+    
+    
   );
 };
 

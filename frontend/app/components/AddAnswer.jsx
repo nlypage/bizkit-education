@@ -145,16 +145,8 @@ const AddAnswer = ({ question }) => {
           <p className={answerQuestionStyles.question_preview_rank}>
             {data?.question.author?.rate}
           </p>
-          <hr
-            className={answerQuestionStyles.question_preview_hr}
-            style={{ marginLeft: "0px" }}
-          />
-          <div
-            className={answerQuestionStyles.question_preview_question_type}
-            style={{ marginTop: "20px", marginLeft: "0px" }}
-          >
-            #{data?.question.subject}
-          </div>
+          
+          
           <div
             className={answerQuestionStyles.question_preview_cost}
             style={{
@@ -172,8 +164,13 @@ const AddAnswer = ({ question }) => {
             />
           </div>
         </div>
-
-        <div className={styles.question_title}>
+        <div
+            className={answerQuestionStyles.question_preview_question_type}
+            style={{ marginTop: "20px", marginLeft: "20px" }}
+          >
+            #{data?.question.subject}
+          </div>
+        <div className={styles.question_title} style={{marginTop: "10px"}}>
           {data ? data.question.header : "Loading..."}
         </div>
         <div className={styles.question_description}>
@@ -348,6 +345,11 @@ const AddAnswer = ({ question }) => {
           </div>
         )}
       </div>
+      <br />
+    <br />
+    <br />
+    <br />
+    <br />
     </>
   );
 };

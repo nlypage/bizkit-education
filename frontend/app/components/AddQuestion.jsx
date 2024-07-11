@@ -100,6 +100,11 @@ const AddQuestion = ({ setView }) => {
           </div>
         </div>
       </div>
+      <br />
+    <br />
+    <br />
+    <br />
+    <br />
     </>
   );
 };

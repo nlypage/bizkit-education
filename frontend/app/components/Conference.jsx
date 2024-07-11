@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { fetchWithAuth } from '../utils/api';
+import DefaultInput from './ui/defaultInput';
+import PurpleButton from './ui/purpleButton';
+import OpacitedButton from './ui/opacitedButton';
 
 const Conference = ({ conference }) => {
   const [inputValue, setInputValue] = useState();
@@ -62,20 +65,44 @@ const Conference = ({ conference }) => {
 
   return (
     <>
-      <div>{conferenceData.title}</div>
-      <div>
-        <iframe
-          width="560"
-          height="315"
-          src={`https://www.youtube.com/embed/${conferenceData.url.split('/').pop()}`}
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
+      <div style={{
+        width: "300px",
+        margin: "auto",
+        marginTop: "30px"
+      }}>
+        <div style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "22px",
+          fontWeight: "bold",
+          color: "grey"
+        }}>{conferenceData.title}</div>
+        <div>
+          <iframe
+            width="300"
+            height="215"
+            style={{
+              borderStyle: "none",
+              borderRadius: "16px"
+            }}
+            src={`https://www.youtube.com/embed/${conferenceData.url.split('/').pop()}`}
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+        <div id='summary-container'></div>
+        <div style={{marginTop: "20px", marginLeft: "40px"}}>
+          <OpacitedButton title={"Краткое содержание"} onClick={handleSubmit}></OpacitedButton>
+
+        </div>
+        <div  style={{marginTop: "-20px"}}>
+          <DefaultInput title={"Сумма"} type={"text"} value={inputValue} onChange={handleInputChange}></DefaultInput>
+
+        </div>
+        <div style={{marginTop: "20px", marginLeft: "40px"}}>
+          <PurpleButton title={"Задонатить"} onClick={Donate}></PurpleButton>
+        </div>
       </div>
-      <div id='summary-container'></div>
-      <button onClick={handleSubmit}>Получить краткое содержание</button>
-      <input type="text" value={inputValue} onChange={handleInputChange} />
-      <button onClick={Donate}>Отправить донат</button>
+      
     </>
   )
 }
