@@ -31,6 +31,9 @@ const MapApp = () => {
       },
     },
   ]);
+  const setTime = () => {
+
+  }
   const mapRef = useRef(null);
   const [newMarkerData, setNewMarkerData] = useState({
     title: "",
@@ -229,7 +232,7 @@ const MapApp = () => {
         <div className={classesStyles.classes_create_class_box} style={{marginTop: "100px"}}>
           
           <form onSubmit={handleFormSubmit}>
-            <DefaultInput type={"text"} title={"Название"} name={"title"} value={newMarkerData.title} onChange={handleFormSubmit}></DefaultInput>
+            <DefaultInput type={"text"} title={"Название"} name={"title"} value={newMarkerData.title} onChange={handleInputChange}></DefaultInput>
             {/* <input
               type="text"
               name="title"
@@ -246,7 +249,8 @@ const MapApp = () => {
               onChange={handleInputChange}
               required
             ></textarea> */}
-            <DefaultInput type={"text"} value={newMarkerData.time} title={"Время"} name={"time"}  onChange={handleInputChange}></DefaultInput>
+            {/* <DefaultInput type={"text"} value={newMarkerData.time} title={"Время"} name={"time"}  onChange={handleInputChange}></DefaultInput> */}
+            
             {/* <input
               type="text"
               name="time"
@@ -256,6 +260,13 @@ const MapApp = () => {
               required
             /> */}
             <DefaultInput type={"text"} value={newMarkerData.address} title={"Адресс"} name={"address"}  onChange={handleInputChange}></DefaultInput>
+            
+            <input className={classesStyles.classes_create_date} style={{marginLeft: "40px"}}
+              type="datetime-local"
+              value={newMarkerData.time}
+              onChange={handleInputChange}
+              required
+            />
             {/* <input
               type="text"
               name="address"
@@ -264,7 +275,7 @@ const MapApp = () => {
               onChange={handleInputChange}
               required
             /> */}
-            <div style={{float: "right", marginRight: "40px", marginTop: "20px"}}>
+            <div style={{float: "left", marginLeft: "40px", marginTop: "20px"}}>
 
               <PurpleButton type={"submit"} title={"Создать"}></PurpleButton>
             </div>
