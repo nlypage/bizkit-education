@@ -244,6 +244,7 @@ const AddAnswer = ({ question }) => {
             value={answer}
             onChange={(e) => setAnswer(e.target.value)}
           />
+           <p style={{fontSize: '80%', color: '#7950F2', marginLeft: '1vw'}}>Комиссия сервиса составляет 20%</p>
           <div
             className={styles.question_preview_answer_button_wrapper}
             style={{
@@ -253,6 +254,7 @@ const AddAnswer = ({ question }) => {
               float: "right",
             }}
           >
+           
             <OpacitedButton
               onClick={addAnswer}
               title={"Отправить"}
@@ -343,7 +345,6 @@ const AddAnswer = ({ question }) => {
               fontSize: "2vh",
             }}
           >
-            <p>Еще нет ответов</p>
           </div>
         )}
       </div>

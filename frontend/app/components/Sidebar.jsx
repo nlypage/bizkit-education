@@ -82,7 +82,7 @@ const Sidebar = ({ setView }) => {
         </div>
         <div className={styles.sidebar_button_box}>
           <SquareArrowLeft size={27} color="#7950F2"/>
-          <button onClick={() => handleLogout} className={styles.sidebar_button}>
+          <button onClick={handleLogout} className={styles.sidebar_button}>
             Выйти
           </button>
           <hr className={styles.sidebar_hr} style={{size:"5"}}/>
