@@ -7,8 +7,8 @@ type CreateEvent struct {
 	Description string    `json:"description" validate:"required,body"`
 	StartTime   time.Time `json:"-" validate:"required"`
 	AuthorUUID  string    `json:"-" validate:"required,uuid4"`
-	Longitude   string    `json:"lng" validate:"required"`
-	Latitude    string    `json:"lat" validate:"required"`
+	Longitude   float64   `json:"lng" validate:"required"`
+	Latitude    float64   `json:"lat" validate:"required"`
 	Address     string    `json:"address" validate:"required"`
 }
 
@@ -16,13 +16,13 @@ type Event struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	StartTime   time.Time `json:"start_time"`
-	Longitude   string    `json:"longitude"`
-	Latitude    string    `json:"latitude"`
+	Longitude   float64   `json:"longitude"`
+	Latitude    float64   `json:"latitude"`
 	Address     string    `json:"address"`
 	Author      Author    `json:"author"`
 }
 
 type ReturnEvent struct {
-	Position [2]string `json:"position"`
-	Data     Event     `json:"data"`
+	Position [2]float64 `json:"position"`
+	Data     Event      `json:"data"`
 }

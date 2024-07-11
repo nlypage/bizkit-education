@@ -45,7 +45,7 @@ func (u eventUseCase) GetAll(ctx context.Context, limit, offset int, searchType 
 		}
 
 		eventsDto = append(eventsDto, &dto.ReturnEvent{
-			Position: [2]string{
+			Position: [2]float64{
 				event.Latitude, event.Longitude,
 			},
 			Data: dto.Event{
