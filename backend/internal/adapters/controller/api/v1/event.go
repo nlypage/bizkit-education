@@ -63,7 +63,7 @@ func (h EventHandler) create(c *fiber.Ctx) error {
 		return err
 	}
 
-	startTime, ok := data["start_time"]
+	startTime, ok := data["time"]
 	if !ok {
 		return errroz.ParsingError
 	}
