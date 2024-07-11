@@ -7,6 +7,7 @@ import {
   Marker,
   Popup,
   useMapEvents,
+  useMap,
 } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -51,7 +52,7 @@ const MapApp = () => {
               title: "",
               description: "",
               time: "",
-              address: addressData,
+              address: addressData.display_name,
             },
           },
         ]);
@@ -59,17 +60,11 @@ const MapApp = () => {
           title: "",
           description: "",
           time: "",
-          address: addressData,
+          address: addressData.display_name,
           lat: lat,
           lng: lng,
         });
         setIsAddingMarker(true);
-        console.log(
-          "New Marker Position:",
-          [lat, lng],
-          "Address:",
-          addressData
-        );
       },
     });
 
@@ -87,7 +82,9 @@ const MapApp = () => {
       const response = await axios.get(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
       );
-      return response.data.display_name;
+      console.log(response.data)
+      return response.data;
+
     } catch (error) {
       console.error("Error getting address:", error);
       return "Unknown address";
@@ -99,6 +96,7 @@ const MapApp = () => {
       const response = await axios.get(
         `https://nominatim.openstreetmap.org/search?q=${searchAddress}&format=json&limit=1`
       );
+      
       if (response.data.length > 0) {
         const { lat, lon } = response.data[0];
         setNewMarkerData({
@@ -120,6 +118,7 @@ const MapApp = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const newMarkerInfo = {
+      position: [newMarkerData.lat, newMarkerData.lng],
       data: newMarkerData,
     };
     setMarkerData((prevData) => [...prevData, newMarkerInfo]);
@@ -129,7 +128,9 @@ const MapApp = () => {
       description: "",
       time: "",
       address: "",
-     
+      lat: "",
+      lng: "",
+
     });
     setIsAddingMarker(false);
     setSearchAddress("");
@@ -153,7 +154,7 @@ const MapApp = () => {
         ref={mapRef}
         center={[51.505, -0.09]}
         zoom={13}
-        style={{ width: "60%", height: "50vh", margin: "10vh", filter: 'grayscale(50%)' }}
+        style={{ width: "60%", height: "50vh", margin: "10vh" }}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -191,6 +192,7 @@ const MapApp = () => {
           >
             <Popup>
               <div>
+                <p>Time: {newMarkerData.time}</p>
                 <p>Address: {newMarkerData.address}</p>
               </div>
             </Popup>
@@ -212,39 +214,39 @@ const MapApp = () => {
         <div style={{ marginTop: "20px" }}>
           <h2>Add New Marker</h2>
           <form onSubmit={handleFormSubmit}>
-        <input
-          type="text"
-          name="title"
-          placeholder="Title"
-          value={newMarkerData.title}
-          onChange={handleInputChange}
-          required
-        />
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={newMarkerData.description}
-          onChange={handleInputChange}
-          required
-        ></textarea>
-        <input
-          type="text"
-          name="time"
-          placeholder="Time"
-          value={newMarkerData.time}
-          onChange={handleInputChange}
-          required
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Address"
-          value={newMarkerData.address}
-          onChange={handleInputChange}
-          required
-        />
-        <button type="submit">Add Marker</button>
-      </form>
+            <input
+              type="text"
+              name="title"
+              placeholder="Title"
+              value={newMarkerData.title}
+              onChange={handleInputChange}
+              required
+            />
+            <textarea
+              name="description"
+              placeholder="Description"
+              value={newMarkerData.description}
+              onChange={handleInputChange}
+              required
+            ></textarea>
+            <input
+              type="text"
+              name="time"
+              placeholder="Time"
+              value={newMarkerData.time}
+              onChange={handleInputChange}
+              required
+            />
+            <input
+              type="text"
+              name="address"
+              placeholder="Address"
+              value={newMarkerData.address}
+              onChange={handleInputChange}
+              required
+            />
+            <button type="submit">Add Marker</button>
+          </form>
         </div>
       )}
     </div>

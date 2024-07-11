@@ -47,6 +47,8 @@ const AddQuestion = ({ setView }) => {
           <div className={stylesForInput.input_box} style={{maxWidth: "500px", marginTop: "10px", marginLeft: "2%"}}>
             <p className={stylesForInput.input_title}>Вопрос</p>
             <input value={header} onChange={(e) => setHeader(e.target.value)} className={stylesForInput.input} type="text" />
+            <div style={{fontSize: '80%', color: '#7950F2'}}>{header.length <= 5 && header.length > 0 ? (<div>Недостаточно символов</div>): (<div></div>)}</div>
+
           </div>
           
           <div className={styles.ask_question_reward_box} style={{width: "150px", marginRight: "2%", marginTop: "27px"}}>
@@ -67,6 +69,7 @@ const AddQuestion = ({ setView }) => {
         
         <div className={styles.add_question_description_wrapper}>
           <textarea placeholder="Напишите подробнее о вопросе" className={styles.add_question_description} value={body} onChange={(e) => setBody(e.target.value)} />
+          <div style={{fontSize: '80%', color: '#7950F2'}}>{body.length <= 20 && body.length > 0? (<div>Недостаточно символов</div>): (<div></div>)}</div>
         </div>
         
         
