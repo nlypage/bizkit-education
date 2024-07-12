@@ -36,12 +36,6 @@ const MapApp = () => {
           ...prevData,
           { title: "", description: "", time: "", address: addressData },
         ]);
-        console.log(
-          "New Marker Position:",
-          [lat, lng],
-          "Address:",
-          addressData
-        );
       },
     });
 

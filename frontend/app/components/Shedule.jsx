@@ -9,7 +9,8 @@ import styles from "./styles/Schedule.module.css"
 import DefaultInput from "./ui/defaultInput";
 import OpacitedButton from "./ui/opacitedButton";
 import PurpleButton from "./ui/purpleButton";
-
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 const useClickOutside = (ref, callback) => {
   const handleClick = (e) => {
     if (ref.current && !ref.current.contains(e.target)) {
@@ -69,8 +70,34 @@ const Schedule = () => {
       if (response.ok) {
         setConferences([data, ...conferences]);
         handleCloseModal();
+        Toastify({
+          text: 'Лекция успешно добавлена',
+          duration: 3000,
+          newWindow: true,
+          gravity: "bottom",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+            background: "#7950F2",
+            width: '100%'
+          },
+          onClick: function() {}
+        }).showToast();
       } else {
         console.error("Error submitting conference:", response.status);
+        Toastify({
+          text: 'Произошла ошибка',
+          duration: 3000,
+          newWindow: true,
+          gravity: "bottom",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+            background: "#7950F2",
+            width: '100%'
+          },
+          onClick: function() {}
+        }).showToast();
       }
     } catch (error) {
       console.error("Error submitting conference:", error);
@@ -79,15 +106,22 @@ const Schedule = () => {
 
 
   return (
-    <div style={{ margin: "300px" }} className={styles.classes} id="cb">
-      <button onClick={handleCreateConference}>Создать конференцию</button>
-      <h1>Мои конференции</h1>
-      <MyConference />
-      <h1>Смотреть конференции</h1>
-      <AllConferences />
-
+    <>
+    <div style={{width: "60%", margin: "auto", marginTop: "100px", textAlign: "center" }} className={styles.classes} id="cb" >
+      <PurpleButton onClick={handleCreateConference} title={"Создать конференцию"}></PurpleButton>
+    </div>
+    <div style={{width: "60%", margin: "auto", marginTop: "20px", textAlign: "center" }} className={styles.classes} id="cb" >
+      <h1 style={{color: "gray", marginTop: "20px"}}>Мои конференции</h1>
+      
+    </div>
+    <MyConference />
+    <div style={{width: "60%", margin: "auto", marginTop: "40px", textAlign: "center" }} className={styles.classes} id="cb" >
+      <h1 style={{color: "gray"}}>Смотреть конференции</h1>
+      
+    </div>
+    <AllConferences />
       {showModal && (
-        <div className={styles.classes_create_class_box} ref={menuRef}>
+        <div className={styles.classes_create_class_box} ref={menuRef} style={{textAlign: "center"}}>
           
             
             <DefaultInput title={"Предмет"} type={"text"} onChange={(e) => setTitle(e.target.value)} value={title}></DefaultInput>
@@ -101,7 +135,7 @@ const Schedule = () => {
 
           
 
-          <DefaultInput title={"Описание"} type={"text"} onChange={(e) => setDescription(e.target.value)} value={title}></DefaultInput>
+          <DefaultInput title={"Описание"} type={"text"} onChange={(e) => setDescription(e.target.value)} value={description}></DefaultInput>
             {/* <input
               type="text"
               placeholder="Описание"
@@ -118,15 +152,17 @@ const Schedule = () => {
 
               <PurpleButton onClick={handleSubmit} title={"Отправить"}></PurpleButton>
             </div>
-
+            
             
           </div>
-            
+          <p style={{fontSize: '80%', color: '#7950F2', marginTop: "15px"}}>Создание лекции стоит 50 коинов</p>
             
           
         </div>
       )}
-    </div>
+    </>
+    
+    
   );
 };
 

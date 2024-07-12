@@ -7,28 +7,6 @@ import answerQuestionStyles from "./styles/QuestionPreview.module.css";
 import OpacitedButton from "./ui/opacitedButton";
 import addQuestionStyles from "./styles/AddQuestion.module.css";
 import PurpleButton from "./ui/purpleButton";
-// {
-//   "uuid": "f413611a-198c-428a-b2c5-08f22595d5f3",
-//   "created_at": "2024-07-04T20:20:06.478291Z",
-//   "updated_at": "2024-07-04T20:20:06.478291Z",
-//   "author_uuid": "dc5edb8d-d889-4d96-8598-75e361066b6e",
-//   "header": "Текст",
-//   "body": "альтернативный текст",
-//   "subject": "Русский язык",
-//   "reward": 20,
-//   "closed": false,
-//   "answers": [
-//       {
-//           "uuid": "f1aa6a74-4fe9-4165-a2a5-bccacc476f8a",
-//           "created_at": "2024-07-04T20:24:48.354046Z",
-//           "updated_at": "2024-07-04T20:24:48.354046Z",
-//           "author_uuid": "dc5edb8d-d889-4d96-8598-75e361066b6e",
-//           "question_uuid": "f413611a-198c-428a-b2c5-08f22595d5f3",
-//           "body": "какой то текст",
-//           "is_correct": false
-//       }
-//   ]
-// }
 
 const AddAnswer = ({ question }) => {
   const [showAnswerInput, setShowAnswerInput] = useState(false);
@@ -49,7 +27,6 @@ const AddAnswer = ({ question }) => {
       );
       const data = await response.json();
       setData(data.body);
-      console.log(data.body);
     } catch (error) {
       console.error(error);
     }
@@ -115,7 +92,6 @@ const AddAnswer = ({ question }) => {
       );
 
       if (response.ok) {
-        console.log(answer);
         setShowAnswerInput(!showAnswerInput);
         fetchQuestions();
       } else {
@@ -145,16 +121,8 @@ const AddAnswer = ({ question }) => {
           <p className={answerQuestionStyles.question_preview_rank}>
             {data?.question.author?.rate}
           </p>
-          <hr
-            className={answerQuestionStyles.question_preview_hr}
-            style={{ marginLeft: "0px" }}
-          />
-          <div
-            className={answerQuestionStyles.question_preview_question_type}
-            style={{ marginTop: "20px", marginLeft: "0px" }}
-          >
-            #{data?.question.subject}
-          </div>
+          
+          
           <div
             className={answerQuestionStyles.question_preview_cost}
             style={{
@@ -172,8 +140,13 @@ const AddAnswer = ({ question }) => {
             />
           </div>
         </div>
-
-        <div className={styles.question_title}>
+        <div
+            className={answerQuestionStyles.question_preview_question_type}
+            style={{ marginTop: "20px", marginLeft: "20px" }}
+          >
+            #{data?.question.subject}
+          </div>
+        <div className={styles.question_title} style={{marginTop: "10px"}}>
           {data ? data.question.header : "Loading..."}
         </div>
         <div className={styles.question_description}>
@@ -348,6 +321,11 @@ const AddAnswer = ({ question }) => {
           </div>
         )}
       </div>
+      <br />
+    <br />
+    <br />
+    <br />
+    <br />
     </>
   );
 };

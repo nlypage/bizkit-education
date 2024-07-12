@@ -7,6 +7,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Header from "../components/base/Header";
 import Title from "../components/base/Title";
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -15,24 +17,53 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("https://bizkit.fun/api/v1/user/auth", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-    console.log(JSON.stringify({ username, password }));
-    const data = await response.json();
-    if (response.ok) {
-      localStorage.setItem("authToken", data.body);
-      console.log(data.body);
-      router.push("/");
-    } else {
-      console.error(data.error);
+    try {
+      const response = await fetch("https://bizkit.fun/api/v1/user/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("authToken", data.body);
+        console.log(data.body);
+        Toastify({
+          text: 'Успешная авторизация',
+          duration: 3000,
+          newWindow: true,
+          gravity: "bottom",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+            background: "#7950F2",
+            width: '100%'
+          },
+          onClick: function() {}
+        }).showToast();
+        router.push("/");
+      } else {
+        console.error(data.error);
+        Toastify({
+          text: 'Проверьте корректность данных',
+          duration: 3000,
+          newWindow: true,
+          gravity: "bottom",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+            background: "#7950F2",
+            width: '100%'
+          },
+          onClick: function() {}
+        }).showToast();
+      }
+    } catch (error) {
+      console.error(error);
+      
     }
   };
-
   return (
     
     <main>

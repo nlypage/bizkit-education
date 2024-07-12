@@ -28,9 +28,6 @@ const AnswerQuestions = () => {
         if (Array.isArray(data.body)) {
           setQuestions(data.body);
           setHasMoreQuestions(data.body.length === 10);
-          console.log(data.body);
-        } else {
-          console.error("Data is not an array:", data.body);
         }
       } catch (error) {
         console.error(error);
@@ -43,7 +40,6 @@ const AnswerQuestions = () => {
 
   const answerClick = (question) => {
     setSelectedQuestion(question);
-    console.log(question);
   };
 
   const loadMore = () => {
@@ -129,7 +125,8 @@ const AnswerQuestions = () => {
           <br />
           <br />
           <br />
-          
+          <br />
+          <br />
         </div>
       )}
     </>

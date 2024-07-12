@@ -29,8 +29,6 @@ const AddQuestion = ({ setView }) => {
       );
 
       const responseData = await response.json();
-      console.log("Response:", responseData);
-
       if (response.ok) {
         setView("userquestion");
       } else {
@@ -58,11 +56,25 @@ const AddQuestion = ({ setView }) => {
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               className={styles.add_question_reward_dropdown }
-              style={{fontWeight: "normal", color: "black", fontSize: "18px", marginTop: "-3px"}}
+              style={{marginLeft: "-20px", fontWeight: "normal", color: "black", fontSize: "18px", marginTop: "-3px"}}
             >
               <option value="Другое">Другое</option>
               <option value="Математика">Математика</option>
               <option value="Русский язык">Русский язык</option>
+              
+              <option value="Физика">Физика</option>
+              <option value="Статистика">Статистика</option>
+              <option value="Биология">Биология</option>
+              <option value="Химия">Химия</option>
+              <option value="История">История</option>
+              <option value="Право">Право</option>
+              <option value="Геометрия">Геометрия</option>
+              <option value="Алгоритмы">Алгоритмы</option>
+              <option value="IT">IT</option>
+              <option value="География">География</option>
+              <option value="Лин-ал">Лин-ал</option>
+              <option value="ОБЖ">ОБЖ</option>
+
             </select>
           </div>
         </div>
@@ -100,6 +112,11 @@ const AddQuestion = ({ setView }) => {
           </div>
         </div>
       </div>
+      <br />
+    <br />
+    <br />
+    <br />
+    <br />
     </>
   );
 };

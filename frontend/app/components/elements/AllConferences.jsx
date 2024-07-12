@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import styles from "../styles/QuestionPreview.module.css";
+// import questionPreviewStyles from "../questionPreviewStyles/QuestionPreview.module.css";
 import OpacitedButton from "../ui/opacitedButton";
 import { fetchWithAuth } from "../../utils/api";
 import { useRouter } from "next/navigation";
 import Conference from "../Conference";
+import styles from "../styles/Schedule.module.css"
+import questionPreviewStyles from "../styles/QuestionPreview.module.css"
 
 const AllConferences = ({setView}) => {
   const [conf, setConf] = useState(null);
@@ -43,41 +45,51 @@ const AllConferences = ({setView}) => {
     window.location.href = `/room/${conference.uuid}?roomID=${conference.uuid}&role=Audience`;
   };
 
+  console.log(conf)
+
+  function convertTime(timeString) {
+    const date = new Date(timeString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    const convertedTime = `${year}-${month}-${day} ${hour}:${minute}`;
+    return convertedTime;
+  }
+
   return (
 
     <>
     {selectedConference ? (<Conference conference={selectedConference}/>):(
     <div>
-      <div className={styles.buttonGroup}>
-        <button
-          className={`${styles.button} ${isArchived ? styles.activeButton : ""}`}
-          onClick={() => setIsArchived(true)}
-        >
-          Архивные
-        </button>
-        <button
-          className={`${styles.button} ${!isArchived ? styles.activeButton : ""}`}
-          onClick={() => setIsArchived(false)}
-        >
-          Предстоящие
-        </button>
+      <div className={questionPreviewStyles.buttonGroup} style={{display: "flex", width: "320px", padding: "1rem", margin: "auto",marginTop: "10px", }}  >
+        <OpacitedButton title={"Архивные"} onClick={() => setIsArchived(true)} className={`${questionPreviewStyles.button} ${isArchived ? questionPreviewStyles.activeButton : ""}`}></OpacitedButton>
+        <OpacitedButton title={"Предстоящие"} onClick={() => setIsArchived(false)} className={`${questionPreviewStyles.button} ${isArchived ? questionPreviewStyles.activeButton : ""}`}></OpacitedButton>
       </div>
       {conf ? (
         <div>
           {conf.map((conference) => (
             <div
-              className={styles.question_preview_box}
+              className={styles.all_classes_class_box}
+              
               key={conference.uuid}
               onClick={() => viewConference(conference)}
             >
-              <div className={styles.question_preview_title}>
+              <div className={questionPreviewStyles.question_preview_title}>
                 {conference.title}
               </div>
-              <div className={styles.question_preview_bottombar}>
-                <div className={styles.question_preview_answer_button_wrapper}>
+              <div className={questionPreviewStyles.question_preview_title} style={{color: "grey", fontSize: "22px"}}>
+                {conference.description}
+              </div>
+              <div className={questionPreviewStyles.question_preview_title} style={{color: "grey", fontSize: "18px", fontWeight: "normal"}}>
+              {convertTime(conference.start_time)}
+              </div>
+              <div className={questionPreviewStyles.question_preview_bottombar}>
+                <div className={questionPreviewStyles.question_preview_answer_button_wrapper} style={{float: "left", marginRight: "0px", marginLeft: "10px"}}>
                   <OpacitedButton
                     onClick={() => (isArchived ? viewConference(conference) : joinConference(conference))}
-                    title={isArchived ? "Посмотреть" : "Открыть лекцию"}
+                    title={isArchived ? "Посмотреть" : "Открыть"}
                   ></OpacitedButton>
                 </div>
               </div>
@@ -88,6 +100,12 @@ const AllConferences = ({setView}) => {
         <div>К сожаление подходящих конференций нет</div>
       )}
     </div>)}
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    
     </>
   );
 };
