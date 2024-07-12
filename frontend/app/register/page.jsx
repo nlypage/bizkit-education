@@ -8,7 +8,8 @@ import OpacitedButton from "../components/ui/opacitedButton"
 import PurpleButton from "../components/ui/purpleButton"
 import stylesForInput from "../components/styles/DefaultInput.module.css"
 import Title from '../components/base/Title';
-
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 export default function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -71,6 +72,19 @@ export default function Register() {
     } else {
       // Handle registration error
       console.error(data.error);
+      Toastify({
+        text: 'Ошибка, попробуйте другую почту',
+        duration: 3000,
+        newWindow: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "#7950F2",
+          width: '100%'
+        },
+        onClick: function() {}
+      }).showToast();
     }
   };
 
