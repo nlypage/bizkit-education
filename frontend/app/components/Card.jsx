@@ -12,27 +12,19 @@ import {
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
-import styles from "./styles/Card.module.css"
+import styles from "./styles/Card.module.css";
 import OpacitedButton from "./ui/opacitedButton";
 import PurpleButton from "./ui/purpleButton";
 import DefaultInput from "./ui/defaultInput";
 import { fetchWithAuth } from "../utils/api";
-import classesStyles from "./styles/Schedule.module.css"
+import classesStyles from "./styles/Schedule.module.css";
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 
 const MapApp = () => {
   const [markerPosition, setMarkerPosition] = useState([]);
-  const [markerData, setMarkerData] = useState([
-    {
-      position: [51.5074, -0.1278],
-      data: {
-        title: "Big Ben",
-        description: "Famous clock tower in London",
-        time: "Always",
-        address: "Westminster, London SW1A 0AA, UK",
-      },
-    },
-  ]);
-  
+  const [markerData, setMarkerData] = useState([]);
+
   useEffect(() => {
     const addEvents = async () => {
       try {
@@ -45,8 +37,7 @@ const MapApp = () => {
         });
         const data = await response.json();
         if (Array.isArray(data.body)) {
-          setMarkerData(data.body)
-          console.log(data.body);
+          setMarkerData(data.body);
         }
       } catch (error) {
         console.error(error);
@@ -54,9 +45,6 @@ const MapApp = () => {
     };
     addEvents();
   }, []);
-
-
-
 
   const mapRef = useRef(null);
   const [newMarkerData, setNewMarkerData] = useState({
@@ -114,10 +102,21 @@ const MapApp = () => {
       const response = await axios.get(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`
       );
-      console.log(response.data)
       return response.data;
-
     } catch (error) {
+      Toastify({
+        text: 'Произошла ошибка',
+        duration: 3000,
+        newWindow: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "#7950F2",
+          width: '100%'
+        },
+        onClick: function() {}
+      }).showToast();
       console.error("Error getting address:", error);
       return "Unknown address";
     }
@@ -128,7 +127,7 @@ const MapApp = () => {
       const response = await axios.get(
         `https://nominatim.openstreetmap.org/search?q=${searchAddress}&format=json&limit=1`
       );
-      
+
       if (response.data.length > 0) {
         const { lat, lon } = response.data[0];
         setNewMarkerData({
@@ -139,8 +138,34 @@ const MapApp = () => {
         });
         setIsAddingMarker(true);
         mapRef.current.flyTo([parseFloat(lat), parseFloat(lon)], 13);
+        Toastify({
+          text: 'Данные отправлены, ожидайте',
+          duration: 3000,
+          newWindow: true,
+          gravity: "bottom",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+            background: "#7950F2",
+            width: '100%'
+          },
+          onClick: function() {}
+        }).showToast();
       } else {
         console.error("No results found for the address");
+        Toastify({
+          text: 'Ошибка, попробуйте позже',
+          duration: 3000,
+          newWindow: true,
+          gravity: "bottom",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+            background: "#7950F2",
+            width: '100%'
+          },
+          onClick: function() {}
+        }).showToast();
       }
     } catch (error) {
       console.error("Error getting coordinates:", error);
@@ -154,7 +179,6 @@ const MapApp = () => {
       data: newMarkerData,
     };
     setMarkerData((prevData) => [...prevData, newMarkerInfo]);
-    console.log("New Marker Data:", newMarkerInfo);
     setNewMarkerData({
       title: "",
       description: "",
@@ -162,7 +186,6 @@ const MapApp = () => {
       address: "",
       lat: "",
       lng: "",
-
     });
     try {
       const response = await fetchWithAuth(
@@ -175,12 +198,38 @@ const MapApp = () => {
           body: JSON.stringify(newMarkerData),
         }
       );
-      console.log( JSON.stringify(newMarkerData))
+    
 
       const responseData = await response.json();
-      console.log("Response:", responseData);
+     
+      Toastify({
+        text: 'Данные успешно добавлены',
+        duration: 3000,
+        newWindow: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "#7950F2",
+          width: '100%'
+        },
+        onClick: function() {}
+      }).showToast();
     } catch (error) {
       console.error("Error:", error);
+      Toastify({
+        text: 'Ошибка, проверьте корректность данных',
+        duration: 3000,
+        newWindow: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "#7950F2",
+          width: '100%'
+        },
+        onClick: function() {}
+      }).showToast();
     }
     setIsAddingMarker(false);
     setSearchAddress("");
@@ -198,11 +247,22 @@ const MapApp = () => {
     setSearchAddress(e.target.value);
   };
 
+  function convertTime(timeString) {
+    const date = new Date(timeString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hour = String(date.getHours()).padStart(2, "0");
+    const minute = String(date.getMinutes()).padStart(2, "0");
+    const convertedTime = `${year}-${month}-${day} ${hour}:${minute}`;
+    return convertedTime;
+  }
+
   return (
     <div className={styles.map}>
       <MapContainer
         ref={mapRef}
-        center={[51.505, -0.09]}
+        center={[	55.7522, 37.6156]}
         zoom={13}
         style={{ width: "100%", height: "500px", borderRadius: "16px" }}
         className={styles.map_container}
@@ -225,8 +285,10 @@ const MapApp = () => {
           >
             <Popup>
               <div>
-                <p>Time: {marker?.data?.time}</p>
-                <p>Address: {marker?.data?.address}</p>
+                <p>Название; {marker?.data?.title}</p>
+                <p>Описание: {marker?.data?.description}</p>
+                <p>Начало: {convertTime(marker?.data?.start_time)}</p>
+                <p>Адрес: {marker?.data?.address}</p>
               </div>
             </Popup>
           </Marker>
@@ -243,38 +305,61 @@ const MapApp = () => {
           >
             <Popup>
               <div>
-                <p>Time: {newMarkerData.time}</p>
-                <p>Address: {newMarkerData.address}</p>
+                <p>Название; {newMarkerData?.data?.title}</p>
+                <p>Описание: {newMarkerData?.data?.description}</p>
+                <p>Начало: {convertTime(newMarkerData?.data?.start_time)}</p>
+                <p>Адрес: {newMarkerData?.data?.address}</p>
               </div>
             </Popup>
           </Marker>
         )}
       </MapContainer>
 
-      <div className={styles.map_find_box} style={{ margin: "auto", marginTop: "20px", width: "100%", display: "flex", height: "50px" }}>
-        
-          <DefaultInput type={"text"} title={"Адресс"} value={searchAddress} onChange={handleSearchAddressChange}></DefaultInput>
+      <div
+        className={styles.map_find_box}
+        style={{
+          margin: "auto",
+          marginTop: "20px",
+          width: "100%",
+          display: "flex",
+          height: "50px",
+        }}
+      >
+        <DefaultInput
+          type={"text"}
+          title={"Адресс"}
+          value={searchAddress}
+          onChange={handleSearchAddressChange}
+        ></DefaultInput>
 
-        
         {/* <input
           type="text"
           placeholder="Search for an address"
           value={searchAddress}
           onChange={handleSearchAddressChange}
         /> */}
-        
-        <div style={{marginTop: "45px", marginLeft: "15px"}}>
-          <OpacitedButton title={"Поиск"} onClick={getCoordinatesFromAddress}></OpacitedButton>
+
+        <div style={{ marginTop: "45px", marginLeft: "15px" }}>
+          <OpacitedButton
+            title={"Добавить"}
+            onClick={getCoordinatesFromAddress}
+          ></OpacitedButton>
         </div>
-        
-        
       </div>
 
       {isAddingMarker && (
-        <div className={classesStyles.classes_create_class_box} style={{marginTop: "100px"}}>
-          
+        <div
+          className={classesStyles.classes_create_class_box}
+          style={{ marginTop: "100px" }}
+        >
           <form onSubmit={handleFormSubmit}>
-            <DefaultInput type={"text"} title={"Название"} name={"title"} value={newMarkerData.title} onChange={handleInputChange}></DefaultInput>
+            <DefaultInput
+              type={"text"}
+              title={"Название"}
+              name={"title"}
+              value={newMarkerData.title}
+              onChange={handleInputChange}
+            ></DefaultInput>
             {/* <input
               type="text"
               name="title"
@@ -283,7 +368,13 @@ const MapApp = () => {
               onChange={handleInputChange}
               required
             /> */}
-            <DefaultInput type={"text"} value={newMarkerData.description} title={"Описание"} name={"description"}  onChange={handleInputChange}></DefaultInput>
+            <DefaultInput
+              type={"text"}
+              value={newMarkerData.description}
+              title={"Описание"}
+              name={"description"}
+              onChange={handleInputChange}
+            ></DefaultInput>
             {/* <textarea
               name="description"
               placeholder="Description"
@@ -292,7 +383,7 @@ const MapApp = () => {
               required
             ></textarea> */}
             {/* <DefaultInput type={"text"} value={newMarkerData.time} title={"Время"} name={"time"}  onChange={handleInputChange}></DefaultInput> */}
-            
+
             {/* <input
               type="text"
               name="time"
@@ -301,10 +392,18 @@ const MapApp = () => {
               onChange={handleInputChange}
               required
             /> */}
-            <DefaultInput type={"text"} value={newMarkerData.address} title={"Адресс"} name={"address"}  onChange={handleInputChange}></DefaultInput>
-            
-            <input className={classesStyles.classes_create_date} style={{marginLeft: "40px"}}
-            name="time"
+            <DefaultInput
+              type={"text"}
+              value={newMarkerData.address}
+              title={"Адресс"}
+              name={"address"}
+              onChange={handleInputChange}
+            ></DefaultInput>
+
+            <input
+              className={classesStyles.classes_create_date}
+              style={{ marginLeft: "40px" }}
+              name="time"
               type="datetime-local"
               value={newMarkerData.time}
               onChange={handleInputChange}
@@ -318,8 +417,9 @@ const MapApp = () => {
               onChange={handleInputChange}
               required
             /> */}
-            <div style={{float: "left", marginLeft: "40px", marginTop: "20px"}}>
-
+            <div
+              style={{ float: "left", marginLeft: "40px", marginTop: "20px" }}
+            >
               <PurpleButton type={"submit"} title={"Создать"}></PurpleButton>
             </div>
             {/* <button type="submit">Add Marker</button> */}

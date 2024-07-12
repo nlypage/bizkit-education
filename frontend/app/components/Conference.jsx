@@ -3,7 +3,8 @@ import { fetchWithAuth } from '../utils/api';
 import DefaultInput from './ui/defaultInput';
 import PurpleButton from './ui/purpleButton';
 import OpacitedButton from './ui/opacitedButton';
-
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 const Conference = ({ conference }) => {
   const [inputValue, setInputValue] = useState();
   const [conferenceData, setConferenceData] = useState(conference);
@@ -11,6 +12,19 @@ const Conference = ({ conference }) => {
 
 
   const handleSubmit = async () => {
+    Toastify({
+      text: 'Данные успешно отправлены, ожидайте',
+      duration: 3000,
+      newWindow: true,
+      gravity: "bottom",
+      position: "right",
+      stopOnFocus: true,
+      style: {
+        background: "#7950F2",
+        width: '100%'
+      },
+      onClick: function() {}
+    }).showToast();
     try {
       const response = await fetchWithAuth(
         "https://bizkit.fun/summarize/generate",
@@ -25,10 +39,24 @@ const Conference = ({ conference }) => {
         }
       );
       const responseData = await response.json();
-      console.log("Response:", responseData);
+     
+      
       document.getElementById('summary-container').innerHTML = responseData.content;
     } catch (error) {
       console.error("Error:", error);
+      Toastify({
+        text: 'Произошла ошибка',
+        duration: 3000,
+        newWindow: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "#7950F2",
+          width: '100%'
+        },
+        onClick: function() {}
+      }).showToast();
     }
   };
 
@@ -50,9 +78,35 @@ const Conference = ({ conference }) => {
       );
 
       const responseData = await response.json();
-      console.log("Response:", responseData);
+    
+      Toastify({
+        text: 'Донат отправлен',
+        duration: 3000,
+        newWindow: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "#7950F2",
+          width: '100%'
+        },
+        onClick: function() {}
+      }).showToast();
     } catch (error) {
       console.error("Error:", error);
+      Toastify({
+        text: 'Произошла ошибка',
+        duration: 3000,
+        newWindow: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "#7950F2",
+          width: '100%'
+        },
+        onClick: function() {}
+      }).showToast();
     }
   };
 
@@ -67,8 +121,10 @@ const Conference = ({ conference }) => {
     <>
       <div style={{
         width: "300px",
-        margin: "auto",
-        marginTop: "30px"
+        margin: "30px auto",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
       }}>
         <div style={{
           fontFamily: "'Inter', sans-serif",
@@ -76,6 +132,12 @@ const Conference = ({ conference }) => {
           fontWeight: "bold",
           color: "grey"
         }}>{conferenceData.title}</div>
+        <div style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: "22px",
+          fontWeight: "bold",
+          color: "grey"
+        }}>{conferenceData.description}</div>
         <div>
           <iframe
             width="300"
@@ -90,21 +152,18 @@ const Conference = ({ conference }) => {
           />
         </div>
         <div id='summary-container'></div>
-        <div style={{marginTop: "20px", marginLeft: "40px"}}>
+        <div style={{ marginTop: "20px" }}>
           <OpacitedButton title={"Краткое содержание"} onClick={handleSubmit}></OpacitedButton>
-
         </div>
-        <div  style={{marginTop: "-20px"}}>
+        <div style={{ marginTop: "-20px" }}>
           <DefaultInput title={"Сумма"} type={"text"} value={inputValue} onChange={handleInputChange}></DefaultInput>
-
         </div>
-        <div style={{marginTop: "20px", marginLeft: "40px"}}>
+        <div style={{ marginTop: "20px" }}>
           <PurpleButton title={"Задонатить"} onClick={Donate}></PurpleButton>
         </div>
       </div>
-      
     </>
-  )
+  );
 }
 
 export default Conference

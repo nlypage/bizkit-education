@@ -27,7 +27,6 @@ const AddAnswer = ({ question }) => {
       );
       const data = await response.json();
       setData(data.body);
-      console.log(data.body);
     } catch (error) {
       console.error(error);
     }
@@ -93,7 +92,6 @@ const AddAnswer = ({ question }) => {
       );
 
       if (response.ok) {
-        console.log(answer);
         setShowAnswerInput(!showAnswerInput);
         fetchQuestions();
       } else {

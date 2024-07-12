@@ -29,8 +29,6 @@ const AddQuestion = ({ setView }) => {
       );
 
       const responseData = await response.json();
-      console.log("Response:", responseData);
-
       if (response.ok) {
         setView("userquestion");
       } else {

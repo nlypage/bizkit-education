@@ -9,7 +9,8 @@ import styles from "./styles/Schedule.module.css"
 import DefaultInput from "./ui/defaultInput";
 import OpacitedButton from "./ui/opacitedButton";
 import PurpleButton from "./ui/purpleButton";
-
+import Toastify from 'toastify-js'
+import "toastify-js/src/toastify.css"
 const useClickOutside = (ref, callback) => {
   const handleClick = (e) => {
     if (ref.current && !ref.current.contains(e.target)) {
@@ -69,8 +70,34 @@ const Schedule = () => {
       if (response.ok) {
         setConferences([data, ...conferences]);
         handleCloseModal();
+        Toastify({
+          text: 'Лекция успешно добавлена',
+          duration: 3000,
+          newWindow: true,
+          gravity: "bottom",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+            background: "#7950F2",
+            width: '100%'
+          },
+          onClick: function() {}
+        }).showToast();
       } else {
         console.error("Error submitting conference:", response.status);
+        Toastify({
+          text: 'Произошла ошибка',
+          duration: 3000,
+          newWindow: true,
+          gravity: "bottom",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+            background: "#7950F2",
+            width: '100%'
+          },
+          onClick: function() {}
+        }).showToast();
       }
     } catch (error) {
       console.error("Error submitting conference:", error);

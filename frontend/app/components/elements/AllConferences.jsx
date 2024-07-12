@@ -45,6 +45,19 @@ const AllConferences = ({setView}) => {
     window.location.href = `/room/${conference.uuid}?roomID=${conference.uuid}&role=Audience`;
   };
 
+  console.log(conf)
+
+  function convertTime(timeString) {
+    const date = new Date(timeString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+    const convertedTime = `${year}-${month}-${day} ${hour}:${minute}`;
+    return convertedTime;
+  }
+
   return (
 
     <>
@@ -67,10 +80,10 @@ const AllConferences = ({setView}) => {
                 {conference.title}
               </div>
               <div className={questionPreviewStyles.question_preview_title} style={{color: "grey", fontSize: "22px"}}>
-                Самая ебейшая лекция по фронту на хаскеле
+                {conference.description}
               </div>
               <div className={questionPreviewStyles.question_preview_title} style={{color: "grey", fontSize: "18px", fontWeight: "normal"}}>
-                14:88 AM
+              {convertTime(conference.start_time)}
               </div>
               <div className={questionPreviewStyles.question_preview_bottombar}>
                 <div className={questionPreviewStyles.question_preview_answer_button_wrapper} style={{float: "left", marginRight: "0px", marginLeft: "10px"}}>

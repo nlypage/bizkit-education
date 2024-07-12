@@ -38,8 +38,34 @@ const MyConference = () => {
       if (response.ok) {
         console.log("PATCH request successful");
         router.push("/");
+        Toastify({
+          text: 'Лекция архивировала',
+          duration: 3000,
+          newWindow: true,
+          gravity: "bottom",
+          position: "right",
+          stopOnFocus: true,
+          style: {
+            background: "#7950F2",
+            width: '100%'
+          },
+          onClick: function() {}
+        }).showToast();
       } else {
         console.error("PATCH request failed");
+        Toastify({
+        text: 'Произошла ошибка',
+        duration: 3000,
+        newWindow: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "#7950F2",
+          width: '100%'
+        },
+        onClick: function() {}
+      }).showToast();
       }
     } catch (error) {
       console.error(error);
@@ -59,8 +85,34 @@ const MyConference = () => {
       console.log(JSON.stringify({ url: linkToAdd, uuid: selectedConference.uuid}))
       setShowModal(false);
       setLinkToAdd("");
+      Toastify({
+        text: 'Ссылка добалвена',
+        duration: 3000,
+        newWindow: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "#7950F2",
+          width: '100%'
+        },
+        onClick: function() {}
+      }).showToast();
     } catch (error) {
       console.error(error);
+      Toastify({
+        text: 'Произошла ошибка',
+        duration: 3000,
+        newWindow: true,
+        gravity: "bottom",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+          background: "#7950F2",
+          width: '100%'
+        },
+        onClick: function() {}
+      }).showToast();
     }
   };
 
@@ -95,7 +147,7 @@ const MyConference = () => {
   return (
     <>
       
-        {myConference.map((conference) => (
+    {myConference.map((conference) => (
           <div className={styles.question_preview_box} key={conference.uuid} style={{minWidth: "370px", maxWidth: "1000px", marginTop: "30px"}}>
             <div className={styles.question_preview_user_box}>
               <img
@@ -132,7 +184,7 @@ const MyConference = () => {
               </div>
             </div>
           </div>
-        ))}
+        ))} 
       
       {showModal && (
         <div onClose={() => setShowModal(false)}>
