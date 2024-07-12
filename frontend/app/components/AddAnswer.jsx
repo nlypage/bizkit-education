@@ -75,6 +75,7 @@ const AddAnswer = ({ question }) => {
     }
   };
 
+  console.log(user)
   const addAnswer = async () => {
     try {
       const response = await fetchWithAuth(
@@ -260,7 +261,7 @@ const AddAnswer = ({ question }) => {
                   {answer.author.rate}
                 </p>
 
-                {user?.uuid == data?.author_uuid && data.closed == false ? (
+                {user?.uuid == data?.question.author?.uuid && data.question.closed == false ? (
                   <div
                     style={{
                       margin: "auto",
