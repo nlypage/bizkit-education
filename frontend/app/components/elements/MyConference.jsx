@@ -155,9 +155,9 @@ const MyConference = () => {
                 alt=""
                 className={styles.question_preview_avatar}
               />
-              <p className={styles.question_preview_nickname}>{"Aboba"}</p>
+              <p className={styles.question_preview_nickname}>{conference?.author?.username}</p>
               <hr className={styles.question_preview_hr} />
-              <p className={styles.question_preview_rank}>{"Megabrain"}</p>
+              <p className={styles.question_preview_rank}>{conference?.author?.rate}</p>
             </div>
             <div className={styles.question_preview_title}>
               {conference.title}

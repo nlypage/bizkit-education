@@ -54,7 +54,7 @@ const Schedule = () => {
   const handleSubmit = async () => {
     const data = { title, description, start_time: time };
     console.log(data);
-
+    handleCloseModal();
     try {
       const response = await fetchWithAuth(
         "https://bizkit.fun/api/v1/conference/create",
@@ -68,10 +68,10 @@ const Schedule = () => {
       );
 
       if (response.ok) {
-        setConferences([data, ...conferences]);
+        setConferences([data, ...conference]);
         handleCloseModal();
         Toastify({
-          text: 'Лекция успешно добавлена',
+          text: 'Лекция успешно добавлена, обновите страницу',
           duration: 3000,
           newWindow: true,
           gravity: "bottom",
