@@ -11,6 +11,7 @@ type Service interface {
 	Create(ctx context.Context, createConference *dto.CreateConference) (*entities.Conference, error)
 	GetAll(ctx context.Context, limit, offset int, searchType string) ([]*entities.Conference, error)
 	GetByUUID(ctx context.Context, uuid string) (*entities.Conference, error)
+	GetUserConferences(ctx context.Context, userUUID string) ([]*entities.Conference, error)
 }
 
 // UserService is an interface that contains a method to change the balance of a user.
@@ -74,6 +75,44 @@ func (u conferenceUseCase) GetAll(ctx context.Context, limit, offset int, search
 			return nil, err
 		}
 
+		conferenceDto = append(conferenceDto, &dto.ReturnConference{
+			UUID:        conference.UUID,
+			CreatedAt:   conference.CreatedAt,
+			UpdatedAt:   conference.UpdatedAt,
+			Title:       conference.Title,
+			Description: conference.Description,
+			StartTime:   conference.StartTime,
+			Author: dto.Author{
+				UUID:     user.UUID,
+				Username: user.Username,
+				Rate:     user.Rate,
+			},
+			URL:      conference.URL,
+			Archived: conference.Archived,
+		})
+	}
+
+	return conferenceDto, nil
+}
+
+func (u conferenceUseCase) GetMy(ctx context.Context, uuid string) ([]*dto.ReturnConference, error) {
+	var (
+		conferenceDto []*dto.ReturnConference
+	)
+
+	conferences, err := u.conferenceService.GetUserConferences(ctx, uuid)
+
+	if err != nil {
+		return nil, err
+	}
+
+	user, errGetUser := u.userService.GetByUUID(ctx, uuid)
+
+	if errGetUser != nil {
+		return nil, errGetUser
+	}
+
+	for _, conference := range conferences {
 		conferenceDto = append(conferenceDto, &dto.ReturnConference{
 			UUID:        conference.UUID,
 			CreatedAt:   conference.CreatedAt,

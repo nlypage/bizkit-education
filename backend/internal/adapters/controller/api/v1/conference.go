@@ -29,6 +29,7 @@ type ConferenceUseCase interface {
 	NewConference(ctx context.Context, createConference *dto.CreateConference) (*entities.Conference, error)
 	GetAll(ctx context.Context, limit, offset int, searchType string) ([]*dto.ReturnConference, error)
 	Donate(ctx context.Context, conferenceUUID string, userUUID string, amount uint) error
+	GetMy(ctx context.Context, uuid string) ([]*dto.ReturnConference, error)
 }
 
 // ConferenceHandler is a struct that contains instances of services.
@@ -160,7 +161,7 @@ func (h ConferenceHandler) getMy(c *fiber.Ctx) error {
 		return err
 	}
 
-	conferences, err := h.conferenceService.GetUserConferences(c.Context(), uuid)
+	conferences, err := h.conferenceUseCase.GetMy(c.Context(), uuid)
 	if err != nil {
 		return err
 	}
