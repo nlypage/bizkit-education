@@ -41,7 +41,7 @@ const Description = () => {
             fontWeight: "bold",
           }}
         >
-          Частозадаваемые вопросы
+          Часто задаваемые вопросы
         </p>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
@@ -50,6 +50,7 @@ const Description = () => {
               alignItems: "center",
               cursor: "pointer",
               paddingBottom: "2vh",
+              marginLeft: "10px"
             }}
             onClick={toggleFirstAnswer}
           >
@@ -74,6 +75,7 @@ const Description = () => {
                 alignItems: "center",
                 cursor: "pointer",
                 paddingBottom: "2vh",
+                
               }}
             >
               <div
@@ -94,6 +96,8 @@ const Description = () => {
               alignItems: "center",
               cursor: "pointer",
               paddingBottom: "2vh",
+              marginLeft: "10px"
+
             }}
             onClick={toggleSecondAnswer}
           >
@@ -145,6 +149,8 @@ const Description = () => {
               alignItems: "center",
               cursor: "pointer",
               paddingBottom: "2vh",
+              marginLeft: "10px"
+
             }}
             onClick={toggleThirdAnswer}
           >
@@ -188,6 +194,8 @@ const Description = () => {
               alignItems: "center",
               cursor: "pointer",
               paddingBottom: "2vh",
+              marginLeft: "10px"
+
             }}
             onClick={toggleForthAnswer}
           >

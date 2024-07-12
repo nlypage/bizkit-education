@@ -12,12 +12,12 @@
     top: 50%;
     margin-top: 80px;
     left: 50%;
-    
+    font-family: 'Inter', sans-serif;
     transform: translate(-50%, 0%);
 }
 
 .triangle {
-    transform: rotate(0deg);
+    transform: rotate(90deg);
     transition: transform 0.3s ease-in-out;
     color: #7950F2;
   }
@@ -31,6 +31,7 @@
     height: 100%;
     background-color: #7950F2;
     margin-right: 10px;
+    margin-left: -10px;
     transition: height 0.3s ease-in-out;
   }
   

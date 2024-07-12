@@ -121,7 +121,7 @@ const Schedule = () => {
     </div>
     <AllConferences />
       {showModal && (
-        <div className={styles.classes_create_class_box} ref={menuRef}>
+        <div className={styles.classes_create_class_box} ref={menuRef} style={{textAlign: "center"}}>
           
             
             <DefaultInput title={"Предмет"} type={"text"} onChange={(e) => setTitle(e.target.value)} value={title}></DefaultInput>
@@ -152,10 +152,10 @@ const Schedule = () => {
 
               <PurpleButton onClick={handleSubmit} title={"Отправить"}></PurpleButton>
             </div>
-
+            
             
           </div>
-            
+          <p style={{fontSize: '80%', color: '#7950F2', marginTop: "15px"}}>Создание лекции стоит 50 коинов</p>
             
           
         </div>
