@@ -107,12 +107,17 @@ func (h QuestionHandler) getAll(c *fiber.Ctx) error {
 
 // getByUUID is a handler for getting a question by UUID.
 func (h QuestionHandler) getByUUID(c *fiber.Ctx) error {
-	uuid, err := utils.GetUUIDByToken(c)
-	if err != nil {
-		return err
+	var uuid4 apiDto.UUID
+	uuid := c.Params("uuid")
+
+	uuid4.UUID = uuid
+
+	errValidate := h.validator.ValidateData(uuid4)
+	if errValidate != nil {
+		return errValidate
 	}
 
-	q, err := h.questionUseCase.GetQuestionWithAnswers(c.Context(), uuid)
+	q, err := h.questionUseCase.GetQuestionWithAnswers(c.Context(), uuid4.UUID)
 	if err != nil {
 		return err
 	}
