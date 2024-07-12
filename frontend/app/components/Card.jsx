@@ -259,174 +259,230 @@ const MapApp = () => {
   }
 
   return (
-    <div className={styles.map}>
-      <MapContainer
-        ref={mapRef}
-        center={[	55.7522, 37.6156]}
-        zoom={13}
-        style={{ width: "100%", height: "500px", borderRadius: "16px" }}
-        className={styles.map_container}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <AddMarkerButton />
+    <>
+    
+      <div className={styles.map}>
+        <MapContainer
+          ref={mapRef}
+          center={[	55.7522, 37.6156]}
+          zoom={13}
+          style={{ width: "100%", height: "500px", borderRadius: "16px" }}
+          className={styles.map_container}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <AddMarkerButton />
 
-        {markerData.map((marker, index) => (
-          <Marker
-            key={index}
-            position={marker.position}
-            draggable={false}
-            icon={L.icon({
-              iconUrl:
-                "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-            })}
-          >
-            <Popup>
-              <div>
-                <p>Название; {marker?.data?.title}</p>
-                <p>Описание: {marker?.data?.description}</p>
-                <p>Начало: {convertTime(marker?.data?.start_time)}</p>
-                <p>Адрес: {marker?.data?.address}</p>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+          {markerData.map((marker, index) => (
+            <Marker
+              key={index}
+              position={marker.position}
+              draggable={false}
+              icon={L.icon({
+                iconUrl:
+                  "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+              })}
+            >
+              <Popup>
+                <div>
+                  <p>Название; {marker?.data?.title}</p>
+                  <p>Описание: {marker?.data?.description}</p>
+                  <p>Начало: {convertTime(marker?.data?.start_time)}</p>
+                  <p>Адрес: {marker?.data?.address}</p>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+
+          {isAddingMarker && (
+            <Marker
+              position={[newMarkerData.lat, newMarkerData.lng]}
+              draggable={false}
+              icon={L.icon({
+                iconUrl:
+                  "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+              })}
+            >
+              <Popup>
+                <div>
+                  <p>Название; {newMarkerData?.data?.title}</p>
+                  <p>Описание: {newMarkerData?.data?.description}</p>
+                  <p>Начало: {convertTime(newMarkerData?.data?.start_time)}</p>
+                  <p>Адрес: {newMarkerData?.data?.address}</p>
+                </div>
+              </Popup>
+            </Marker>
+          )}
+        </MapContainer>
+
+        <div
+          className={styles.map_find_box}
+          style={{
+            margin: "auto",
+            marginTop: "20px",
+            width: "100%",
+            display: "flex",
+            height: "50px",
+          }}
+        >
+          <DefaultInput
+            type={"text"}
+            title={"Адресс"}
+            value={searchAddress}
+            onChange={handleSearchAddressChange}
+          ></DefaultInput>
+
+          {/* <input
+            type="text"
+            placeholder="Search for an address"
+            value={searchAddress}
+            onChange={handleSearchAddressChange}
+          /> */}
+
+          <div style={{ marginTop: "45px", marginLeft: "15px" }}>
+            <OpacitedButton
+              title={"Добавить"}
+              onClick={getCoordinatesFromAddress}
+            ></OpacitedButton>
+          </div>
+        </div>
 
         {isAddingMarker && (
-          <Marker
-            position={[newMarkerData.lat, newMarkerData.lng]}
-            draggable={false}
-            icon={L.icon({
-              iconUrl:
-                "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
-            })}
+          <div
+            className={classesStyles.classes_create_class_box}
+            style={{ marginTop: "100px" }}
           >
-            <Popup>
-              <div>
-                <p>Название; {newMarkerData?.data?.title}</p>
-                <p>Описание: {newMarkerData?.data?.description}</p>
-                <p>Начало: {convertTime(newMarkerData?.data?.start_time)}</p>
-                <p>Адрес: {newMarkerData?.data?.address}</p>
+            <form onSubmit={handleFormSubmit}>
+              <DefaultInput
+                type={"text"}
+                title={"Название"}
+                name={"title"}
+                value={newMarkerData.title}
+                onChange={handleInputChange}
+              ></DefaultInput>
+              {/* <input
+                type="text"
+                name="title"
+                placeholder="Title"
+                value={newMarkerData.title}
+                onChange={handleInputChange}
+                required
+              /> */}
+              <DefaultInput
+                type={"text"}
+                value={newMarkerData.description}
+                title={"Описание"}
+                name={"description"}
+                onChange={handleInputChange}
+              ></DefaultInput>
+              {/* <textarea
+                name="description"
+                placeholder="Description"
+                value={newMarkerData.description}
+                onChange={handleInputChange}
+                required
+              ></textarea> */}
+              {/* <DefaultInput type={"text"} value={newMarkerData.time} title={"Время"} name={"time"}  onChange={handleInputChange}></DefaultInput> */}
+
+              {/* <input
+                type="text"
+                name="time"
+                placeholder="Time"
+                value={newMarkerData.time}
+                onChange={handleInputChange}
+                required
+              /> */}
+              <DefaultInput
+                type={"text"}
+                value={newMarkerData.address}
+                title={"Адресс"}
+                name={"address"}
+                onChange={handleInputChange}
+              ></DefaultInput>
+
+              <input
+                className={classesStyles.classes_create_date}
+                style={{ marginLeft: "40px" }}
+                name="time"
+                type="datetime-local"
+                value={newMarkerData.time}
+                onChange={handleInputChange}
+                required
+              />
+              {/* <input
+                type="text"
+                name="address"
+                placeholder="Address"
+                value={newMarkerData.address}
+                onChange={handleInputChange}
+                required
+              /> */}
+              <div
+                style={{ float: "left", marginLeft: "40px", marginTop: "20px" }}
+              >
+                <PurpleButton type={"submit"} title={"Создать"}></PurpleButton>
               </div>
-            </Popup>
-          </Marker>
+              {/* <button type="submit">Add Marker</button> */}
+            </form>
+          </div>
         )}
-      </MapContainer>
-
-      <div
-        className={styles.map_find_box}
-        style={{
-          margin: "auto",
-          marginTop: "20px",
-          width: "100%",
-          display: "flex",
-          height: "50px",
-        }}
-      >
-        <DefaultInput
-          type={"text"}
-          title={"Адресс"}
-          value={searchAddress}
-          onChange={handleSearchAddressChange}
-        ></DefaultInput>
-
-        {/* <input
-          type="text"
-          placeholder="Search for an address"
-          value={searchAddress}
-          onChange={handleSearchAddressChange}
-        /> */}
-
-        <div style={{ marginTop: "45px", marginLeft: "15px" }}>
-          <OpacitedButton
-            title={"Добавить"}
-            onClick={getCoordinatesFromAddress}
-          ></OpacitedButton>
-        </div>
+        
       </div>
+    <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      
+      
 
-      {isAddingMarker && (
-        <div
-          className={classesStyles.classes_create_class_box}
-          style={{ marginTop: "100px" }}
-        >
-          <form onSubmit={handleFormSubmit}>
-            <DefaultInput
-              type={"text"}
-              title={"Название"}
-              name={"title"}
-              value={newMarkerData.title}
-              onChange={handleInputChange}
-            ></DefaultInput>
-            {/* <input
-              type="text"
-              name="title"
-              placeholder="Title"
-              value={newMarkerData.title}
-              onChange={handleInputChange}
-              required
-            /> */}
-            <DefaultInput
-              type={"text"}
-              value={newMarkerData.description}
-              title={"Описание"}
-              name={"description"}
-              onChange={handleInputChange}
-            ></DefaultInput>
-            {/* <textarea
-              name="description"
-              placeholder="Description"
-              value={newMarkerData.description}
-              onChange={handleInputChange}
-              required
-            ></textarea> */}
-            {/* <DefaultInput type={"text"} value={newMarkerData.time} title={"Время"} name={"time"}  onChange={handleInputChange}></DefaultInput> */}
-
-            {/* <input
-              type="text"
-              name="time"
-              placeholder="Time"
-              value={newMarkerData.time}
-              onChange={handleInputChange}
-              required
-            /> */}
-            <DefaultInput
-              type={"text"}
-              value={newMarkerData.address}
-              title={"Адресс"}
-              name={"address"}
-              onChange={handleInputChange}
-            ></DefaultInput>
-
-            <input
-              className={classesStyles.classes_create_date}
-              style={{ marginLeft: "40px" }}
-              name="time"
-              type="datetime-local"
-              value={newMarkerData.time}
-              onChange={handleInputChange}
-              required
-            />
-            {/* <input
-              type="text"
-              name="address"
-              placeholder="Address"
-              value={newMarkerData.address}
-              onChange={handleInputChange}
-              required
-            /> */}
-            <div
-              style={{ float: "left", marginLeft: "40px", marginTop: "20px" }}
-            >
-              <PurpleButton type={"submit"} title={"Создать"}></PurpleButton>
-            </div>
-            {/* <button type="submit">Add Marker</button> */}
-          </form>
-        </div>
-      )}
-    </div>
+      
+    </>
   );
 };
 

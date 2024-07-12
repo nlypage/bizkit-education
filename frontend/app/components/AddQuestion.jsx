@@ -58,6 +58,7 @@ const AddQuestion = ({ setView }) => {
               className={styles.add_question_reward_dropdown }
               style={{marginLeft: "-20px", fontWeight: "normal", color: "black", fontSize: "18px", marginTop: "-3px"}}
             >
+              <option>Предмет</option>
               <option value="Другое">Другое</option>
               <option value="Математика">Математика</option>
               <option value="Русский язык">Русский язык</option>

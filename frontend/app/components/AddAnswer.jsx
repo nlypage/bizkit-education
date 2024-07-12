@@ -99,9 +99,13 @@ const AddAnswer = ({ question }) => {
         console.error("Error submitting question");
       }
     } catch (error) {
+      
       console.error("Error:", error);
+      
     }
   };
+  console.log(data)
+  console.log(user)
   return (
     <>
       {/* исправить именя пользователя, проблема бека */}
