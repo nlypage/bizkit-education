@@ -120,7 +120,8 @@ func (v Validator) GetSubject(c *fiber.Ctx) (string, error) {
 		return subject, nil
 	}
 	switch subject {
-	case "Русский язык", "Математика", "Физика", "Литература", "Информатика", "Другое":
+	case "Русский язык", "Математика", "Физика", "Литература", "Информатика", "Статистика", "Биология", "Химия",
+		"История", "Право", "Геометрия", "Алгоритмы", "IT", "География", "Лин-ал", "ОБЖ", "Другое":
 		return subject, nil
 	default:
 		return "", errroz.InvalidSubject
