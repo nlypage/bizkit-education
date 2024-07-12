@@ -14,7 +14,7 @@ type User struct {
 	Email       string `json:"email" gorm:"unique"`
 	Password    []byte `json:"-"`
 	Role        string `json:"role" gorm:"default:student"`
-	CoinsAmount int    `json:"coins_amount" gorm:"default:100"`
+	CoinsAmount int    `json:"coins_amount" gorm:"default:300"`
 	Rate        string `json:"rate" gorm:"default:Ученик"`
 	//TODO: questions
 }
